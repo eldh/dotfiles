@@ -1,11 +1,13 @@
 "*":
-  editor:
-    showIndentGuide: true
-    fontFamily: "Menlo"
-    invisibles: {}
-    fontSize: 15
-    softWrapAtPreferredLineLength: true
+  "exception-reporting":
+    userId: "fa30af58-aca4-36b5-2f45-3cb313ebe1ad"
+  welcome:
+    showOnStartup: false
   core:
+    themes: [
+      "spacegray-dark-neue-ui"
+      "spacegray-black-syntax"
+    ]
     ignoredNames: [
       ".bundle"
       ".git"
@@ -14,23 +16,29 @@
       "tmp"
       "vendor"
     ]
-    themes: [
-      "unity-ui"
-      "glacier-syntax"
-    ]
     hideGitIgnoredFiles: true
-    disabledPackages: [
-      "background-tips"
-      "exception-reporting"
-      "metrics"
-    ]
   "spell-check":
     grammars: [
       "text.plain"
       "source.gfm"
       "text.git-commit"
     ]
+  editor:
+    invisibles: {}
+    fontFamily: "Input"
+    preferredLineLength: 100
+    scrollSensitivity: 70
+    softWrap: true
+    showIndentGuide: true
+    fontSize: 15
+  "linter-eslint": {}
+  linter:
+    showErrorPanel: false
+  autosave:
+    enabled: true
+  tabs:
+    usePreviewTabs: true
+  minimap: {}
+  emmet: {}
   welcome:
     showOnStartup: false
-  "release-notes":
-    viewedVersion: "0.89.0"

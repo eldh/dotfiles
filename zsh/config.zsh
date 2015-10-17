@@ -7,9 +7,13 @@ fi
 export LSCOLORS="exfxcxdxbxegedabagacad"
 export CLICOLOR=true
 
+# Load functions
 fpath=($ZSH/functions $fpath)
-
 autoload -U $ZSH/functions/*(:t)
+
+# Load theme
+autoload -U promptinit && promptinit
+prompt pure
 
 HISTFILE=~/.zsh_history
 HISTSIZE=10000
