@@ -40,5 +40,3 @@
     usePreviewTabs: true
   minimap: {}
   emmet: {}
-  welcome:
-    showOnStartup: false

@@ -16,20 +16,29 @@
  */
 
 // style the background color of the tree view
-// .tree-view {
-//   background-color: whitesmoke;
-// }
+@dark-gray-blue: #16181c;
+atom-text-editor,
+:host,
+atom-text-editor::shadow .gutter,
+:host .gutter {
+  background-color: @dark-gray-blue;
+}
+.tree-view,
+.tab-bar {
+  background-color: darken(@dark-gray-blue, 3%);
+  .tab.active {
+    background-color: @dark-gray-blue;
 
-// style the background and foreground colors on the atom-text-editor-element itself
-// atom-text-editor, :host {
-//   color: white;
-//   background-color: hsl(180, 24%, 12%);
-// }
+  }
+}
 
 
 // To style other content in the text editor's shadow DOM, use the ::shadow expression
 atom-text-editor::shadow {
 .selection .region {
-    background-color: #405463 !important;
+    background-color: lighten(@dark-gray-blue, 12%) !important;
   }
+}
+atom-text-editor::shadow .cursor-line, :host .cursor-line {
+  background-color: lighten(@dark-gray-blue, 5%) !important;
 }
