@@ -1,3 +1,5 @@
+alias git=hub
+
 # Query/use custom command for `git`.
 zstyle -s ":vcs_info:git:*:-all-" "command" _omz_git_git_cmd
 : ${_omz_git_git_cmd:=git}
@@ -26,18 +28,6 @@ function current_repository() {
     return
   fi
   echo $($_omz_git_git_cmd remote -v | cut -d':' -f 2)
-}
-# Pretty log messages
-function _git_log_prettily(){
-  if ! [ -z $1 ]; then
-    git log --pretty=$1
-  fi
-}
-# Warn if the current branch is a WIP
-function work_in_progress() {
-  if $(git log -n 1 2>/dev/null | grep -q -c "\-\-wip\-\-"); then
-    echo "WIP!!"
-  fi
 }
 
 #
