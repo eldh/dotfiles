@@ -1,1 +1,1 @@
-apm install --packages-file packages.txt
+apm install --packages-file atom/packages.txt

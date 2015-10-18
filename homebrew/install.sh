@@ -44,6 +44,9 @@ brew tap homebrew/versions
 brew install zsh-completions
 brew install zsh-syntax-highlighting
 
+command -v zsh | sudo tee -a /etc/shells
+chsh -s /usr/local/bin/zsh
+
 brew install tmux
 
 # Install more recent versions of some OS X tools.
@@ -90,13 +93,11 @@ brew cask install font-lato
 brew cask install font-abril-fatface
 brew cask install font-crimson-text
 brew cask install font-libre-baskerville
-brew cask install font-open-sans
 brew cask install font-roboto-slab
 brew cask install font-roboto
 brew cask install font-roboto-mono
 brew cask install qlcolorcode qlstephen qlmarkdown quicklook-json qlprettypatch quicklook-csv betterzipql webp-quicklook suspicious-package
 brew cask cleanup
-
 
 # Remove outdated versions from the cellar.
 brew cleanup
