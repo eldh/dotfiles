@@ -62,7 +62,6 @@ alias gpristine='git reset --hard && git clean -dfx'
 alias gcm='git checkout master'
 alias gcmsg='git commit -m'
 alias gco='git checkout'
-compdef _git gco=git-checkout
 alias gcp='git cherry-pick'
 alias gcs='git commit -S'
 
@@ -71,7 +70,6 @@ alias gdca='git diff --cached'
 alias gdct='git describe --tags `git rev-list --tags --max-count=1`'
 alias gdt='git diff-tree --no-commit-id --name-only -r'
 gdv() { git diff -w "$@" | view - }
-compdef _git gdv=git-diff
 alias gdw='git diff --word-diff'
 
 alias gf='git fetch'

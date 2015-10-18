@@ -44,6 +44,8 @@ brew tap homebrew/versions
 brew install zsh-completions
 brew install zsh-syntax-highlighting
 
+brew install tmux
+
 # Install more recent versions of some OS X tools.
 brew install vim --override-system-vi
 brew install homebrew/dupes/grep
@@ -53,7 +55,6 @@ brew install homebrew/php/php55 --with-gmp
 
 # Install other useful binaries.
 brew install ack
-# brew install dark-mode
 brew install git
 brew install git-lfs
 brew install speedtest_cli
