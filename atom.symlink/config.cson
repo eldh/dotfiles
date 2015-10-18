@@ -25,7 +25,7 @@
     ]
   editor:
     invisibles: {}
-    fontFamily: "Input"
+    fontFamily: "Input Mono Condensed"
     preferredLineLength: 100
     scrollSensitivity: 70
     softWrap: true
