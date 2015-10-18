@@ -2,8 +2,9 @@
 # bash `git-completion` script at $completion below (this is where Homebrew
 # tosses it, at least).
 completion='$(brew --prefix)/share/zsh/site-functions/_git'
-
 if test -f $completion
 then
   source $completion
 fi
+zstyle ':completion:*' ignored-patterns 'gcomm' 'gcov'
+# compdef _git-checkout gco
