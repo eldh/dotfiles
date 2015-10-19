@@ -63,6 +63,7 @@ brew install git-lfs
 brew install speedtest_cli
 
 brew install node
+npm install -g npm@latest
 
 brew install caskroom/cask/brew-cask
 brew cask install alfred
