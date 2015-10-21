@@ -671,6 +671,10 @@ defaults write org.m0k.transmission WarningLegal -bool false
 # # Hide the app in the background if it’s not the front-most window
 # defaults write com.twitter.twitter-mac HideInBackground -bool true
 
+
+# Sketch
+defaults write com.bohemiancoding.sketch3 exportCompactSVG -bool yes
+
 ###############################################################################
 # Spectacle.app                                                               #
 ###############################################################################
