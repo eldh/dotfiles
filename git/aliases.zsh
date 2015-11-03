@@ -86,6 +86,7 @@ alias gmom='git merge origin/master'
 alias gmt='git mergetool --no-prompt'
 alias gmtvim='git mergetool --no-prompt --tool=vimdiff'
 alias gmum='git merge upstream/master'
+alias gmours='grep -lr "<<<<<<<" . | xargs git checkout --ours'
 
 alias gp='git push'
 alias gpd='git push --dry-run'
@@ -96,7 +97,7 @@ alias gprune='git branch --merged | grep -v "\*" | grep -v "master" | grep -v "d
 alias gr='git reset --'
 alias grba='git rebase --abort'
 alias grbc='git rebase --continue'
-alias gre='git rebase'
+alias gre='git rebase --autostash'
 alias grup='git remote update'
 alias grv='git remote -v'
 
