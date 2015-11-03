@@ -65,12 +65,21 @@ brew install speedtest_cli
 brew install node
 npm install -g npm@latest
 
+npm install -g npm-check-updates
+npm install -g eslint
+npm install -g coffee-script
+npm install -g webpack
+npm install -g babel
+npm install -g gulp
+npm install -g react-native-cli
+npm install -g jsdom
+npm install -g node-inspector
+
+
 brew install caskroom/cask/brew-cask
 brew cask install alfred
 brew cask alfred link
 brew cask install google-chrome
-brew cask install google-chrome-canary
-brew cask install firefoxdeveloperedition
 brew cask install bettertouchtool
 brew cask install flux
 brew cask install dash
@@ -83,11 +92,18 @@ brew cask install dropbox
 brew cask install mailbox
 brew cask install onepassword
 brew cask install transmission
+
+brew tap caskroom/versions
+brew cask install firefoxdeveloperedition
+brew cask install google-chrome-canary
+
 brew tap caskroom/fonts
 brew cask install font-inconsolata
 brew cask install font-input
 brew cask install font-fira-sans
 brew cask install font-fira-code
+brew cask install font-hasklig
+brew cask install font-monoid
 brew cask install font-source-sans-pro
 brew cask install font-source-code-pro
 brew cask install font-lato

@@ -17,6 +17,8 @@
       "vendor"
     ]
     hideGitIgnoredFiles: true
+    destroyEmptyPanes: false
+    openEmptyEditorOnStart: false
   "spell-check":
     grammars: [
       "text.plain"
@@ -25,13 +27,16 @@
     ]
   editor:
     invisibles: {}
-    fontFamily: "Input Mono Condensed"
+    fontFamily: "Fira Code"
     preferredLineLength: 100
     scrollSensitivity: 70
     softWrap: true
     showIndentGuide: true
-    fontSize: 15
-  "linter-eslint": {}
+    lineHeight: 1.7
+  "linter-eslint":
+    useGlobalEslint: true
+    globalNodePath: "/usr/local"
+    disableWhenNoEslintrcFileInPath: true
   linter:
     showErrorPanel: false
   autosave:
@@ -40,3 +45,11 @@
     usePreviewTabs: true
   minimap: {}
   emmet: {}
+  "linter-scss-lint":
+    executablePath: "/usr/local/bin/scss-lint"
+  "tree-view": {}
+  react: {}
+  "file-watcher":
+    promptWhenFileHasChangedOnDisk: false
+  nuclide:
+    remoteProjectsConfig: []

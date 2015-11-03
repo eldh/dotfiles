@@ -60,5 +60,5 @@ EOD
 # Don’t display the annoying prompt when quitting iTerm
 # defaults write com.googlecode.iterm2 PromptOnQuit -bool false
 
-# Install the Solarized Dark theme for iTerm
-open "open '$HOME/dotfiles/terminal/spacegray.itermcolors'"
+# Install the Spacegray theme for iTerm
+# open "open '$HOME/dotfiles/terminal/spacegray.itermcolors'"
