@@ -28,7 +28,7 @@
   editor:
     invisibles: {}
     fontFamily: "Fira Code"
-    preferredLineLength: 100
+    preferredLineLength: 120
     scrollSensitivity: 70
     softWrap: true
     showIndentGuide: true
@@ -47,7 +47,9 @@
   emmet: {}
   "linter-scss-lint":
     executablePath: "/usr/local/bin/scss-lint"
-  "tree-view": {}
+  "tree-view":
+    hideVcsIgnoredFiles: true
+    hideIgnoredNames: true
   react: {}
   "file-watcher":
     promptWhenFileHasChangedOnDisk: false
