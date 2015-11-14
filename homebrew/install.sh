@@ -107,6 +107,7 @@ brew cask install font-monoid
 brew cask install font-source-sans-pro
 brew cask install font-source-code-pro
 brew cask install font-lato
+brew cask install font-pacifico
 brew cask install font-abril-fatface
 brew cask install font-crimson-text
 brew cask install font-libre-baskerville
