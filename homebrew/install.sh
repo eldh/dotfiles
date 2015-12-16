@@ -89,9 +89,9 @@ brew cask install atom
 brew cask install github-desktop
 brew cask install sequel-pro
 brew cask install dropbox
-brew cask install mailbox
 brew cask install onepassword
 brew cask install transmission
+brew cask install licecap
 
 brew tap caskroom/versions
 brew cask install firefoxdeveloperedition

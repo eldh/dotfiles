@@ -16,7 +16,7 @@
  */
 
 // style the background color of the tree view
-@dark-gray-blue: #16181c;
+@dark-gray-blue: #16181c;ı
 atom-text-editor,
 :host,
 atom-text-editor::shadow .gutter,
@@ -40,9 +40,26 @@ atom-text-editor {
 // To style other content in the text editor's shadow DOM, use the ::shadow expression
 atom-text-editor::shadow {
 .selection .region {
-    background-color: lighten(@dark-gray-blue, 12%) !important;
+    background-color: lighten(@dark-gray-blue, 20%) !important;
   }
 }
 atom-text-editor::shadow .cursor-line, :host .cursor-line {
-  background-color: lighten(@dark-gray-blue, 5%) !important;
+  background-color: lighten(@dark-gray-blue, 4%) !important;
+}
+
+
+atom-text-editor::shadow .gutter, :host .gutter {
+  color: lighten(@dark-gray-blue, 20%);
+}
+
+atom-text-editor::shadow {
+
+  // Hide folding part of the gutter
+  .icon-right {
+    width: 0 !important;
+  }
+
+  .line-number {
+    padding-left: 10px !important;
+  }
 }
