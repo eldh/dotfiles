@@ -19,6 +19,9 @@
     hideGitIgnoredFiles: true
     destroyEmptyPanes: false
     openEmptyEditorOnStart: false
+    disabledPackages: [
+      "hyperclick"
+    ]
   "spell-check":
     grammars: [
       "text.plain"
@@ -28,11 +31,11 @@
   editor:
     invisibles: {}
     fontFamily: "Fira Code"
-    preferredLineLength: 120
+    preferredLineLength: 100
     scrollSensitivity: 70
     softWrap: true
-    showIndentGuide: true
     lineHeight: 1.7
+    showIndentGuide: true
   "linter-eslint":
     useGlobalEslint: true
     globalNodePath: "/usr/local"
@@ -48,10 +51,13 @@
   "linter-scss-lint":
     executablePath: "/usr/local/bin/scss-lint"
   "tree-view":
-    hideVcsIgnoredFiles: true
     hideIgnoredNames: true
+    hideVcsIgnoredFiles: true
   react: {}
   "file-watcher":
     promptWhenFileHasChangedOnDisk: false
   nuclide:
     remoteProjectsConfig: []
+  "fuzzy-finder":
+    preserveLastSearch: true
+    useAlternateScoring: true
