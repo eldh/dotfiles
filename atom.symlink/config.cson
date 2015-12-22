@@ -36,6 +36,7 @@
     softWrap: true
     lineHeight: 1.7
     showIndentGuide: true
+    fontSize: 13
   "linter-eslint":
     useGlobalEslint: true
     globalNodePath: "/usr/local"
@@ -61,3 +62,12 @@
   "fuzzy-finder":
     preserveLastSearch: true
     useAlternateScoring: true
+".js.regexp.replacement.source":
+  editor:
+    preferredLineLength: 100
+".js.regexp.source":
+  editor:
+    preferredLineLength: 100
+".js.source":
+  editor:
+    preferredLineLength: 100
