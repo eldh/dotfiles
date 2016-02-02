@@ -1,13 +1,12 @@
 "*":
-  "exception-reporting":
-    userId: "fa30af58-aca4-36b5-2f45-3cb313ebe1ad"
-  welcome:
-    showOnStartup: false
+  autosave:
+    enabled: true
   core:
-    themes: [
-      "spacegray-dark-neue-ui"
-      "spacegray-black-syntax"
+    destroyEmptyPanes: false
+    disabledPackages: [
+      "hyperclick"
     ]
+    hideGitIgnoredFiles: true
     ignoredNames: [
       ".bundle"
       ".git"
@@ -16,52 +15,53 @@
       "tmp"
       "vendor"
     ]
-    hideGitIgnoredFiles: true
-    destroyEmptyPanes: false
     openEmptyEditorOnStart: false
-    disabledPackages: [
-      "hyperclick"
+    themes: [
+      "spacegray-dark-neue-ui"
+      "spacegray-black-syntax"
     ]
+  editor:
+    fontFamily: "Fira Code"
+    invisibles: {}
+    lineHeight: 1.7
+    preferredLineLength: 100
+    scrollSensitivity: 70
+    showIndentGuide: true
+    softWrap: true
+  emmet: {}
+  "exception-reporting":
+    userId: "fa30af58-aca4-36b5-2f45-3cb313ebe1ad"
+  "file-watcher":
+    promptWhenFileHasChangedOnDisk: false
+  "fuzzy-finder":
+    preserveLastSearch: true
+    useAlternateScoring: true
+  linter:
+    showErrorPanel: false
+  "linter-eslint":
+    disableWhenNoEslintrcFileInPath: true
+    globalNodePath: "/usr/local"
+    useGlobalEslint: true
+  "linter-scss-lint":
+    executablePath: "/usr/local/bin/scss-lint"
+  minimap:
+    absoluteMode: true
+  nuclide:
+    remoteProjectsConfig: []
+  react: {}
   "spell-check":
     grammars: [
       "text.plain"
       "source.gfm"
       "text.git-commit"
     ]
-  editor:
-    invisibles: {}
-    fontFamily: "Fira Code"
-    preferredLineLength: 100
-    scrollSensitivity: 70
-    softWrap: true
-    lineHeight: 1.7
-    showIndentGuide: true
-    fontSize: 13
-  "linter-eslint":
-    useGlobalEslint: true
-    globalNodePath: "/usr/local"
-    disableWhenNoEslintrcFileInPath: true
-  linter:
-    showErrorPanel: false
-  autosave:
-    enabled: true
   tabs:
     usePreviewTabs: true
-  minimap: {}
-  emmet: {}
-  "linter-scss-lint":
-    executablePath: "/usr/local/bin/scss-lint"
   "tree-view":
     hideIgnoredNames: true
     hideVcsIgnoredFiles: true
-  react: {}
-  "file-watcher":
-    promptWhenFileHasChangedOnDisk: false
-  nuclide:
-    remoteProjectsConfig: []
-  "fuzzy-finder":
-    preserveLastSearch: true
-    useAlternateScoring: true
+  welcome:
+    showOnStartup: false
 ".js.regexp.replacement.source":
   editor:
     preferredLineLength: 100
