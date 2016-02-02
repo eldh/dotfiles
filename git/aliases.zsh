@@ -54,6 +54,7 @@ alias gca='git commit -v -a'
 alias gca!='git commit -v -a --amend'
 alias gcan!='git commit -v -a -s --no-edit --amend'
 alias gcam='git commit -a -m'
+
 alias gcb='git checkout -b'
 alias gcf='git config --list'
 alias gcl='git clone --recursive'
@@ -78,6 +79,8 @@ alias gfo='git fetch origin'
 alias gignore='git update-index --assume-unchanged'
 alias gignored='git ls-files -v | grep "^[[:lower:]]"'
 
+alias gsoft='git reset --soft HEAD~'
+
 alias glog="git log --graph --pretty=format:'%Cred%h%Creset %an: %s - %Creset %C(yellow)%d%Creset %Cgreen(%cr)%Creset' --abbrev-commit --date=relative"
 
 alias gm='git merge'
@@ -94,8 +97,8 @@ alias gpl='git pull --rebase'
 alias gprune='git branch --merged | grep -v "\*" | grep -v "master" | grep -v "develop" | grep -v "staging" | xargs -n 1 git branch -d'
 
 alias gr='git rebase'
-alias grba='git rebase --abort'
-alias grbc='git rebase --continue'
+alias grea='git rebase --abort'
+alias grec='git rebase --continue'
 alias gre='git rebase --autostash'
 alias grup='git remote update'
 alias grv='git remote -v'
