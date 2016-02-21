@@ -7,6 +7,9 @@ bind-key a send-prefix
 unbind r
 bind r source-file ~/.tmux.conf
 
+# Bind command+k to clear-history
+bind -n C-k clear-history
+
 # start window index of 1
 set-option -g base-index 1
 setw -g pane-base-index 1
