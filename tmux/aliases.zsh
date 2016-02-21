@@ -1,0 +1,6 @@
+alias tmkilla="tmux kill-session -a"
+alias tmkill="tmux kill-session -t"
+alias tml="tmux list-sessions"
+# alias tmn="tmux new -s"
+alias tma="tmux attach -t"
+alias tmn="tmux new-session \; split-window\; split-window\; select-layout even-vertical\;"
