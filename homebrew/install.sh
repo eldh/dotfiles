@@ -56,6 +56,9 @@ brew install homebrew/dupes/openssh
 brew install homebrew/dupes/screen
 brew install homebrew/php/php55 --with-gmp
 
+# clojurescript
+brew install rlwrap
+
 # Install other useful binaries.
 brew install ack
 brew install git
@@ -74,7 +77,6 @@ npm install -g gulp
 npm install -g react-native-cli
 npm install -g jsdom
 npm install -g node-inspector
-
 
 brew install caskroom/cask/brew-cask
 brew cask install alfred
