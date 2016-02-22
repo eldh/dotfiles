@@ -99,7 +99,7 @@ alias gprune='git branch --merged | grep -v "\*" | grep -v "master" | grep -v "d
 alias gr='git rebase'
 alias grea='git rebase --abort'
 alias grec='git rebase --continue'
-alias gre='git rebase --autostash'
+alias gre='git rebase --autostash --autosquash'
 alias grup='git remote update'
 alias grv='git remote -v'
 

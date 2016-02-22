@@ -41,7 +41,6 @@
   "linter-eslint":
     disableWhenNoEslintrcFileInPath: true
     globalNodePath: "/usr/local"
-    useGlobalEslint: true
   "linter-scss-lint":
     executablePath: "/usr/local/bin/scss-lint"
   minimap:
