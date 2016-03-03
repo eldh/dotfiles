@@ -56,9 +56,43 @@
     ]
   tabs:
     usePreviewTabs: true
+  "terminal-plus":
+    ansiColors:
+      normal:
+        blue:
+          red: 139
+          green: 155
+          blue: 205
+          alpha: 1
+        cyan:
+          red: 138
+          green: 203
+          blue: 207
+          alpha: 1
+        green:
+          red: 198
+          green: 251
+          blue: 179
+          alpha: 1
+        magenta:
+          red: 206
+          green: 139
+          blue: 202
+          alpha: 1
+        red:
+          red: 254
+          green: 151
+          blue: 165
+          alpha: 1
+        yellow:
+          red: 249
+          green: 249
+          blue: 171
+          alpha: 1
+    core: {}
+    style: {}
   "tree-view":
     hideIgnoredNames: true
-    hideVcsIgnoredFiles: true
   welcome:
     showOnStartup: false
 ".js.regexp.replacement.source":
