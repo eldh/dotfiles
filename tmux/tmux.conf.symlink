@@ -29,6 +29,10 @@ set-option -g mouse-select-pane on
 set-option -g mouse-resize-pane on
 set-option -g mouse-select-window on
 
+# scrolling
+set-option -g mouse on
+bind -n WheelUpPane copy-mode
+
 # colors
 set -g default-terminal "screen-256color"
 
@@ -43,7 +47,6 @@ set -g status-fg black
 set -g status-bg default
 setw -g window-status-format " #I #W "
 setw -g window-status-current-format "#[fg=magenta] #I #W "
-setw -g window-status-content-attr bold,blink,reverse
 set-window-option -g automatic-rename off
 
 # listen to alerts from all windows
