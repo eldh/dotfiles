@@ -54,6 +54,9 @@ defaults write NSGlobalDomain NSTableViewDefaultSizeMode -int 2
 # (Uncomment if you’re on an older Mac that messes up the animation)
 #defaults write NSGlobalDomain NSScrollAnimationEnabled -bool false
 
+# Strip text formatting when copying from Terminal
+defaults write com.apple.Terminal CopyAttributesProfile com.apple.Terminal.no-attributes
+
 # Increase window resize speed for Cocoa applications
 defaults write NSGlobalDomain NSWindowResizeTime -float 0.001
 

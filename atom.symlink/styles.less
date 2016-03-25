@@ -18,11 +18,12 @@
 // style the background color of the tree view
 @dark-gray-blue: #16181c;
 atom-text-editor,
+[data-zen="true"] atom-pane-container atom-pane .item-views,
 :host,
 atom-text-editor::shadow .gutter,
 :host .gutter {
   font-weight: 300;
-  background-color: @dark-gray-blue;
+  background-color: @dark-gray-blue !important;
 }
 .tree-view,
 .tab-bar {
