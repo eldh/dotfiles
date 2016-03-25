@@ -91,6 +91,7 @@ alias gmum='git merge upstream/master'
 alias gmours='grep -lr "<<<<<<<" . | xargs git checkout --ours'
 
 alias gp='git push'
+alias gpn='git push --set-upstream origin echo $(git rev-parse --abbrev-ref HEAD)'
 alias gpd='git push --dry-run'
 alias gpv='git push -v'
 alias gpl='git pull --rebase'
