@@ -13,6 +13,7 @@ alias c="cd ~/Code"
 alias g="git"
 alias h="history"
 alias j="jobs"
+alias ffs="sudo !!"
 
 # List all files colorized in long format
 alias l="ls -lF -G"
