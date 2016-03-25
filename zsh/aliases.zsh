@@ -13,7 +13,6 @@ alias c="cd ~/Code"
 alias g="git"
 alias h="history"
 alias j="jobs"
-alias ffs="sudo !!"
 
 # List all files colorized in long format
 alias l="ls -lF -G"
@@ -30,6 +29,9 @@ export LS_COLORS='no=00:fi=00:di=01;34:ln=01;36:pi=40;33:so=01;35:do=01;35:bd=40
 
 # Enable aliases to be sudo’ed
 alias sudo='sudo '
+
+# FFS! (last command as sudo)
+alias ffs='sudo $(fc -ln -1)'
 
 # Get week number
 alias week='date +%V'
