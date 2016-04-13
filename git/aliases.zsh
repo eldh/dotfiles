@@ -104,6 +104,8 @@ alias gre='git rebase --autostash --autosquash'
 alias grup='git remote update'
 alias grv='git remote -v'
 
+alias gup='git pull --rebase && git submodule update --init --recursive'
+
 alias greset='git reset --hard'
 
 alias gsps='git show --pretty=short --show-signature'

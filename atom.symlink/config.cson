@@ -64,35 +64,35 @@
     ansiColors:
       normal:
         blue:
-          red: 139
-          green: 155
+          alpha: 1
           blue: 205
-          alpha: 1
+          green: 155
+          red: 139
         cyan:
-          red: 138
-          green: 203
+          alpha: 1
           blue: 207
-          alpha: 1
+          green: 203
+          red: 138
         green:
-          red: 198
-          green: 251
+          alpha: 1
           blue: 179
-          alpha: 1
+          green: 251
+          red: 198
         magenta:
-          red: 206
-          green: 139
+          alpha: 1
           blue: 202
-          alpha: 1
+          green: 139
+          red: 206
         red:
-          red: 254
-          green: 151
+          alpha: 1
           blue: 165
-          alpha: 1
+          green: 151
+          red: 254
         yellow:
-          red: 249
-          green: 249
-          blue: 171
           alpha: 1
+          blue: 171
+          green: 249
+          red: 249
     core: {}
     style: {}
   "tree-view":
