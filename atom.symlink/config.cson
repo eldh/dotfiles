@@ -22,7 +22,7 @@
     ]
   editor:
     fontFamily: "Input"
-    fontSize: 13
+    fontSize: 12
     invisibles: {}
     lineHeight: 1.7
     preferredLineLength: 100
@@ -39,7 +39,10 @@
     useAlternateScoring: true
   linter:
     showErrorPanel: false
+    showErrorTabFile: false
+    showErrorTabProject: false
   "linter-eslint":
+    disableEslintIgnore: true
     disableWhenNoEslintrcFileInPath: true
     globalNodePath: "/usr/local"
   "linter-scss-lint":
