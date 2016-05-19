@@ -68,9 +68,9 @@ brew install speedtest_cli
 brew install node
 npm install -g npm@latest
 
+npm install -g fast-cli
 npm install -g npm-check-updates
 npm install -g eslint
-npm install -g coffee-script
 npm install -g webpack
 npm install -g babel
 npm install -g gulp
