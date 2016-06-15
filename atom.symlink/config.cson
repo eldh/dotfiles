@@ -21,8 +21,8 @@
       "spacegray-black-syntax"
     ]
   editor:
-    fontFamily: "Input"
-    fontSize: 12
+    confirmCheckoutHeadRevision: false
+    fontFamily: "SF Mono"
     invisibles: {}
     lineHeight: 1.7
     preferredLineLength: 100
