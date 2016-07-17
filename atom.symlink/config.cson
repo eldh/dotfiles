@@ -5,6 +5,8 @@
     destroyEmptyPanes: false
     disabledPackages: [
       "hyperclick"
+      "linter-flake8"
+      "linter-flow"
     ]
     hideGitIgnoredFiles: true
     ignoredNames: [
@@ -47,6 +49,9 @@
     globalNodePath: "/usr/local"
   "linter-scss-lint":
     executablePath: "/usr/local/bin/scss-lint"
+  "linter-stylelint":
+    disableWhenNoConfig: true
+    useStandard: true
   minimap:
     absoluteMode: true
   nuclide:
@@ -64,35 +69,35 @@
     ansiColors:
       normal:
         blue:
-          alpha: 1
-          blue: 205
-          green: 155
           red: 139
+          green: 155
+          blue: 205
+          alpha: 1
         cyan:
-          alpha: 1
-          blue: 207
-          green: 203
           red: 138
+          green: 203
+          blue: 207
+          alpha: 1
         green:
-          alpha: 1
-          blue: 179
-          green: 251
           red: 198
+          green: 251
+          blue: 179
+          alpha: 1
         magenta:
-          alpha: 1
-          blue: 202
-          green: 139
           red: 206
+          green: 139
+          blue: 202
+          alpha: 1
         red:
-          alpha: 1
-          blue: 165
-          green: 151
           red: 254
-        yellow:
+          green: 151
+          blue: 165
           alpha: 1
-          blue: 171
-          green: 249
+        yellow:
           red: 249
+          green: 249
+          blue: 171
+          alpha: 1
     core: {}
     style: {}
   "tree-view":
