@@ -39,13 +39,11 @@ brew upgrade --all
 brew install coreutils
 sudo ln -s /usr/local/bin/gsha256sum /usr/local/bin/sha256sum
 
-brew install zsh
+brew install fish
 brew tap homebrew/versions
-brew install zsh-completions
-brew install zsh-syntax-highlighting
 
-command -v zsh | sudo tee -a /etc/shells
-chsh -s /usr/local/bin/zsh
+command -v fish | sudo tee -a /etc/shells
+chsh -s /usr/local/bin/fish
 
 brew install tmux
 
@@ -66,17 +64,6 @@ brew install git-lfs
 brew install speedtest_cli
 
 brew install node
-npm install -g npm@latest
-
-npm install -g fast-cli
-npm install -g npm-check-updates
-npm install -g eslint
-npm install -g webpack
-npm install -g babel
-npm install -g gulp
-npm install -g react-native-cli
-npm install -g jsdom
-npm install -g node-inspector
 
 brew install caskroom/cask/brew-cask
 brew cask install alfred
