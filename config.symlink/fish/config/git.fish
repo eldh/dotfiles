@@ -1,34 +1,18 @@
 alias git=hub
 
-# Query/use custom command for `git`.
-zstyle -s ":vcs_info:git:*:-all-" "command" _omz_git_git_cmd
-: ${_omz_git_git_cmd:=git}
-
 #
 # Functions
 #
+function git_branch
+    set -g git_branch (git rev-parse --abbrev-ref HEAD ^ /dev/null)
+    if [ $status -ne 0 ]
+        set -ge git_branch
+        set -g git_dirty_count 0
+    else
+        set -g git_dirty_count (git status --porcelain  | wc -l | sed "s/ //g")
+    end
+end
 
-# The current branch name
-# Usage example: git pull origin $(current_branch)
-# Using '--quiet' with 'symbolic-ref' will not cause a fatal error (128) if
-# it's not a symbolic ref, but in a Git repo.
-function current_branch() {
-  local ref
-  ref=$($_omz_git_git_cmd symbolic-ref --quiet HEAD 2> /dev/null)
-  local ret=$?
-  if [[ $ret != 0 ]]; then
-    [[ $ret == 128 ]] && return  # no git repo.
-    ref=$($_omz_git_git_cmd rev-parse --short HEAD 2> /dev/null) || return
-  fi
-  echo ${ref#refs/heads/}
-}
-# The list of remotes
-function current_repository() {
-  if ! $_omz_git_git_cmd rev-parse --is-inside-work-tree &> /dev/null; then
-    return
-  fi
-  echo $($_omz_git_git_cmd remote -v | cut -d':' -f 2)
-}
 
 #
 # Aliases
@@ -43,7 +27,6 @@ alias gapa='git add --patch'
 
 alias gb='git branch'
 alias gba='git branch -a'
-alias gbda='git branch --merged | command grep -vE "^(\*|\s*master\s*$)" | command xargs -n 1 git branch -d'
 alias gbl='git blame -b -w'
 alias gbnm='git branch --no-merged'
 alias gbr='git branch --remote'
@@ -59,7 +42,7 @@ alias gcb='git checkout -b'
 alias gcf='git config --list'
 alias gcl='git clone --recursive'
 alias gclean='git clean -fd'
-alias gpristine='git reset --hard && git clean -dfx'
+alias gpristine='git reset --hard and git clean -dfx'
 alias gcm='git commit -m'
 alias gco='git checkout'
 alias gcp='git cherry-pick'
@@ -69,7 +52,6 @@ alias gd='git diff --compaction-heuristic'
 alias gdca='git diff --cached'
 alias gdct='git describe --tags `git rev-list --tags --max-count=1`'
 alias gdt='git diff-tree --no-commit-id --name-only -r'
-gdv() { git diff -w "$@" | view - }
 alias gdw='git diff --word-diff'
 
 alias gf='git fetch'
@@ -91,7 +73,7 @@ alias gmum='git merge upstream/master'
 alias gmours='grep -lr "<<<<<<<" . | xargs git checkout --ours'
 
 alias gp='git push'
-alias gpn='git push --set-upstream origin $(git rev-parse --abbrev-ref HEAD)'
+alias gpn='git push --set-upstream origin (git rev-parse --abbrev-ref HEAD)'
 alias gpd='git push --dry-run'
 alias gpv='git push -v'
 alias gpl='git pull --rebase'
@@ -104,7 +86,7 @@ alias gre='git rebase --autostash --autosquash'
 alias grup='git remote update'
 alias grv='git remote -v'
 
-alias gup='git pull --rebase && git submodule update --init --recursive'
+alias gup='git pull --rebase and git submodule update --init --recursive'
 
 alias greset='git reset --hard'
 
@@ -114,4 +96,4 @@ alias gsts='git stash show --text'
 
 alias stash='git stash'
 alias pop='git stash pop'
-alias yolo='gaa && gc --amend && gp -f'
+alias yolo='gaa and gc --amend and gp -f'

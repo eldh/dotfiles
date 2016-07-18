@@ -1,7 +1,0 @@
-{
-  "cjsx": {
-      "filters": "jsx, html",
-      "extends": "jsx",
-      "profile": "xml"
-  }
-}

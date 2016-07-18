@@ -10,3 +10,6 @@ atom.symlink/themes
 git/gitconfig.symlink
 
 atom.symlink/projects.cson
+
+config.symlink/fish/fish_history
+config.symlink/fish/fishd.*
