@@ -7,6 +7,7 @@
       "hyperclick"
       "linter-flake8"
       "linter-flow"
+      "react"
     ]
     hideGitIgnoredFiles: true
     ignoredNames: [

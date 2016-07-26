@@ -403,7 +403,7 @@
 	<key>NSWindow Frame SUUpdateAlert</key>
 	<string>970 787 620 392 0 0 2560 1440 </string>
 	<key>NSWindow Frame SharedPreferences</key>
-	<string>269 83 918 512 0 0 1280 800 </string>
+	<string>269 61 918 495 0 0 1280 800 </string>
 	<key>NSWindow Frame iTerm Window 0</key>
 	<string>253 94 650 502 0 0 1280 800 </string>
 	<key>NSWindow Frame iTerm Window 1</key>
@@ -596,7 +596,7 @@
 				<real>0.99822604656219482</real>
 			</dict>
 			<key>Blinking Cursor</key>
-			<false/>
+			<true/>
 			<key>Blur</key>
 			<true/>
 			<key>Blur Radius</key>
@@ -1223,7 +1223,7 @@
 	<key>SUHasLaunchedBefore</key>
 	<true/>
 	<key>SULastCheckTime</key>
-	<date>2016-07-17T21:25:17Z</date>
+	<date>2016-07-21T19:21:03Z</date>
 	<key>SUSendProfileInfo</key>
 	<false/>
 	<key>SUSkippedVersion</key>
