@@ -96,4 +96,4 @@ alias gsts='git stash show --text'
 
 alias stash='git stash'
 alias pop='git stash pop'
-alias yolo='gaa and gc --amend and gp -f'
+alias yolo='gaa & git commit --amend & gp -f'
