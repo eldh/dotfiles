@@ -40,6 +40,11 @@
   "fuzzy-finder":
     preserveLastSearch: true
     useAlternateScoring: true
+  "language-babel":
+    allowLocalOverride: true
+    autoIndentJSX: true
+    babelMapsAddUrl: false
+    createTargetDirectories: false
   linter:
     showErrorPanel: false
     showErrorTabFile: false
@@ -105,6 +110,12 @@
     hideIgnoredNames: true
   welcome:
     showOnStartup: false
+".babel.regexp.source":
+  editor:
+    preferredLineLength: 100
+".js.jsx.source":
+  editor:
+    preferredLineLength: 100
 ".js.regexp.replacement.source":
   editor:
     preferredLineLength: 100
