@@ -11,5 +11,6 @@ npm install -g jsdom
 npm install -g node-inspector
 npm install -g np
 npm install -g create-react-app
+npm install -g git-recent
 
 exit 0
