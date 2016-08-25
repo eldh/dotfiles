@@ -403,13 +403,13 @@
 	<key>NSWindow Frame SUUpdateAlert</key>
 	<string>970 787 620 392 0 0 2560 1440 </string>
 	<key>NSWindow Frame SharedPreferences</key>
-	<string>269 61 918 495 0 0 1280 800 </string>
+	<string>498 481 796 473 0 0 2560 1440 </string>
 	<key>NSWindow Frame iTerm Window 0</key>
 	<string>253 94 650 502 0 0 1280 800 </string>
 	<key>NSWindow Frame iTerm Window 1</key>
-	<string>604 79 650 502 0 0 1280 800 </string>
+	<string>182 95 650 502 0 0 2560 1440 </string>
 	<key>NSWindow Frame iTerm Window 2</key>
-	<string>173 4 652 528 0 0 2560 1440 </string>
+	<string>57 24 650 502 0 0 2560 1440 </string>
 	<key>New Bookmarks</key>
 	<array>
 		<dict>
@@ -419,8 +419,12 @@
 			<false/>
 			<key>Ansi 0 Color</key>
 			<dict>
+				<key>Alpha Component</key>
+				<real>1</real>
 				<key>Blue Component</key>
 				<real>0.0</real>
+				<key>Color Space</key>
+				<string>Calibrated</string>
 				<key>Green Component</key>
 				<real>0.0</real>
 				<key>Red Component</key>
@@ -482,10 +486,14 @@
 			</dict>
 			<key>Ansi 15 Color</key>
 			<dict>
+				<key>Alpha Component</key>
+				<real>1</real>
 				<key>Blue Component</key>
 				<real>0.99999129772186279</real>
+				<key>Color Space</key>
+				<string>Calibrated</string>
 				<key>Green Component</key>
-				<real>0.99997437000274658</real>
+				<real>0.99997442960739136</real>
 				<key>Red Component</key>
 				<real>1</real>
 			</dict>
@@ -549,12 +557,16 @@
 			</dict>
 			<key>Ansi 8 Color</key>
 			<dict>
+				<key>Alpha Component</key>
+				<real>1</real>
 				<key>Blue Component</key>
-				<real>0.0</real>
+				<real>0.83716875314712524</real>
+				<key>Color Space</key>
+				<string>Calibrated</string>
 				<key>Green Component</key>
-				<real>0.0</real>
+				<real>0.83715450763702393</real>
 				<key>Red Component</key>
-				<real>0.0</real>
+				<real>0.83717954158782959</real>
 			</dict>
 			<key>Ansi 9 Color</key>
 			<dict>
@@ -666,7 +678,7 @@
 			<key>Custom Command</key>
 			<string>No</string>
 			<key>Custom Directory</key>
-			<string>No</string>
+			<string>Yes</string>
 			<key>Default Bookmark</key>
 			<string>No</string>
 			<key>Description</key>
@@ -680,13 +692,13 @@
 				<key>Alpha Component</key>
 				<real>1</real>
 				<key>Blue Component</key>
-				<real>0.7456585168838501</real>
+				<real>0.7557823657989502</real>
 				<key>Color Space</key>
 				<string>Calibrated</string>
 				<key>Green Component</key>
-				<real>0.74564588069915771</real>
+				<real>0.75576961040496826</real>
 				<key>Red Component</key>
-				<real>0.74566823244094849</real>
+				<real>0.75579231977462769</real>
 			</dict>
 			<key>Guid</key>
 			<string>950FE624-8D8A-4175-AF96-97017A25FDCC</string>
@@ -997,6 +1009,8 @@
 				<key>Red Component</key>
 				<real>0.5152624249458313</real>
 			</dict>
+			<key>Minimum Contrast</key>
+			<real>0.0</real>
 			<key>Mouse Reporting</key>
 			<true/>
 			<key>Name</key>
@@ -1024,13 +1038,13 @@
 				<key>Alpha Component</key>
 				<real>1</real>
 				<key>Blue Component</key>
-				<real>0.72946739196777344</real>
+				<real>0.72369873523712158</real>
 				<key>Color Space</key>
 				<string>Calibrated</string>
 				<key>Green Component</key>
-				<real>0.72945499420166016</real>
+				<real>0.72368645668029785</real>
 				<key>Red Component</key>
-				<real>0.72947680950164795</real>
+				<real>0.72370815277099609</real>
 			</dict>
 			<key>Selection Color</key>
 			<dict>
@@ -1082,11 +1096,15 @@
 			<key>Window Type</key>
 			<integer>0</integer>
 			<key>Working Directory</key>
-			<string>/Users/eldh</string>
+			<string>/Users/eldh/Code</string>
 		</dict>
 	</array>
 	<key>NoSyncCommandHistoryHasEverBeenUsed</key>
 	<true/>
+	<key>NoSyncDoNotWarnBeforeMultilinePaste</key>
+	<true/>
+	<key>NoSyncDoNotWarnBeforeMultilinePaste_selection</key>
+	<integer>1</integer>
 	<key>NoSyncDoNotWarnBeforePastingOneLineEndingInNewlineAtShellPrompt</key>
 	<true/>
 	<key>NoSyncDoNotWarnBeforePastingOneLineEndingInNewlineAtShellPrompt_selection</key>
@@ -1223,7 +1241,7 @@
 	<key>SUHasLaunchedBefore</key>
 	<true/>
 	<key>SULastCheckTime</key>
-	<date>2016-07-21T19:21:03Z</date>
+	<date>2016-08-07T20:21:45Z</date>
 	<key>SUSendProfileInfo</key>
 	<false/>
 	<key>SUSkippedVersion</key>

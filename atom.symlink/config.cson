@@ -1,4 +1,8 @@
 "*":
+  "activate-power-mode":
+    autoToggle: false
+    particles:
+      spawnCount: {}
   autosave:
     enabled: true
   core:
@@ -8,6 +12,7 @@
       "linter-flake8"
       "linter-flow"
       "react"
+      "emmet"
     ]
     hideGitIgnoredFiles: true
     ignoredNames: [
@@ -42,7 +47,6 @@
     useAlternateScoring: true
   "language-babel":
     allowLocalOverride: true
-    autoIndentJSX: true
     babelMapsAddUrl: false
     createTargetDirectories: false
   linter:
@@ -50,7 +54,6 @@
     showErrorTabFile: false
     showErrorTabProject: false
   "linter-eslint":
-    disableEslintIgnore: true
     disableWhenNoEslintrcFileInPath: true
     globalNodePath: "/usr/local"
   "linter-scss-lint":
