@@ -13,3 +13,5 @@ atom.symlink/projects.cson
 
 config.symlink/fish/fish_history
 config.symlink/fish/fishd.*
+
+node_modules

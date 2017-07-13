@@ -16,52 +16,17 @@
  */
 
 // style the background color of the tree view
-@dark-gray-blue: #16181c;
-atom-text-editor,
-[data-zen="true"] atom-pane-container atom-pane .item-views,
-:host,
-atom-text-editor::shadow .gutter,
-:host .gutter {
-  font-weight: 400;
-  background-color: @dark-gray-blue !important;
+// @dark-gray: rgb(24, 24, 24);
+atom-text-editor, [data-zen="true"] atom-pane-container atom-pane .item-views, :host, atom-text-editor.editor .gutter, :host .gutter {
+  // font-weight: 300;
 }
-.tree-view,
-.tab-bar {
-  background-color: darken(@dark-gray-blue, 3%);
-  .tab.active {
-    background-color: @dark-gray-blue;
 
+atom-text-editor.editor {
+  .wrap-guide {
+    background-color: transparent!important;
+    border-left: none;
   }
-}
-
-atom-text-editor {
-  text-rendering: optimizeLegibility;
-  background-color: @dark-gray-blue;
-}
-
-// To style other content in the text editor's shadow DOM, use the ::shadow expression
-atom-text-editor::shadow {
-.selection .region {
-    background-color: lighten(@dark-gray-blue, 10%) !important;
-  }
-}
-atom-text-editor::shadow .cursor-line, :host .cursor-line {
-  background-color: lighten(@dark-gray-blue, 3%) !important;
-}
-
-
-atom-text-editor::shadow .gutter, :host .gutter {
-  color: lighten(@dark-gray-blue, 20%);
-}
-
-atom-text-editor::shadow {
-
-  // Hide folding part of the gutter
   .icon-right {
     width: 0 !important;
-  }
-
-  .line-number {
-    padding-left: 10px !important;
   }
 }

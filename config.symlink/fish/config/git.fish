@@ -1,5 +1,15 @@
 alias git=hub
 
+# Uses git's autocompletion for inner commands. Assumes an install of git's
+# bash `git-completion` script at $completion below (this is where Homebrew
+# tosses it, at least).
+# completion='$(brew --prefix)/share/zsh/site-functions/_git'
+# if test -f $completion
+#   source $completion
+# end
+# compdef _git-checkout gco
+
+
 #
 # Functions
 #
@@ -21,72 +31,73 @@ end
 
 alias g='git'
 
-alias ga='git add'
-alias gaa='git add --all'
-alias gapa='git add --patch'
+abbr ga='git add'
+abbr gaa='git add --all'
+abbr gapa='git add --patch'
 
-alias gb='git branch'
-alias gba='git branch -a'
-alias gbl='git blame -b -w'
-alias gbnm='git branch --no-merged'
-alias gbr='git branch --remote'
+abbr gb='git branch'
+abbr gba='git branch -a'
+abbr gbl='git blame -b -w'
+abbr gbnm='git branch --no-merged'
+abbr gbr='git branch --remote'
 
-alias gc='git commit -v'
-alias gc!='git commit -v --amend'
-alias gca='git commit -v -a'
-alias gca!='git commit -v -a --amend'
-alias gcan!='git commit -v -a -s --no-edit --amend'
-alias gcam='git commit -a -m'
+abbr gc='git commit -v'
+abbr gc!='git commit -v --amend'
+abbr gca='git commit -v -a'
+abbr gcan!='git commit -v -a -s --no-edit --amend'
+abbr gcam='git commit -a -m'
+alias gcaa='git commit -v -a --amend'
 
-alias gcb='git checkout -b'
-alias gcf='git config --list'
-alias gcl='git clone --recursive'
-alias gclean='git clean -fd'
-alias gpristine='git reset --hard and git clean -dfx'
-alias gcm='git commit -m'
-alias gco='git checkout'
-alias gcp='git cherry-pick'
-alias gcs='git commit -S'
+abbr gcb='git checkout -b'
+abbr gcf='git config --list'
+abbr gcl='git clone --recursive'
+abbr gclean='git clean -fd'
+abbr gpristine='git reset --hard and git clean -dfx'
+abbr gcm='git commit -m'
+abbr gco='git checkout'
+abbr gcp='git cherry-pick'
+abbr gcs='git commit -S'
 
+abbr gdca='git diff --cached'
+abbr gdct='git describe --tags `git rev-list --tags --max-count=1`'
+abbr gdt='git diff-tree --no-commit-id --name-only -r'
+abbr gdw='git diff --word-diff'
 alias gd='git diff --compaction-heuristic'
-alias gdca='git diff --cached'
-alias gdct='git describe --tags `git rev-list --tags --max-count=1`'
-alias gdt='git diff-tree --no-commit-id --name-only -r'
-alias gdw='git diff --word-diff'
 
-alias gf='git fetch'
-alias gfa='git fetch --all --prune'
-alias gfo='git fetch origin'
+abbr gf='git fetch'
+abbr gfa='git fetch --all --prune'
+abbr gfo='git fetch origin'
 
-alias gignore='git update-index --assume-unchanged'
-alias gignored='git ls-files -v | grep "^[[:lower:]]"'
+abbr gignore='git update-index --assume-unchanged'
+abbr gignored='git ls-files -v | grep "^[[:lower:]]"'
 
-alias gsoft='git reset --soft HEAD~'
+abbr gsoft='git reset --soft HEAD~'
 
 alias glog="git log --graph --pretty=format:'%Cred%h%Creset %an: %s - %Creset %C(yellow)%d%Creset %Cgreen(%cr)%Creset' --abbrev-commit --date=relative"
 
-alias gm='git merge'
-alias gmom='git merge origin/master'
-alias gmt='git mergetool --no-prompt'
-alias gmtvim='git mergetool --no-prompt --tool=vimdiff'
-alias gmum='git merge upstream/master'
-alias gmours='grep -lr "<<<<<<<" . | xargs git checkout --ours'
+abbr gm='git merge'
+abbr gmom='git merge origin/master'
+abbr gmt='git mergetool --no-prompt'
+abbr gmtvim='git mergetool --no-prompt --tool=vimdiff'
+abbr gmum='git merge upstream/master'
+abbr gmours='grep -lr "<<<<<<<" . | xargs git checkout --ours'
 
-alias gp='git push'
-alias gpn='git push --set-upstream origin (git rev-parse --abbrev-ref HEAD)'
-alias gpd='git push --dry-run'
-alias gpv='git push -v'
-alias gpl='git pull --rebase'
+abbr gp='git push'
+abbr gpd='git push --dry-run'
+abbr gpv='git push -v'
 alias gprune='git branch --merged | grep -v "\*" | grep -v "master" | grep -v "develop" | grep -v "staging" | xargs -n 1 git branch -d'
+alias gpn='git push --set-upstream origin (git rev-parse --abbrev-ref HEAD)'
+alias gpl='git pull --rebase'
 
-alias gr='git rebase'
+abbr gr='git rebase'
+abbr gre='git rebase --autostash --autosquash'
+abbr grup='git remote update'
+abbr grv='git remote -v'
+alias grem='git rebase --autostash --autosquash master'
 alias grea='git rebase --abort'
 alias grec='git rebase --continue'
-alias gre='git rebase --autostash --autosquash'
-alias grup='git remote update'
-alias grv='git remote -v'
 
-alias gup='git pull --rebase and git submodule update --init --recursive'
+abbr gup='git pull --rebase and git submodule update --init --recursive'
 
 alias greset='git reset --hard'
 
@@ -96,4 +107,4 @@ alias gsts='git stash show --text'
 
 alias stash='git stash'
 alias pop='git stash pop'
-alias yolo='gaa & git commit --amend & gp -f'
+alias yolo='git add --all & git commit --amend & git push -f'

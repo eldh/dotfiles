@@ -54,6 +54,8 @@ brew install homebrew/dupes/openssh
 brew install homebrew/dupes/screen
 brew install homebrew/php/php55 --with-gmp
 
+brew install ne
+
 # clojurescript
 brew install rlwrap
 
@@ -103,6 +105,9 @@ brew cask install font-libre-baskerville
 brew cask install font-roboto-slab
 brew cask install font-roboto
 brew cask install font-roboto-mono
+brew cask install font-noto-serif
+brew cask install font-noto-sans
+# brew cask install font-noto-mono
 brew cask install qlcolorcode qlstephen qlmarkdown quicklook-json qlprettypatch quicklook-csv betterzipql webp-quicklook suspicious-package
 brew cask cleanup
 

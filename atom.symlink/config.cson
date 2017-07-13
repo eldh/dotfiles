@@ -3,16 +3,53 @@
     autoToggle: false
     particles:
       spawnCount: {}
+  "atom-package-deps":
+    ignored: []
   autosave:
     enabled: true
   core:
-    destroyEmptyPanes: false
+    customFileTypes:
+      "source.ini": [
+        ".buckconfig"
+        ".hgrc"
+      ]
+      "source.json": [
+        ".arcconfig"
+        "BUCK.autodeps"
+      ]
+      "source.python": [
+        "BUCK"
+      ]
     disabledPackages: [
       "hyperclick"
-      "linter-flake8"
       "linter-flow"
       "react"
       "emmet"
+      "activate-power-mode"
+      "language-c"
+      "language-clojure"
+      "language-csharp"
+      "language-go"
+      "language-java"
+      "language-mustache"
+      "language-objective-c"
+      "language-perl"
+      "language-php"
+      "language-ruby-on-rails"
+      "language-sql"
+      "language-toml"
+      "language-xml"
+      "nuclide"
+      "tabs-to-spaces"
+      "terminal-plus"
+      "archive-view"
+      "autocomplete-html"
+      "background-tips"
+      "bookmarks"
+      "language-hyperlink"
+      "language-ruby"
+      "linter-stylelint"
+      "intentions"
     ]
     hideGitIgnoredFiles: true
     ignoredNames: [
@@ -22,20 +59,20 @@
       "repositories"
       "tmp"
       "vendor"
+      "node_modules"
     ]
     openEmptyEditorOnStart: false
+    telemetryConsent: "limited"
     themes: [
-      "spacegray-dark-neue-ui"
-      "spacegray-black-syntax"
+      "hyper-black-ui"
+      "hyper-black-syntax"
     ]
   editor:
     confirmCheckoutHeadRevision: false
-    fontFamily: "SF Mono"
+    fontFamily: "SF Mono, Fantasque Sans Mono"
     invisibles: {}
     lineHeight: 1.7
-    preferredLineLength: 100
     scrollSensitivity: 70
-    showIndentGuide: true
     softWrap: true
   emmet: {}
   "exception-reporting":
@@ -49,22 +86,32 @@
     allowLocalOverride: true
     babelMapsAddUrl: false
     createTargetDirectories: false
-  linter:
-    showErrorPanel: false
-    showErrorTabFile: false
-    showErrorTabProject: false
+  linter: {}
   "linter-eslint":
     disableWhenNoEslintrcFileInPath: true
+    fixOnSave: true
     globalNodePath: "/usr/local"
+  "linter-flake8":
+    maxLineLength: 100
   "linter-scss-lint":
     executablePath: "/usr/local/bin/scss-lint"
   "linter-stylelint":
-    disableWhenNoConfig: true
-    useStandard: true
+    disableWhenNoConfig: false
+  "linter-ui-default":
+    panelHeight: 81
+    showPanel: true
+    showTooltip: false
   minimap:
-    absoluteMode: true
+    disablePythonDocLinks: true
   nuclide:
     remoteProjectsConfig: []
+  "ocaml-merlin":
+    completePartialPrefixes: true
+  "prettier-atom":
+    prettierOptions:
+      singleQuote: true
+      trailingComma: "all"
+    useEslint: true
   react: {}
   "spell-check":
     grammars: [
@@ -72,45 +119,25 @@
       "source.gfm"
       "text.git-commit"
     ]
+  "status-bar": {}
   tabs:
+    showIcons: false
     usePreviewTabs: true
   "terminal-plus":
     ansiColors:
       normal:
-        blue:
-          red: 139
-          green: 155
-          blue: 205
-          alpha: 1
-        cyan:
-          red: 138
-          green: 203
-          blue: 207
-          alpha: 1
-        green:
-          red: 198
-          green: 251
-          blue: 179
-          alpha: 1
-        magenta:
-          red: 206
-          green: 139
-          blue: 202
-          alpha: 1
-        red:
-          red: 254
-          green: 151
-          blue: 165
-          alpha: 1
-        yellow:
-          red: 249
-          green: 249
-          blue: 171
-          alpha: 1
+        blue: "#8b9bcd"
+        cyan: "#8acbcf"
+        green: "#c6fbb3"
+        magenta: "#ce8bca"
+        red: "#fe97a5"
+        yellow: "#f9f9ab"
     core: {}
     style: {}
   "tree-view":
     hideIgnoredNames: true
+    hideVcsIgnoredFiles: true
+    showOnRightSide: true
   welcome:
     showOnStartup: false
 ".babel.regexp.source":
@@ -126,5 +153,11 @@
   editor:
     preferredLineLength: 100
 ".js.source":
+  editor:
+    preferredLineLength: 100
+".languagebabel.ttlextension":
+  editor:
+    preferredLineLength: 100
+".source.styledcss":
   editor:
     preferredLineLength: 100

@@ -14,7 +14,7 @@ end
 # Theming
 
 
-set fish_greeting ''
+set fish_greeting '⚡️'
 
 function fish_title
   echo (basename $PWD)
@@ -84,3 +84,5 @@ alias afk="/System/Library/CoreServices/Menu\ Extras/User.menu/Contents/Resource
 
 # Start ios simulator
 alias ios="open /Applications/Xcode.app/Contents/Developer/Applications/Simulator.app"
+
+test -e {$HOME}/.iterm2_shell_integration.fish ; and source {$HOME}/.iterm2_shell_integration.fish

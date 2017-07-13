@@ -25,8 +25,8 @@
 # If you are unfamiliar with CSON, you can read more about it in the
 # Atom Flight Manual:
 # https://atom.io/docs/latest/using-atom-basic-customization#cson
+# 'atom-text-editor':
+#   'alt-shift-backspace': 'editor:delete-to-beginning-of-subword'
+#   'alt-shift-delete': 'editor:delete-to-end-of-word'
 'atom-text-editor':
-  'alt-shift-backspace': 'editor:delete-to-beginning-of-subword'
-  'alt-shift-delete': 'editor:delete-to-end-of-word'
-'atom-text-editor:not([mini])':
-  'cmd-shift-e': 'emmet:expand-abbreviation'
+  'ctrl-alt-f': 'editor:delete-to-beginning-of-subword'
