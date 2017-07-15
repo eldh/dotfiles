@@ -69,7 +69,7 @@ brew install node
 
 brew install caskroom/cask/brew-cask
 brew cask install alfred
-brew cask alfred link
+brew cask install iterm2
 brew cask install google-chrome
 brew cask install bettertouchtool
 brew cask install flux
@@ -87,6 +87,7 @@ brew cask install licecap
 brew tap caskroom/versions
 brew cask install firefoxdeveloperedition
 brew cask install google-chrome-canary
+brew cask install safari-technology-preview
 
 brew tap caskroom/fonts
 brew cask install font-inconsolata

@@ -1,9 +1,9 @@
 set -x FISH $HOME/.config/fish
 
-if test (hostname) = "NeoNeo.local"
+if test (hostname) = "Neo-neo.local"
   set -x THIS_MACHINE NeoNeo
-else
-  set -x THIS_MACHINE TictailBook
+  else
+    set -x THIS_MACHINE WorkBook
 end
 
 # load the config files
