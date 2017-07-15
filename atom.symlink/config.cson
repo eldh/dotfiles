@@ -3,53 +3,46 @@
     autoToggle: false
     particles:
       spawnCount: {}
-  "atom-package-deps":
-    ignored: []
   autosave:
     enabled: true
   core:
-    customFileTypes:
-      "source.ini": [
-        ".buckconfig"
-        ".hgrc"
-      ]
-      "source.json": [
-        ".arcconfig"
-        "BUCK.autodeps"
-      ]
-      "source.python": [
-        "BUCK"
-      ]
+    destroyEmptyPanes: false
     disabledPackages: [
       "hyperclick"
+      "linter-flake8"
       "linter-flow"
       "react"
       "emmet"
-      "activate-power-mode"
-      "language-c"
-      "language-clojure"
-      "language-csharp"
-      "language-go"
-      "language-java"
-      "language-mustache"
+      "github"
+      "background-tips"
+      "image-view"
+      "language-coffee-script"
+      "language-hyperlink"
       "language-objective-c"
-      "language-perl"
-      "language-php"
+      "language-property-list"
       "language-ruby-on-rails"
+      "wrap-guide"
+      "archive-view"
+      "language-java"
+      "language-go"
+      "language-csharp"
+      "language-clojure"
+      "language-c"
+      "language-python"
+      "language-ruby"
+      "language-php"
+      "language-perl"
+      "language-mustache"
+      "language-make"
+      "welcome"
+      "status-bar"
+      "language-source"
       "language-sql"
+      "language-todo"
       "language-toml"
       "language-xml"
-      "nuclide"
-      "tabs-to-spaces"
-      "terminal-plus"
-      "archive-view"
-      "autocomplete-html"
-      "background-tips"
-      "bookmarks"
-      "language-hyperlink"
-      "language-ruby"
-      "linter-stylelint"
-      "intentions"
+      "link"
+      "metrics"
     ]
     hideGitIgnoredFiles: true
     ignoredNames: [
@@ -59,20 +52,21 @@
       "repositories"
       "tmp"
       "vendor"
-      "node_modules"
     ]
     openEmptyEditorOnStart: false
     telemetryConsent: "limited"
     themes: [
-      "hyper-black-ui"
-      "hyper-black-syntax"
+      "spacegray-dark-neue-ui"
+      "spacegray-black-syntax"
     ]
   editor:
     confirmCheckoutHeadRevision: false
-    fontFamily: "SF Mono, Fantasque Sans Mono"
+    fontFamily: "SF Mono, Input Mono"
     invisibles: {}
     lineHeight: 1.7
+    preferredLineLength: 100
     scrollSensitivity: 70
+    showIndentGuide: true
     softWrap: true
   emmet: {}
   "exception-reporting":
@@ -89,29 +83,16 @@
   linter: {}
   "linter-eslint":
     disableWhenNoEslintrcFileInPath: true
-    fixOnSave: true
     globalNodePath: "/usr/local"
-  "linter-flake8":
-    maxLineLength: 100
   "linter-scss-lint":
     executablePath: "/usr/local/bin/scss-lint"
   "linter-stylelint":
     disableWhenNoConfig: false
-  "linter-ui-default":
-    panelHeight: 81
-    showPanel: true
-    showTooltip: false
+    useStandard: true
   minimap:
-    disablePythonDocLinks: true
+    absoluteMode: true
   nuclide:
     remoteProjectsConfig: []
-  "ocaml-merlin":
-    completePartialPrefixes: true
-  "prettier-atom":
-    prettierOptions:
-      singleQuote: true
-      trailingComma: "all"
-    useEslint: true
   react: {}
   "spell-check":
     grammars: [
@@ -119,25 +100,48 @@
       "source.gfm"
       "text.git-commit"
     ]
-  "status-bar": {}
+  "status-bar":
+    fullWidth: false
+    isVisible: false
   tabs:
-    showIcons: false
     usePreviewTabs: true
   "terminal-plus":
     ansiColors:
       normal:
-        blue: "#8b9bcd"
-        cyan: "#8acbcf"
-        green: "#c6fbb3"
-        magenta: "#ce8bca"
-        red: "#fe97a5"
-        yellow: "#f9f9ab"
+        blue:
+          alpha: 1
+          blue: 205
+          green: 155
+          red: 139
+        cyan:
+          alpha: 1
+          blue: 207
+          green: 203
+          red: 138
+        green:
+          alpha: 1
+          blue: 179
+          green: 251
+          red: 198
+        magenta:
+          alpha: 1
+          blue: 202
+          green: 139
+          red: 206
+        red:
+          alpha: 1
+          blue: 165
+          green: 151
+          red: 254
+        yellow:
+          alpha: 1
+          blue: 171
+          green: 249
+          red: 249
     core: {}
     style: {}
   "tree-view":
     hideIgnoredNames: true
-    hideVcsIgnoredFiles: true
-    showOnRightSide: true
   welcome:
     showOnStartup: false
 ".babel.regexp.source":
@@ -153,11 +157,5 @@
   editor:
     preferredLineLength: 100
 ".js.source":
-  editor:
-    preferredLineLength: 100
-".languagebabel.ttlextension":
-  editor:
-    preferredLineLength: 100
-".source.styledcss":
   editor:
     preferredLineLength: 100

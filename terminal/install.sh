@@ -58,7 +58,7 @@ EOD
 #defaults write org.x.X11 wm_ffm -bool true
 
 # Don’t display the annoying prompt when quitting iTerm
-# defaults write com.googlecode.iterm2 PromptOnQuit -bool false
+defaults write com.googlecode.iterm2 PromptOnQuit -bool false
 
 # Install the Spacegray theme for iTerm
-# open "open '$HOME/dotfiles/terminal/spacegray.itermcolors'"
+open "open '$HOME/dotfiles/terminal/spacegray.itermcolors'"

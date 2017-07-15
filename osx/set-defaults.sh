@@ -46,6 +46,12 @@ defaults write com.apple.systemuiserver menuExtras -array \
 # Set sidebar icon size to medium
 defaults write NSGlobalDomain NSTableViewDefaultSizeMode -int 2
 
+# Dark mode
+defaults write /Library/Preferences/.GlobalPreferences AppleInterfaceTheme Dark
+
+# Autohide dock
+defaults write com.apple.Dock autohide-delay -float 0
+
 # Always show scrollbars
 # defaults write NSGlobalDomain AppleShowScrollBars -string "Always"
 # Possible values: `WhenScrolling`, `Automatic` and `Always`
@@ -259,6 +265,10 @@ defaults write com.apple.finder ShowStatusBar -bool true
 # Finder: show path bar
 defaults write com.apple.finder ShowPathbar -bool true
 
+# Default finder locatioon should be $HOME
+defaults write com.apple.finder NewWindowTarget -string "PfLo" && \
+defaults write com.apple.finder NewWindowTargetPath -string "file://${HOME}"
+
 # Display full POSIX path as Finder window title
 # defaults write com.apple.finder _FXShowPosixPathInTitle -bool true
 
@@ -402,6 +412,9 @@ defaults write com.apple.dock showhidden -bool true
 
 # Disable the Launchpad gesture (pinch with thumb and three fingers)
 defaults write com.apple.dock showLaunchpadGestureEnabled -int 0
+
+# Hide desktop icons
+defaults write com.apple.finder CreateDesktop -bool false
 
 # Reset Launchpad, but keep the desktop wallpaper intact
 # find "${HOME}/Library/Application Support/Dock" -name "*-*.db" -maxdepth 1 -delete

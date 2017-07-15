@@ -1,16 +1,16 @@
 #!/bin/sh
 
-npm install -g fast-cli
-npm install -g npm-check-updates
-npm install -g eslint
-npm install -g jest
-npm install -g webpack
-npm install -g diff-so-fancy
-npm install -g node-inspector
-npm install -g np
-npm install -g create-react-app
-npm install -g git-recent
-npm install -g vtop
-npm install -g http-server
-
+npm i -g fast-cli
+npm i -g npm-check-updates
+npm i -g eslint
+npm i -g jest
+npm i -g webpack
+npm i -g diff-so-fancy
+npm i -g np
+npm i -g git-recent
+npm i -g vtop
+npm i -g http-server
+npm i -g np
+npm i -g git-recent
+npm i -g alfred-npms
 exit 0
