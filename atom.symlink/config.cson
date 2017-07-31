@@ -43,6 +43,7 @@
       "language-xml"
       "link"
       "metrics"
+      "linter-stylelint"
     ]
     hideGitIgnoredFiles: true
     ignoredNames: [
@@ -56,8 +57,8 @@
     openEmptyEditorOnStart: false
     telemetryConsent: "limited"
     themes: [
-      "spacegray-dark-neue-ui"
-      "spacegray-black-syntax"
+      "hyper-black-ui"
+      "hyper-black-syntax"
     ]
   editor:
     confirmCheckoutHeadRevision: false
@@ -89,11 +90,15 @@
   "linter-stylelint":
     disableWhenNoConfig: false
     useStandard: true
+  "linter-ui-default":
+    panelHeight: 81
   minimap:
     absoluteMode: true
   nuclide:
     remoteProjectsConfig: []
   react: {}
+  "reason-refmt":
+    useLinter: false
   "spell-check":
     grammars: [
       "text.plain"

@@ -83,13 +83,13 @@ if begin; status --is-interactive; and not functions -q -- iterm2_status; and [ 
     end
   end
 
-  function -v _ underscore_change
-    if [ x$_ = xfish ]
-      iterm2_precmd
-    else
-      iterm2_preexec
-    end
-  end
+  # function -v _ underscore_change
+  #   if [ x$_ = xfish ]
+  #     iterm2_precmd
+  #   else
+  #     iterm2_preexec
+  #   end
+  # end
 
   # If hostname -f is slow for you, set iterm2_hostname before sourcing this script
   if not set -q iterm2_hostname
