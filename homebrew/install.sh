@@ -62,17 +62,17 @@ brew install rlwrap
 # Install other useful binaries.
 brew install ack
 brew install git
+brew install hub
 brew install git-lfs
 brew install speedtest_cli
 
 brew install node
 
-brew install caskroom/cask/brew-cask
+brew tap caskroom/cask
 brew cask install alfred
 brew cask install iterm2
 brew cask install google-chrome
 brew cask install bettertouchtool
-brew cask install flux
 brew cask install dash
 brew cask install spotify
 brew cask install slack
@@ -80,10 +80,9 @@ brew cask install atom
 brew cask install github-desktop
 brew cask install sequel-pro
 brew cask install dropbox
-brew cask install onepassword
 brew cask install transmission
-brew cask install licecap
 brew cask install vscode
+brew cask install kap
 
 brew tap caskroom/versions
 brew cask install firefoxdeveloperedition

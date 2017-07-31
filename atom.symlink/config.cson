@@ -10,7 +10,6 @@
     disabledPackages: [
       "hyperclick"
       "linter-flake8"
-      "linter-flow"
       "react"
       "emmet"
       "github"
