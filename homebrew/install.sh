@@ -83,6 +83,7 @@ brew cask install dropbox
 brew cask install transmission
 brew cask install vscode
 brew cask install kap
+brew cask install 1password
 
 brew tap caskroom/versions
 brew cask install firefoxdeveloperedition
