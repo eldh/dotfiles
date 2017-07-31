@@ -1,0 +1,46 @@
+{
+    "id": "46e1f58d-e66f-4ecc-a579-b8813ac94e38",
+    "organizationId": "98768a1b-ca19-5a30-8231-5ef4af38fa95",
+    "status": "fulfilled",
+    "type": "customerInvalidDocument",
+    "data": {
+        "reason": "missing-page",
+        "documentId": "68a1b179-1170-438f-97a7-fdbdca449a26",
+        "organizationId": "1c2b4330-bec0-423f-ace2-2996f985859c"
+    },
+    "actions": [{
+      "key": "freetextAnswer",
+      "type": "schemaForm",
+      "title": "Fill in an answer",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "answer": {
+            "type": "string",
+            "ui": {
+              "widget": "textarea"
+            }
+          }
+        },
+        "required": ["answer"]
+      }
+    }, {
+      "key": "trash",
+      "type": "option",
+      "title": "Trash document",
+      "actionLabel": "Trash the document, I don't care"
+    }, {
+      "key": "pick-suggested-entity",
+      "type": "pickSuggestions",
+      "title": "Show suggested matches",
+      "suggestions": [
+          {
+              "id": "81f62bff-5ad4-453a-a8c8-2b42e709bacf",
+              "type": "document",
+              "confidence": 0.75
+          }
+      ]
+    }],
+    "links": [],
+    "result": "# If it bleeds, we can kill it."
+}

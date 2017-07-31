@@ -1,0 +1,197 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FlexDataTable should render with empty rows and columns 1`] = `
+<StyledFlexDataTable
+  columns={Array []}
+  rows={Array []}
+>
+  <StyledFlex
+    flexDirection="column"
+  >
+    <div
+      data-radium={true}
+      style={
+        Object {
+          "alignItems": undefined,
+          "display": "flex",
+          "flexDirection": "column",
+          "justifyContent": undefined,
+          "width": "100%",
+        }
+      }
+    />
+  </StyledFlex>
+</StyledFlexDataTable>
+`;
+
+exports[`FlexDataTable should render with empty rows and defined columns 1`] = `
+<StyledFlexDataTable
+  columns={
+    Array [
+      [Function],
+    ]
+  }
+  rows={Array []}
+>
+  <StyledFlex
+    flexDirection="column"
+  >
+    <div
+      data-radium={true}
+      style={
+        Object {
+          "alignItems": undefined,
+          "display": "flex",
+          "flexDirection": "column",
+          "justifyContent": undefined,
+          "width": "100%",
+        }
+      }
+    />
+  </StyledFlex>
+</StyledFlexDataTable>
+`;
+
+exports[`FlexDataTable should render with rows and columns 1`] = `
+<StyledFlexDataTable
+  columns={
+    Array [
+      [Function],
+      [Function],
+    ]
+  }
+  rows={
+    Array [
+      Object {
+        "key": "1",
+      },
+      Object {
+        "key": "2",
+      },
+      Object {
+        "key": "3",
+      },
+    ]
+  }
+>
+  <StyledFlex
+    flexDirection="column"
+  >
+    <div
+      data-radium={true}
+      style={
+        Object {
+          "alignItems": undefined,
+          "display": "flex",
+          "flexDirection": "column",
+          "justifyContent": undefined,
+          "width": "100%",
+        }
+      }
+    >
+      <FlexTableRow
+        flexDirection="row"
+        last={false}
+      >
+        <StyledFlex
+          style={
+            Array [
+              Object {
+                "borderBottom": "1px #e3e3e3 solid",
+              },
+            ]
+          }
+        >
+          <div
+            data-radium={true}
+            style={
+              Object {
+                "alignItems": undefined,
+                "borderBottom": "1px #e3e3e3 solid",
+                "display": "flex",
+                "flexDirection": undefined,
+                "justifyContent": undefined,
+                "width": "100%",
+              }
+            }
+          >
+            <div>
+              key
+            </div>
+            <div>
+              key
+            </div>
+          </div>
+        </StyledFlex>
+      </FlexTableRow>
+      <FlexTableRow
+        flexDirection="row"
+        last={false}
+      >
+        <StyledFlex
+          style={
+            Array [
+              Object {
+                "borderBottom": "1px #e3e3e3 solid",
+              },
+            ]
+          }
+        >
+          <div
+            data-radium={true}
+            style={
+              Object {
+                "alignItems": undefined,
+                "borderBottom": "1px #e3e3e3 solid",
+                "display": "flex",
+                "flexDirection": undefined,
+                "justifyContent": undefined,
+                "width": "100%",
+              }
+            }
+          >
+            <div>
+              key
+            </div>
+            <div>
+              key
+            </div>
+          </div>
+        </StyledFlex>
+      </FlexTableRow>
+      <FlexTableRow
+        flexDirection="row"
+        last={true}
+      >
+        <StyledFlex
+          style={
+            Array [
+              false,
+            ]
+          }
+        >
+          <div
+            data-radium={true}
+            style={
+              Object {
+                "alignItems": undefined,
+                "display": "flex",
+                "flexDirection": undefined,
+                "justifyContent": undefined,
+                "width": "100%",
+              }
+            }
+          >
+            <div>
+              key
+            </div>
+            <div>
+              key
+            </div>
+          </div>
+        </StyledFlex>
+      </FlexTableRow>
+    </div>
+  </StyledFlex>
+</StyledFlexDataTable>
+`;
