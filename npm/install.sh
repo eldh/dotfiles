@@ -14,4 +14,5 @@ npm i -g http-server
 npm i -g np
 npm i -g git-recent
 npm i -g alfred-npms
+npm i -g alfred-emoj
 exit 0
