@@ -4,6 +4,7 @@ atom.symlink/.storage
 atom.symlink/compile-cache/
 atom.symlink/blob-store
 atom.symlink/packages
+atom.symlink/recovery
 atom.symlink/storage
 atom.symlink/themes
 
@@ -13,6 +14,7 @@ atom.symlink/projects.cson
 
 config.symlink/fish/fish_history
 config.symlink/fish/fishd.*
-
+config.symlink/configstore
+config.symlink/yarn
 node_modules
 .DS_Store
