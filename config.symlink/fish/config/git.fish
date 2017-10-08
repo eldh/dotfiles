@@ -62,7 +62,7 @@ abbr gdca='git diff --cached'
 abbr gdct='git describe --tags `git rev-list --tags --max-count=1`'
 abbr gdt='git diff-tree --no-commit-id --name-only -r'
 abbr gdw='git diff --word-diff'
-alias gd='git diff --compaction-heuristic'
+alias gd='git diff --indent-heuristic'
 
 abbr gf='git fetch'
 abbr gfa='git fetch --all --prune'

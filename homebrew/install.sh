@@ -65,6 +65,7 @@ brew install git
 brew install hub
 brew install git-lfs
 brew install speedtest_cli
+brew install ccat
 
 brew install node
 

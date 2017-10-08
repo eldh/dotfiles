@@ -6,7 +6,6 @@
   autosave:
     enabled: true
   core:
-    destroyEmptyPanes: false
     disabledPackages: [
       "hyperclick"
       "linter-flake8"
@@ -43,6 +42,13 @@
       "link"
       "metrics"
       "linter-stylelint"
+      "language-graphql"
+      "language-reason"
+      "language-terraform"
+      "linter-refmt"
+      "ocaml-merlin"
+      "reason-refmt"
+      "language-less"
     ]
     hideGitIgnoredFiles: true
     ignoredNames: [
@@ -52,8 +58,10 @@
       "repositories"
       "tmp"
       "vendor"
+      "node_modules"
     ]
     openEmptyEditorOnStart: false
+    projectHome: "/Users/eldh/Code"
     telemetryConsent: "limited"
     themes: [
       "hyper-black-ui"
@@ -83,7 +91,12 @@
   linter: {}
   "linter-eslint":
     disableWhenNoEslintrcFileInPath: true
+    fixOnSave: true
     globalNodePath: "/usr/local"
+    ignoreFixableRulesWhileTyping: true
+  "linter-js-standard":
+    checkStyleDevDependencies: true
+    showEslintRules: true
   "linter-scss-lint":
     executablePath: "/usr/local/bin/scss-lint"
   "linter-stylelint":
@@ -146,6 +159,7 @@
     style: {}
   "tree-view":
     hideIgnoredNames: true
+    hideVcsIgnoredFiles: true
   welcome:
     showOnStartup: false
 ".babel.regexp.source":

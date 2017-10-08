@@ -6,5 +6,5 @@ set -x DOTFILES ~/dotfiles
 
 # Languages
 set PATH /usr/local/sbin $PATH # homebrew
-
+set PATH ~/Library/Python/3.6/bin $PATH # python stuff
 set PATH $DOTFILES/bin $PATH # local bins
