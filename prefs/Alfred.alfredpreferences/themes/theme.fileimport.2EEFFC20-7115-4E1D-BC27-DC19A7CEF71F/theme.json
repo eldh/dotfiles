@@ -23,7 +23,7 @@
       },
       "iconPaddingHorizontal" : 5,
       "paddingVertical" : 10,
-      "iconSize" : 40
+      "iconSize" : 32
     },
     "search" : {
       "paddingVertical" : 9,
@@ -38,13 +38,13 @@
       "backgroundSelected" : "#667A8CFF"
     },
     "window" : {
-      "color" : "#00000000",
+      "color" : "#00000043",
       "paddingHorizontal" : 0,
-      "width" : 440,
+      "width" : 650,
       "borderPadding" : 1,
-      "borderColor" : "#00000033",
+      "borderColor" : "#FEFFFF32",
       "blur" : 40,
-      "roundness" : -4,
+      "roundness" : 0,
       "paddingVertical" : 0
     },
     "credit" : "eldh",
