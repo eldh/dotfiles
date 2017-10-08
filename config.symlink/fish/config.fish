@@ -37,6 +37,9 @@ alias g="git"
 alias h="history"
 alias j="jobs"
 
+# Replace stuff
+alias cat="ccat"
+
 # List all files colorized in long format
 alias l="ls -lF -G"
 
