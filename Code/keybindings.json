@@ -31,5 +31,22 @@
   {
     "key": "cmd+k cmd+b",
     "command": "workbench.action.maximizeEditor"
+  },
+  {
+    "key": "cmd+l",
+    "command": "extension.debugWrapAfter"
+  },
+  {
+    "key": "ctrl+shift+cmd+w",
+    "command": "workbench.action.closeWindow"
+  },
+  {
+    "key": "shift+cmd+w",
+    "command": "-workbench.action.closeWindow"
+  },
+  {
+    "key": "cmd+w",
+    "command": "-workbench.action.closeWindow",
+    "when": "!editorIsOpen"
   }
 ]

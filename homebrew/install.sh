@@ -79,10 +79,10 @@ brew cask install spotify
 brew cask install slack
 brew cask install atom
 brew cask install github-desktop
-brew cask install sequel-pro
+brew cask install zensequel-pro
 brew cask install dropbox
 brew cask install transmission
-brew cask install vscode
+brew cask install visual-studio-code
 brew cask install kap
 brew cask install 1password
 
