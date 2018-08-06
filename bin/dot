@@ -14,6 +14,3 @@ brew update
 
 # Install homebrew packages
 $FISH/homebrew/install.sh 2>&1
-
-# Update atom package list
-ls $FISH/atom.symlink/packages/ > $FISH/atom/packages.txt
