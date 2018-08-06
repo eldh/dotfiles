@@ -231,6 +231,9 @@ defaults write NSGlobalDomain AppleFontSmoothing -int 2
 # Finder: allow quitting via ⌘ + Q; doing so will also hide desktop icons
 # defaults write com.apple.finder QuitMenuItem -bool true
 
+# Enable text selection in quicklook
+defaults write com.apple.finder QLEnableTextSelection -bool true
+
 # Finder: disable window animations and Get Info animations
 # defaults write com.apple.finder DisableAllAnimations -bool true
 
@@ -285,9 +288,9 @@ defaults write com.apple.frameworks.diskimages skip-verify-locked -bool true
 defaults write com.apple.frameworks.diskimages skip-verify-remote -bool true
 
 # Automatically open a new Finder window when a volume is mounted
-defaults write com.apple.frameworks.diskimages auto-open-ro-root -bool true
-defaults write com.apple.frameworks.diskimages auto-open-rw-root -bool true
-defaults write com.apple.finder OpenWindowForNewRemovableDisk -bool true
+# defaults write com.apple.frameworks.diskimages auto-open-ro-root -bool true
+# defaults write com.apple.frameworks.diskimages auto-open-rw-root -bool true
+# defaults write com.apple.finder OpenWindowForNewRemovableDisk -bool true
 
 # Show item info near icons on the desktop and in other icon views
 # /usr/libexec/PlistBuddy -c "Set :DesktopViewSettings:IconViewSettings:showItemInfo true" ~/Library/Preferences/com.apple.finder.plist
@@ -307,9 +310,6 @@ defaults write com.apple.finder OpenWindowForNewRemovableDisk -bool true
 # /usr/libexec/PlistBuddy -c "Set :FK_StandardViewSettings:IconViewSettings:iconSize 80" ~/Library/Preferences/com.apple.finder.plist
 # /usr/libexec/PlistBuddy -c "Set :StandardViewSettings:IconViewSettings:iconSize 80" ~/Library/Preferences/com.apple.finder.plist
 
-# Disable Finder icons
-defaults write com.apple.finder CreateDesktop false
-
 # Use list view in all Finder windows by default
 # Four-letter codes for the other view modes: `icnv`, `clmv`, `Flwv`
 defaults write com.apple.finder FXPreferredViewStyle -string "Nlsv"
@@ -319,9 +319,6 @@ defaults write com.apple.finder FXPreferredViewStyle -string "Nlsv"
 
 # Empty Trash securely by default
 # defaults write com.apple.finder EmptyTrashSecurely -bool true
-
-# Enable AirDrop over Ethernet and on unsupported Macs running Lion
-# defaults write com.apple.NetworkBrowser BrowseAllInterfaces -bool true
 
 # Enable the MacBook Air SuperDrive on any Mac
 # sudo nvram boot-args="mbasd=1"
@@ -359,19 +356,16 @@ defaults write com.apple.dock minimize-to-application -bool true
 # Enable spring loading for all Dock items
 defaults write com.apple.dock enable-spring-load-actions-on-all-items -bool true
 
-# Show indicator lights for open applications in the Dock
-defaults write com.apple.dock show-process-indicators -bool true
+# Hide indicator lights for open applications in the Dock
+defaults write com.apple.dock show-process-indicators -bool false
 
 # Wipe all (default) app icons from the Dock
 # This is only really useful when setting up a new Mac, or if you don’t use
 # the Dock to launch apps.
-# defaults write com.apple.dock persistent-apps -array
+defaults write com.apple.dock persistent-apps -array
 
 # Don’t animate opening applications from the Dock
 # defaults write com.apple.dock launchanim -bool false
-
-# Speed up Mission Control animations
-# defaults write com.apple.dock expose-animation-duration -float 0.1
 
 # Don’t group windows by application in Mission Control
 # (i.e. use the old Exposé behavior instead)
@@ -388,6 +382,7 @@ defaults write com.apple.dock mru-spaces -bool false
 
 # Remove the auto-hiding Dock delay
 defaults write com.apple.dock autohide-delay -float 0
+
 # Remove the animation when hiding/showing the Dock
 # defaults write com.apple.dock autohide-time-modifier -float 0
 
@@ -458,7 +453,7 @@ defaults write com.apple.Safari ShowFullURLInSmartSearchField -bool true
 # defaults write com.apple.Safari HomePage -string "about:blank"
 
 # Prevent Safari from opening ‘safe’ files automatically after downloading
-# defaults write com.apple.Safari AutoOpenSafeDownloads -bool false
+defaults write com.apple.Safari AutoOpenSafeDownloads -bool false
 
 # Allow hitting the Backspace key to go to the previous page in history
 # defaults write com.apple.Safari com.apple.Safari.ContentPageGroupIdentifier.WebKit2BackspaceKeyNavigationEnabled -bool true
@@ -655,8 +650,8 @@ defaults write com.bohemiancoding.sketch3 exportCompactSVG -bool yes
 
 for app in "Activity Monitor" "Address Book" "Calendar" "Contacts" "cfprefsd" \
 	"Dock" "Finder" "Google Chrome" "Google Chrome Canary" "Mail" "Messages" \
-	"Opera" "Safari" "Spectacle" "SystemUIServer" "Terminal" \
-	"Transmission" "Twitter" "iCal"; do
+	"Opera" "Safari" "SystemUIServer" "Terminal" \
+	"Transmission" "iCal"; do
 	killall "${app}" > /dev/null 2>&1
 done
 echo "Done. Note that some of these changes require a logout/restart to take effect."

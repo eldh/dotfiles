@@ -9,6 +9,7 @@
   "workbench.activityBar.visible": false,
   "files.exclude": {
     "**/.git": true,
+    "src/**/*.bs.js": true,
     "**/node_modules": true,
     "**/dist": true,
     "**/build": true,
@@ -49,7 +50,8 @@
     "editorGutter.background": "#000000",
     "editorWarning.foreground": "#ffc400",
     "editorError.foreground": "#d44343",
-    "editorInfo.foreground": "#2eebcb"
+    "editorInfo.foreground": "#2eebcb",
+    "editorWidget.border": "#1C617A"
   },
   "editor.minimap.enabled": true,
   "editor.minimap.showSlider": "always",
@@ -65,7 +67,38 @@
   "editor.codeLens": true,
   "workbench.startupEditor": "newUntitledFile",
   "eslint.autoFixOnSave": true,
-  "workbench.colorTheme": "Fedu",
   "editor.selectionHighlight": false,
-  "editor.snippetSuggestions": "top"
+  "editor.snippetSuggestions": "top",
+  "workbench.colorTheme": "Visual Studio Dark",
+  "gitlens.advanced.messages": {
+    "suppressCommitHasNoPreviousCommitWarning": false,
+    "suppressCommitNotFoundWarning": false,
+    "suppressFileNotUnderSourceControlWarning": false,
+    "suppressGitVersionWarning": false,
+    "suppressLineUncommittedWarning": false,
+    "suppressNoRepositoryWarning": false,
+    "suppressUpdateNotice": true,
+    "suppressWelcomeNotice": true
+  },
+  "reason.diagnostics.tools": [
+    "merlin", "bsb"
+  ],
+  "gitlens.keymap": "alternate",
+  "editor.tabSize": 2,
+  "editor.lightbulb.enabled": false,
+  "zenMode.centerLayout": true,
+  "sync.gist": "1e679e9dce3adba34d884e39a7cfee5a",
+  "sync.lastUpload": "2018-04-06T18:06:46.663Z",
+  "sync.autoDownload": false,
+  "sync.autoUpload": false,
+  "sync.lastDownload": "",
+  "sync.forceDownload": false,
+  "sync.host": "",
+  "sync.pathPrefix": "",
+  "sync.quietSync": false,
+  "sync.askGistName": false,
+  "sync.removeExtensions": true,
+  "sync.syncExtensions": true,
+  "git.ignoreMissingGitWarning": true,
+  "git.path": "/usr/local/bin/git"
 }

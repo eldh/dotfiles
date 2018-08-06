@@ -12,8 +12,6 @@ for file in $FISH/config/*.fish
 end
 
 # Theming
-
-
 set fish_greeting '⚡️'
 
 function fish_title
