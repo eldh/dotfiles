@@ -48,23 +48,22 @@ chsh -s /usr/local/bin/fish
 brew install tmux
 
 # Install more recent versions of some OS X tools.
-brew install vim --override-system-vi
-brew install homebrew/dupes/grep
-brew install homebrew/dupes/openssh
-brew install homebrew/dupes/screen
-brew install homebrew/php/php55 --with-gmp
+# brew install vim --override-system-vi
+# brew install homebrew/dupes/grep
+# brew install homebrew/dupes/openssh
+# brew install homebrew/dupes/screen
+# brew install homebrew/php/php55 --with-gmp
 
 brew install ne
 
 # clojurescript
-brew install rlwrap
+# brew install rlwrap
 
 # Install other useful binaries.
 brew install ack
 brew install git
 brew install hub
 brew install git-lfs
-brew install speedtest_cli
 brew install ccat
 
 brew install node
@@ -79,14 +78,13 @@ brew cask install spotify
 brew cask install slack
 brew cask install atom
 brew cask install github-desktop
-brew cask install zensequel-pro
+brew cask install sequel-pro
 brew cask install dropbox
 brew cask install transmission
 brew cask install visual-studio-code
 brew cask install kap
 brew cask install 1password
 
-brew tap caskroom/versions
 brew cask install firefoxdeveloperedition
 brew cask install google-chrome-canary
 brew cask install safari-technology-preview
@@ -111,7 +109,7 @@ brew cask install font-roboto-mono
 brew cask install font-noto-serif
 brew cask install font-noto-sans
 # brew cask install font-noto-mono
-brew cask install qlcolorcode qlstephen qlmarkdown quicklook-json qlprettypatch quicklook-csv betterzipql webp-quicklook suspicious-package
+brew cask install qlcolorcode qlcolorcode-extra qlstephen qlmarkdown quicklook-json qlprettypatch quicklook-csv betterzipql webpquicklook suspicious-package qlvideo
 brew cask cleanup
 
 # Remove outdated versions from the cellar.

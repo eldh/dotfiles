@@ -7,10 +7,16 @@ language-fish-shell
 language-reason
 linter
 linter-eslint
+linter-flow
 linter-refmt
 linter-stylelint
 linter-ui-default
 minimap
 ocaml-merlin
+prettier-atom
 reason-refmt
+spacegray-black-syntax
+spacegray-dark-neue-syntax
+spacegray-dark-neue-ui
+spacegray-dark-syntax
 tabs-to-spaces
