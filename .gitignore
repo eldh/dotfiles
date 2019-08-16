@@ -16,5 +16,6 @@ config.symlink/fish/fish_history
 config.symlink/fish/fishd.*
 config.symlink/configstore
 config.symlink/yarn
+config.symlink/hub
 node_modules
 .DS_Store

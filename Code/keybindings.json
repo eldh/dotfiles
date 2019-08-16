@@ -48,5 +48,20 @@
     "key": "cmd+w",
     "command": "-workbench.action.closeWindow",
     "when": "!editorIsOpen"
+  },
+  {
+    "key": "shift+cmd+r",
+    "command": "reason-language-server.restart",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "ctrl+shift+alt+7",
+    "command": "gitlens.showCommitSearch",
+    "when": "gitlens:enabled && config.gitlens.keymap == 'alternate'"
+  },
+  {
+    "key": "shift+alt+7",
+    "command": "-gitlens.showCommitSearch",
+    "when": "gitlens:enabled && config.gitlens.keymap == 'alternate'"
   }
 ]

@@ -1,6 +1,7 @@
 {
   "dependencies": {
+    "create-next-app": "^9.0.3",
+    "serve": "^10.1.1"
   },
-  "devDependencies": {
-  }
+  "devDependencies": {}
 }
