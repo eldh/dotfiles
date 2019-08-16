@@ -4,6 +4,7 @@
   "editor.fontSize": 14,
   "editor.cursorStyle": "line",
   "editor.wordWrap": "on",
+  "eslint.validate": ["javascript", "typescript", "typescriptreact", "javascriptreact"],
   "editor.fontLigatures": true,
   "workbench.statusBar.visible": false,
   "workbench.activityBar.visible": false,
@@ -34,7 +35,7 @@
     "scrollbarSlider.hoverBackground": "#363636",
     "scrollbarSlider.background": "#303030",
     "sideBar.background": "#0F0F0F",
-    "editorGroup.background": "#000000",
+    "editorGroup.emptyBackground": "#000000",
     "editor.background": "#000000",
     "editor.selectionBackground": "#5e1c7a",
     "editor.selectionForeground": "#ffffff",
@@ -57,7 +58,6 @@
   "editor.minimap.showSlider": "always",
   "editor.multiCursorModifier": "ctrlCmd",
   "editor.formatOnPaste": false,
-  "prettier.eslintIntegration": true,
   "prettier.printWidth": 100,
   "prettier.singleQuote": true,
   "prettier.trailingComma": "es5",
@@ -66,7 +66,6 @@
   "editor.renderLineHighlight": "all",
   "editor.codeLens": true,
   "workbench.startupEditor": "newUntitledFile",
-  "eslint.autoFixOnSave": true,
   "editor.selectionHighlight": false,
   "editor.snippetSuggestions": "top",
   "workbench.colorTheme": "Visual Studio Dark",
@@ -80,25 +79,37 @@
     "suppressUpdateNotice": true,
     "suppressWelcomeNotice": true
   },
-  "reason.diagnostics.tools": [
-    "merlin", "bsb"
-  ],
   "gitlens.keymap": "alternate",
   "editor.tabSize": 2,
   "editor.lightbulb.enabled": false,
   "zenMode.centerLayout": true,
   "sync.gist": "1e679e9dce3adba34d884e39a7cfee5a",
-  "sync.lastUpload": "2018-04-06T18:06:46.663Z",
   "sync.autoDownload": false,
   "sync.autoUpload": false,
-  "sync.lastDownload": "",
   "sync.forceDownload": false,
-  "sync.host": "",
-  "sync.pathPrefix": "",
   "sync.quietSync": false,
   "sync.askGistName": false,
   "sync.removeExtensions": true,
   "sync.syncExtensions": true,
   "git.ignoreMissingGitWarning": true,
-  "git.path": "/usr/local/bin/git"
+  "git.path": "/usr/local/bin/git",
+  "[reason]": {
+    "editor.formatOnSave": false
+  },
+  "javascript.updateImportsOnFileMove.enabled": "always",
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  "eslint.autoFixOnSave": true,
+  "editor.formatOnSave": true,
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  }
 }

@@ -7,3 +7,4 @@ set -x DOTFILES ~/dotfiles
 # Languages
 set PATH /usr/local/sbin $PATH # homebrew
 set PATH $DOTFILES/bin $PATH # local bins
+set PATH ~/.opam/system/bin $PATH # opam

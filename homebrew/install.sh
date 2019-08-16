@@ -65,11 +65,12 @@ brew install git
 brew install hub
 brew install git-lfs
 brew install ccat
-
+brew install fzf
 brew install node
 
 brew tap caskroom/cask
 brew cask install alfred
+brew cask install kitty
 brew cask install iterm2
 brew cask install google-chrome
 brew cask install bettertouchtool
