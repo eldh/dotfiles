@@ -31,73 +31,71 @@ end
 
 alias g='git'
 
-abbr ga='git add'
-abbr gaa='git add --all'
-abbr gapa='git add --patch'
+abbr -a ga git add
+abbr -a gaa git add --all
+abbr -a gapa git add --patch
 
-abbr gb='git branch'
-abbr gba='git branch -a'
-abbr gbl='git blame -b -w'
-abbr gbnm='git branch --no-merged'
-abbr gbr='git branch --remote'
+abbr -a gb git branch
+abbr -a gba git branch -a
+abbr -a gbl git blame -b -w
+abbr -a gbnm git branch --no-merged
+abbr -a gbr git branch --remote
 
-abbr gc='git commit -v'
-abbr gc!='git commit -v --amend'
-abbr gca='git commit -v -a'
-abbr gcan!='git commit -v -a -s --no-edit --amend'
-abbr gcam='git commit -a -m'
+abbr -a gc git commit -v
+abbr -a gca git commit -v -a
+abbr -a gcam git commit -a -m
 alias gcaa='git commit -v -a --amend'
 
-abbr gcb='git checkout -b'
-abbr gcf='git config --list'
-abbr gcl='git clone --recursive'
-abbr gclean='git clean -fd'
-abbr gpristine='git reset --hard and git clean -dfx'
-abbr gcm='git commit -m'
-abbr gco='git checkout'
-abbr gcp='git cherry-pick'
-abbr gcs='git commit -S'
+abbr -a gcb git checkout -b
+abbr -a gcf git config --list
+abbr -a gcl git clone --recursive
+abbr -a gclean git clean -fd
+abbr -a gpristine git reset --hard and git clean -dfx
+abbr -a gcm git commit -m
+abbr -a gco git checkout
+abbr -a gcp git cherry-pick
+abbr -a gcs git commit -S
 
-abbr gdca='git diff --cached'
-abbr gdct='git describe --tags `git rev-list --tags --max-count=1`'
-abbr gdt='git diff-tree --no-commit-id --name-only -r'
-abbr gdw='git diff --word-diff'
+abbr -a gdca git diff --cached
+abbr -a gdct git describe --tags `git rev-list --tags --max-count=1`
+abbr -a gdt git diff-tree --no-commit-id --name-only -r
+abbr -a gdw git diff --word-diff
 alias gd='git diff --indent-heuristic'
 
-abbr gf='git fetch'
-abbr gfa='git fetch --all --prune'
-abbr gfo='git fetch origin'
+abbr -a gf git fetch
+abbr -a gfa git fetch --all --prune
+abbr -a gfo git fetch origin
 
-abbr gignore='git update-index --assume-unchanged'
-abbr gignored='git ls-files -v | grep "^[[:lower:]]"'
+abbr -a gignore git update-index --assume-unchanged
+abbr -a gignored git ls-files -v | grep "^[[:lower:]]"
 
-abbr gsoft='git reset --soft HEAD~'
+abbr -a gsoft git reset --soft HEAD~
 
 alias glog="git log --graph --pretty=format:'%Cred%h%Creset %an: %s - %Creset %C(yellow)%d%Creset %Cgreen(%cr)%Creset' --abbrev-commit --date=relative"
 
-abbr gm='git merge'
-abbr gmom='git merge origin/master'
-abbr gmt='git mergetool --no-prompt'
-abbr gmtvim='git mergetool --no-prompt --tool=vimdiff'
-abbr gmum='git merge upstream/master'
-abbr gmours='grep -lr "<<<<<<<" . | xargs git checkout --ours'
+abbr -a gm git merge
+abbr -a gmom git merge origin/master
+abbr -a gmt git mergetool --no-prompt
+abbr -a gmtvim git mergetool --no-prompt --tool=vimdiff
+abbr -a gmum git merge upstream/master
+abbr -a gmours grep -lr "<<<<<<<" . | xargs git checkout --ours
 
-abbr gp='git push'
-abbr gpd='git push --dry-run'
-abbr gpv='git push -v'
+abbr -a gp git push
+abbr -a gpd git push --dry-run
+abbr -a gpv git push -v
 alias gprune='git branch --merged | grep -v "\*" | grep -v "master" | grep -v "develop" | grep -v "staging" | xargs -n 1 git branch -d'
 alias gpn='git push --set-upstream origin (git rev-parse --abbrev-ref HEAD)'
 alias gpl='git pull --rebase'
 
-abbr gr='git rebase'
-abbr gre='git rebase --autostash --autosquash'
-abbr grup='git remote update'
-abbr grv='git remote -v'
+abbr -a gr git rebase
+abbr -a gre git rebase --autostash --autosquash
+abbr -a grup git remote update
+abbr -a grv git remote -v
 alias grem='git rebase --autostash --autosquash master'
 alias grea='git rebase --abort'
 alias grec='git rebase --continue'
 
-abbr gup='git pull --rebase and git submodule update --init --recursive'
+abbr -a gup git pull --rebase and git submodule update --init --recursive
 
 alias greset='git reset --hard'
 
