@@ -1,194 +1,176 @@
 {
-  "BTTPresetName" : "btt.preset_87FF703C-6226-450F-9AD2-17FF26A935B4",
-  "BTTPresetUUID" : "049FEA9F-D57E-4EA0-A054-0EE94BD5AEA2",
-  "BTTPresetContent" : [
+  "BTTPresetName": "btt.preset_87FF703C-6226-450F-9AD2-17FF26A935B4",
+  "BTTPresetUUID": "049FEA9F-D57E-4EA0-A054-0EE94BD5AEA2",
+  "BTTPresetContent": [
     {
-      "BTTAppBundleIdentifier" : "com.apple.Terminal",
-      "BTTAppName" : "Terminal",
-      "BTTAppSpecificSettings" : {
-
-      },
-      "BTTTriggers" : [
+      "BTTAppBundleIdentifier": "com.apple.Terminal",
+      "BTTAppName": "Terminal",
+      "BTTAppSpecificSettings": {},
+      "BTTTriggers": [
         {
-          "BTTTriggerType" : 100,
-          "BTTTriggerTypeDescription" : "3 Finger Swipe Left",
-          "BTTTriggerClass" : "BTTTriggerTypeTouchpadAll",
-          "BTTShortcutToSend" : "56,55,124",
-          "BTTEnabled" : 1,
-          "BTTOrder" : 0
+          "BTTTriggerType": 100,
+          "BTTTriggerTypeDescription": "3 Finger Swipe Left",
+          "BTTTriggerClass": "BTTTriggerTypeTouchpadAll",
+          "BTTShortcutToSend": "56,55,124",
+          "BTTEnabled": 1,
+          "BTTOrder": 0
         },
         {
-          "BTTTriggerType" : 101,
-          "BTTTriggerTypeDescription" : "3 Finger Swipe Right",
-          "BTTTriggerClass" : "BTTTriggerTypeTouchpadAll",
-          "BTTShortcutToSend" : "56,55,123",
-          "BTTEnabled" : 1,
-          "BTTOrder" : 0
+          "BTTTriggerType": 101,
+          "BTTTriggerTypeDescription": "3 Finger Swipe Right",
+          "BTTTriggerClass": "BTTTriggerTypeTouchpadAll",
+          "BTTShortcutToSend": "56,55,123",
+          "BTTEnabled": 1,
+          "BTTOrder": 0
         }
       ]
     },
     {
-      "BTTAppBundleIdentifier" : "BT.G",
-      "BTTAppName" : "Global",
-      "BTTAppSpecificSettings" : {
-
-      },
-      "BTTTriggers" : [
+      "BTTAppBundleIdentifier": "BT.G",
+      "BTTAppName": "Global",
+      "BTTAppSpecificSettings": {},
+      "BTTTriggers": [
         {
-          "BTTTriggerClass" : "BTTTriggerTypeKeyboardShortcut",
-          "BTTShortcutToSend" : "58,19",
-          "BTTEnabled" : 1,
-          "BTTShortcutKeyCode" : 10,
-          "BTTShortcutModifierKeys" : 0,
-          "BTTOrder" : 0
+          "BTTTriggerClass": "BTTTriggerTypeKeyboardShortcut",
+          "BTTShortcutToSend": "58,19",
+          "BTTEnabled": 1,
+          "BTTShortcutKeyCode": 10,
+          "BTTShortcutModifierKeys": 0,
+          "BTTOrder": 0
         },
         {
-          "BTTTriggerType" : -1,
-          "BTTTriggerClass" : "BTTTriggerTypeKeyboardShortcut",
-          "BTTShortcutToSend" : "58,21",
-          "BTTEnabled" : 1,
-          "BTTShortcutKeyCode" : 21,
-          "BTTShortcutModifierKeys" : 131072,
-          "BTTOrder" : 1
+          "BTTTriggerType": -1,
+          "BTTTriggerClass": "BTTTriggerTypeKeyboardShortcut",
+          "BTTShortcutToSend": "58,21",
+          "BTTEnabled": 1,
+          "BTTShortcutKeyCode": 21,
+          "BTTShortcutModifierKeys": 131072,
+          "BTTOrder": 1
         }
       ]
     },
     {
-      "BTTAppBundleIdentifier" : "com.github.atom",
-      "BTTAppName" : "Atom",
-      "BTTAppSpecificSettings" : {
-
-      },
-      "BTTTriggers" : [
+      "BTTAppBundleIdentifier": "com.github.atom",
+      "BTTAppName": "Atom",
+      "BTTAppSpecificSettings": {},
+      "BTTTriggers": [
         {
-          "BTTTriggerType" : 100,
-          "BTTTriggerTypeDescription" : "3 Finger Swipe Left",
-          "BTTTriggerClass" : "BTTTriggerTypeTouchpadAll",
-          "BTTShortcutToSend" : "58,55,124",
-          "BTTEnabled" : 1,
-          "BTTOrder" : 0
+          "BTTTriggerType": 100,
+          "BTTTriggerTypeDescription": "3 Finger Swipe Left",
+          "BTTTriggerClass": "BTTTriggerTypeTouchpadAll",
+          "BTTShortcutToSend": "58,55,124",
+          "BTTEnabled": 1,
+          "BTTOrder": 0
         },
         {
-          "BTTTriggerType" : 101,
-          "BTTTriggerTypeDescription" : "3 Finger Swipe Right",
-          "BTTTriggerClass" : "BTTTriggerTypeTouchpadAll",
-          "BTTShortcutToSend" : "58,55,123",
-          "BTTEnabled" : 1,
-          "BTTOrder" : 1
+          "BTTTriggerType": 101,
+          "BTTTriggerTypeDescription": "3 Finger Swipe Right",
+          "BTTTriggerClass": "BTTTriggerTypeTouchpadAll",
+          "BTTShortcutToSend": "58,55,123",
+          "BTTEnabled": 1,
+          "BTTOrder": 1
         }
       ]
     },
     {
-      "BTTAppBundleIdentifier" : "com.apple.finder",
-      "BTTAppName" : "Finder",
-      "BTTAppSpecificSettings" : {
-
-      },
-      "BTTTriggers" : [
-
-      ]
+      "BTTAppBundleIdentifier": "com.apple.finder",
+      "BTTAppName": "Finder",
+      "BTTAppSpecificSettings": {},
+      "BTTTriggers": []
     },
     {
-      "BTTAppBundleIdentifier" : "com.google.Chrome",
-      "BTTAppName" : "Google Chrome",
-      "BTTAppSpecificSettings" : {
-
-      },
-      "BTTTriggers" : [
+      "BTTAppBundleIdentifier": "com.google.Chrome",
+      "BTTAppName": "Google Chrome",
+      "BTTAppSpecificSettings": {},
+      "BTTTriggers": [
         {
-          "BTTTriggerType" : 100,
-          "BTTTriggerTypeDescription" : "3 Finger Swipe Left",
-          "BTTTriggerClass" : "BTTTriggerTypeTouchpadAll",
-          "BTTShortcutToSend" : "58,48",
-          "BTTEnabled" : 1,
-          "BTTOrder" : 1
+          "BTTTriggerType": 100,
+          "BTTTriggerTypeDescription": "3 Finger Swipe Left",
+          "BTTTriggerClass": "BTTTriggerTypeTouchpadAll",
+          "BTTShortcutToSend": "58,48",
+          "BTTEnabled": 1,
+          "BTTOrder": 1
         },
         {
-          "BTTTriggerType" : 102,
-          "BTTTriggerTypeDescription" : "3 Finger Swipe Up",
-          "BTTTriggerClass" : "BTTTriggerTypeTouchpadAll",
-          "BTTShortcutToSend" : "58,55,34",
-          "BTTEnabled" : 1,
-          "BTTOrder" : 2
+          "BTTTriggerType": 102,
+          "BTTTriggerTypeDescription": "3 Finger Swipe Up",
+          "BTTTriggerClass": "BTTTriggerTypeTouchpadAll",
+          "BTTShortcutToSend": "58,55,34",
+          "BTTEnabled": 1,
+          "BTTOrder": 2
         },
         {
-          "BTTTriggerType" : 101,
-          "BTTTriggerTypeDescription" : "3 Finger Swipe Right",
-          "BTTTriggerClass" : "BTTTriggerTypeTouchpadAll",
-          "BTTShortcutToSend" : "58,56,48",
-          "BTTEnabled" : 1,
-          "BTTOrder" : 0
+          "BTTTriggerType": 101,
+          "BTTTriggerTypeDescription": "3 Finger Swipe Right",
+          "BTTTriggerClass": "BTTTriggerTypeTouchpadAll",
+          "BTTShortcutToSend": "58,56,48",
+          "BTTEnabled": 1,
+          "BTTOrder": 0
         }
       ]
     },
     {
-      "BTTAppBundleIdentifier" : "com.apple.SafariTechnologyPreview",
-      "BTTAppName" : "Safari Technology Preview",
-      "BTTAppSpecificSettings" : {
-
-      },
-      "BTTTriggers" : [
+      "BTTAppBundleIdentifier": "com.apple.SafariTechnologyPreview",
+      "BTTAppName": "Safari Technology Preview",
+      "BTTAppSpecificSettings": {},
+      "BTTTriggers": [
         {
-          "BTTTriggerType" : 102,
-          "BTTTriggerTypeDescription" : "3 Finger Swipe Up",
-          "BTTTriggerClass" : "BTTTriggerTypeTouchpadAll",
-          "BTTShortcutToSend" : "58,55,34",
-          "BTTEnabled" : 1,
-          "BTTOrder" : 2
+          "BTTTriggerType": 102,
+          "BTTTriggerTypeDescription": "3 Finger Swipe Up",
+          "BTTTriggerClass": "BTTTriggerTypeTouchpadAll",
+          "BTTShortcutToSend": "58,55,34",
+          "BTTEnabled": 1,
+          "BTTOrder": 2
         },
         {
-          "BTTTriggerType" : 100,
-          "BTTTriggerTypeDescription" : "3 Finger Swipe Left",
-          "BTTTriggerClass" : "BTTTriggerTypeTouchpadAll",
-          "BTTShortcutToSend" : "56,55,124",
-          "BTTEnabled" : 1,
-          "BTTOrder" : 1
+          "BTTTriggerType": 100,
+          "BTTTriggerTypeDescription": "3 Finger Swipe Left",
+          "BTTTriggerClass": "BTTTriggerTypeTouchpadAll",
+          "BTTShortcutToSend": "56,55,124",
+          "BTTEnabled": 1,
+          "BTTOrder": 1
         },
         {
-          "BTTTriggerType" : 101,
-          "BTTTriggerTypeDescription" : "3 Finger Swipe Right",
-          "BTTTriggerClass" : "BTTTriggerTypeTouchpadAll",
-          "BTTShortcutToSend" : "56,55,123",
-          "BTTEnabled" : 1,
-          "BTTOrder" : 0
+          "BTTTriggerType": 101,
+          "BTTTriggerTypeDescription": "3 Finger Swipe Right",
+          "BTTTriggerClass": "BTTTriggerTypeTouchpadAll",
+          "BTTShortcutToSend": "56,55,123",
+          "BTTEnabled": 1,
+          "BTTOrder": 0
         }
       ]
     },
     {
-      "BTTAppBundleIdentifier" : "com.apple.Safari",
-      "BTTAppName" : "Safari",
-      "BTTAppSpecificSettings" : {
-
-      },
-      "BTTTriggers" : [
+      "BTTAppBundleIdentifier": "com.apple.Safari",
+      "BTTAppName": "Safari",
+      "BTTAppSpecificSettings": {},
+      "BTTTriggers": [
         {
-          "BTTTriggerType" : 102,
-          "BTTTriggerTypeDescription" : "3 Finger Swipe Up",
-          "BTTTriggerClass" : "BTTTriggerTypeTouchpadAll",
-          "BTTShortcutToSend" : "58,55,34",
-          "BTTEnabled" : 1,
-          "BTTOrder" : 2
+          "BTTTriggerType": 102,
+          "BTTTriggerTypeDescription": "3 Finger Swipe Up",
+          "BTTTriggerClass": "BTTTriggerTypeTouchpadAll",
+          "BTTShortcutToSend": "58,55,34",
+          "BTTEnabled": 1,
+          "BTTOrder": 2
         },
         {
-          "BTTTriggerType" : 100,
-          "BTTTriggerTypeDescription" : "3 Finger Swipe Left",
-          "BTTTriggerClass" : "BTTTriggerTypeTouchpadAll",
-          "BTTShortcutToSend" : "56,55,124",
-          "BTTEnabled" : 1,
-          "BTTOrder" : 0
+          "BTTTriggerType": 100,
+          "BTTTriggerTypeDescription": "3 Finger Swipe Left",
+          "BTTTriggerClass": "BTTTriggerTypeTouchpadAll",
+          "BTTShortcutToSend": "56,55,124",
+          "BTTEnabled": 1,
+          "BTTOrder": 0
         },
         {
-          "BTTTriggerType" : 101,
-          "BTTTriggerTypeDescription" : "3 Finger Swipe Right",
-          "BTTTriggerClass" : "BTTTriggerTypeTouchpadAll",
-          "BTTShortcutToSend" : "56,55,123",
-          "BTTEnabled" : 1,
-          "BTTOrder" : 1
+          "BTTTriggerType": 101,
+          "BTTTriggerTypeDescription": "3 Finger Swipe Right",
+          "BTTTriggerClass": "BTTTriggerTypeTouchpadAll",
+          "BTTShortcutToSend": "56,55,123",
+          "BTTEnabled": 1,
+          "BTTOrder": 1
         }
       ]
     }
   ],
-  "BTTPresetSnapAreas" : [
-
-  ]
+  "BTTPresetSnapAreas": []
 }

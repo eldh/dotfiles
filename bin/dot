@@ -4,13 +4,20 @@
 #
 # `dot` handles installation, updates, things like that. Run it periodically
 # to make sure you're on the latest and greatest.
+echo "set FISH"
 export FISH=$HOME/dotfiles
-
 # Set OS X defaults
+echo "set osx defaults"
 $FISH/osx/set-defaults.sh
 
+# Install homebrew
+echo "installing homebrew"
+/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+
 # Upgrade homebrew
+echo "brew update"
 brew update
 
 # Install homebrew packages
+echo "install homebrew packages"
 $FISH/homebrew/install.sh 2>&1
