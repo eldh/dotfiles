@@ -78,7 +78,6 @@ brew cask install bettertouchtool
 brew cask install dash
 brew cask install spotify
 brew cask install slack
-brew cask install github-desktop
 brew cask install sequel-pro
 brew cask install dropbox
 brew cask install transmission
@@ -87,7 +86,6 @@ brew cask install kap
 brew cask install 1password
 brew cask install gitup
 
-brew cask install firefoxdeveloperedition
 brew cask install safari-technology-preview
 
 brew tap caskroom/fonts

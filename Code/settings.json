@@ -1,10 +1,35 @@
 {
   "files.autoSave": "onFocusChange",
+  "auto-close-tag.activationOnLanguage": [
+    "reason",
+    "xml",
+    "php",
+    "blade",
+    "ejs",
+    "jinja",
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact",
+    "plaintext",
+    "markdown",
+    "vue",
+    "liquid",
+    "erb",
+    "lang-cfml",
+    "cfml",
+    "HTML (Eex)"
+  ],
   "editor.fontFamily": "'Fira Code', Menlo, Monaco, 'Courier New', monospace",
   "editor.fontSize": 14,
   "editor.cursorStyle": "line",
   "editor.wordWrap": "on",
-  "eslint.validate": ["javascript", "typescript", "typescriptreact", "javascriptreact"],
+  "eslint.validate": [
+    "javascript",
+    "typescript",
+    "typescriptreact",
+    "javascriptreact"
+  ],
   "editor.fontLigatures": true,
   "workbench.statusBar.visible": false,
   "workbench.activityBar.visible": false,
@@ -110,6 +135,9 @@
   "eslint.autoFixOnSave": true,
   "editor.formatOnSave": true,
   "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[javascriptreact]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   }
 }
