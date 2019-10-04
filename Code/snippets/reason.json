@@ -12,6 +12,16 @@
 	// 	],
 	// 	"description": "Log output to console"
 	// }
+	"React component": {
+		"prefix": "component",
+		"body": [
+			"[@react.component]",
+			"let make = ($1) => {",
+			"  $2",
+			"};"
+		],
+		"description": "Insert new React component"
+	},
 	"Print to console": {
 		"prefix": "log",
 		"body": [
