@@ -68,6 +68,7 @@ brew install ccat
 brew install fzf
 brew install node
 brew install yarn
+brew install gpg
 
 brew tap caskroom/cask
 brew cask install alfred
