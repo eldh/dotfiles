@@ -38,6 +38,12 @@ alias g="git"
 alias h="history"
 alias j="jobs"
 
+## bsb
+alias bsc="yarn bsb -clean-world -make-world"
+alias bsm="yarn bsb -make-world"
+alias bsw="yarn bsb -make-world -w"
+alias bscw="yarn bsb -clean-world -make-world -w"
+
 # Replace stuff
 alias cat="ccat"
 
