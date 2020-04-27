@@ -1,5 +1,6 @@
 {
   "files.autoSave": "onFocusChange",
+  "editor.formatOnSave": true,
   "auto-close-tag.activationOnLanguage": [
     "reason",
     "xml",
@@ -83,7 +84,6 @@
   "editor.minimap.showSlider": "always",
   "editor.multiCursorModifier": "ctrlCmd",
   "editor.formatOnPaste": false,
-  "editor.formatOnSave": false,
   "terminal.external.osxExec": "iTerm.app",
   "editor.renderLineHighlight": "all",
   "editor.codeLens": true,
@@ -116,7 +116,7 @@
   "git.ignoreMissingGitWarning": true,
   "git.path": "/usr/local/bin/git",
   "[reason]": {
-    "editor.formatOnSave": false
+    "editor.formatOnSave": true
   },
   "reason_language_server.autoRebuild": true,
   "javascript.updateImportsOnFileMove.enabled": "always",

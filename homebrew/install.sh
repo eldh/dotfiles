@@ -69,6 +69,8 @@ brew install fzf
 brew install node
 brew install yarn
 brew install gpg
+brew install scc
+brew install cloc
 
 brew tap caskroom/cask
 brew cask install alfred

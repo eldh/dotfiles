@@ -17,5 +17,8 @@ config.symlink/fish/fishd.*
 config.symlink/configstore
 config.symlink/yarn
 config.symlink/hub
+config.symlink/gcloud
+config.symlink/gatsby
+
 node_modules
 .DS_Store
