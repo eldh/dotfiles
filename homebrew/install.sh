@@ -72,7 +72,7 @@ brew install gpg
 brew install scc
 brew install cloc
 
-brew tap caskroom/cask
+brew tap homebrew/cask-cask
 brew cask install alfred
 brew cask install kitty
 brew cask install iterm2
@@ -91,7 +91,7 @@ brew cask install gitup
 
 brew cask install safari-technology-preview
 
-brew tap caskroom/fonts
+brew tap homebrew/cask-fonts
 brew cask install font-inconsolata
 brew cask install font-input
 brew cask install font-fira-sans

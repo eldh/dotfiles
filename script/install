@@ -1,10 +1,6 @@
-#!/usr/bin/env bash
-#
-# Run all dotfiles installers.
+#!/bin/sh
 
-set -e
-
-cd "$(dirname $0)"/..
-
-# find the installers and run them iteratively
-find . -name install.sh | while read installer ; do sh -c "${installer}" ; done
+sh ../npm/install.sh
+sh ../Code/install.sh
+sh ../homebrew/install.sh
+sh ../terminal/install.sh
