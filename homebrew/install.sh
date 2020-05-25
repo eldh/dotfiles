@@ -75,19 +75,16 @@ brew install cloc
 brew tap homebrew/cask-cask
 brew cask install alfred
 brew cask install kitty
-brew cask install iterm2
 brew cask install brave-browser
 brew cask install bettertouchtool
-brew cask install dash
 brew cask install spotify
 brew cask install slack
-brew cask install sequel-pro
-brew cask install dropbox
 brew cask install transmission
 brew cask install visual-studio-code
 brew cask install kap
 brew cask install 1password
 brew cask install gitup
+brew cask install vlc
 
 brew cask install safari-technology-preview
 
