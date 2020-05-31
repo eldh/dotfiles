@@ -13,5 +13,6 @@ npm i -g spoof
 npm i -g vtop
 npm i -g kill-port
 npm i -g yarn-deduplicate
+npm i -g md-to-pdf
 
 exit 0
