@@ -1,18 +1,10 @@
 [
   // Place your key bindings in this file to overwrite the defaults
-  {
-    "key": "shift+alt+up",
-    "command": "editor.action.copyLinesUpAction",
-    "when": "editorTextFocus && !editorReadonly"
-  },
+
   {
     "key": "shift+alt+up",
     "command": "-editor.action.copyLinesUpAction",
     "when": "editorTextFocus && !editorReadonly"
-  },
-  {
-    "key": "shift+cmd+d",
-    "command": "-workbench.view.debug"
   },
   {
     "key": "shift+cmd+d",
@@ -77,4 +69,17 @@
     "command": "workbench.action.files.saveWithoutFormatting",
     "when": "editorTextFocus"
   },
+  {
+    "key": "cmd+2",
+    "command": "-workbench.action.focusSecondEditorGroup"
+  },
+  {
+    "key": "cmd+2",
+    "command": "editor.action.changeAll",
+    "when": "editorTextFocus && editorTextFocus && !editorReadonly"
+  },
+  {
+    "key": "ctrl+cmd+2",
+    "command": "workbench.action.focusSecondEditorGroup"
+  }
 ]
