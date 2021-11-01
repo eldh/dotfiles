@@ -21,8 +21,6 @@ end
 # Set locale to en_us
 export LC_ALL=en_US.UTF-8
 
-alias git hub
-
 # Reload the shell (i.e. invoke as a login shell)
 alias reload="exec $SHELL -l"
 
