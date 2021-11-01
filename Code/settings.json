@@ -45,7 +45,6 @@
     "**/CVS": true,
     "**/.DS_Store": true
   },
-  "window.zoomLevel": 1,
   "editor.scrollBeyondLastLine": false,
   "workbench.editor.showIcons": true,
   "editor.tokenColorCustomizations": {
