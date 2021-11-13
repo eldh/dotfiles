@@ -79,37 +79,6 @@
       "BTTTriggers": []
     },
     {
-      "BTTAppBundleIdentifier": "com.google.Chrome",
-      "BTTAppName": "Google Chrome",
-      "BTTAppSpecificSettings": {},
-      "BTTTriggers": [
-        {
-          "BTTTriggerType": 100,
-          "BTTTriggerTypeDescription": "3 Finger Swipe Left",
-          "BTTTriggerClass": "BTTTriggerTypeTouchpadAll",
-          "BTTShortcutToSend": "58,48",
-          "BTTEnabled": 1,
-          "BTTOrder": 1
-        },
-        {
-          "BTTTriggerType": 102,
-          "BTTTriggerTypeDescription": "3 Finger Swipe Up",
-          "BTTTriggerClass": "BTTTriggerTypeTouchpadAll",
-          "BTTShortcutToSend": "58,55,34",
-          "BTTEnabled": 1,
-          "BTTOrder": 2
-        },
-        {
-          "BTTTriggerType": 101,
-          "BTTTriggerTypeDescription": "3 Finger Swipe Right",
-          "BTTTriggerClass": "BTTTriggerTypeTouchpadAll",
-          "BTTShortcutToSend": "58,56,48",
-          "BTTEnabled": 1,
-          "BTTOrder": 0
-        }
-      ]
-    },
-    {
       "BTTAppBundleIdentifier": "com.apple.SafariTechnologyPreview",
       "BTTAppName": "Safari Technology Preview",
       "BTTAppSpecificSettings": {},
