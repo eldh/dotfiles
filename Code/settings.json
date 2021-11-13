@@ -131,7 +131,7 @@
         "scope": [
           "keyword.control - variable.interpolation",
           "keyword.control.open",
-          "keyword.other",
+          "keyword.other"
         ],
         "settings": {
           "fontStyle": "italic"
@@ -190,7 +190,25 @@
     "editorWarning.foreground": "#ffc400",
     "editorError.foreground": "#d44343",
     "editorInfo.foreground": "#2eebcb",
-    "editorWidget.border": "#1C617A"
+    "editorWidget.border": "#1C617A",
+    "terminal.foreground": "#dcdfe4",
+    "terminal.background": "#0f0f11",
+    "terminal.ansiBlue": "#69dbf0",
+    "terminal.ansiBrightBlue": "#aae2ec",
+    "terminal.ansiGreen": "#83f197",
+    "terminal.ansiBrightGreen": "#c3f0cb",
+    "terminal.ansiCyan": "#83f1e2",
+    "terminal.ansiBrightCyan": "#bbf7ef",
+    "terminal.ansiMagenta": "#f183e8",
+    "terminal.ansiBrightMagenta": "#f0b9eb",
+    "terminal.ansiBlack": "#6b6b6b",
+    "terminal.ansiBrightBlack": "#9e9e9e",
+    "terminal.ansiWhite": "#ebebeb",
+    "terminal.ansiBrightWhite": "#ffffff",
+    "terminal.ansiRed": "#fa7f7f",
+    "terminal.ansiBrightRed": "#f5cdcd",
+    "terminal.ansiYellow": "#f3f186",
+    "terminal.ansiBrightYellow": "#f3f2b8"
   },
   "editor.minimap.enabled": true,
   "editor.minimap.showSlider": "always",
@@ -209,9 +227,7 @@
     "suppressFileNotUnderSourceControlWarning": false,
     "suppressGitVersionWarning": false,
     "suppressLineUncommittedWarning": false,
-    "suppressNoRepositoryWarning": false,
-    "suppressUpdateNotice": true,
-    "suppressWelcomeNotice": true
+    "suppressNoRepositoryWarning": false
   },
   "gitlens.keymap": "alternate",
   "editor.tabSize": 2,
@@ -230,7 +246,6 @@
   "[reason]": {
     "editor.formatOnSave": true
   },
-  "reason_language_server.autoRebuild": true,
   "javascript.updateImportsOnFileMove.enabled": "always",
   "[json]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode",
@@ -268,9 +283,7 @@
   "gitlens.codeLens.enabled": false,
   "gitlens.statusBar.enabled": false,
   "gitlens.hovers.enabled": false,
-  "gitlens.views.repositories.enabled": false,
   "gitlens.views.fileHistory.enabled": false,
-  "gitlens.views.lineHistory.enabled": false,
   "gitlens.views.search.enabled": false,
   "gitlens.views.compare.enabled": false,
   "javascript.format.enable": false,
@@ -283,5 +296,6 @@
   },
   "files.associations": {
     "*.symlink": "shellscript"
-  }
+  },
+  "terminal.integrated.drawBoldTextInBrightColors": false
 }

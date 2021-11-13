@@ -39,9 +39,6 @@ brew upgrade
 brew install coreutils
 sudo ln -s /usr/local/bin/gsha256sum /usr/local/bin/sha256sum
 
-brew install fish
-
-command -v fish | sudo tee -a /etc/shells
 chsh -s /bin/zsh
 
 brew install nano
@@ -59,7 +56,8 @@ brew install gpg
 brew install scc
 brew install cloc
 brew install gh
-brew install pure
+brew install starship
+brew install zsh-history-substring-search
 
 brew install homebrew/cask/alfred
 brew install homebrew/cask/kitty
