@@ -32,6 +32,9 @@ done
 # initialize autocomplete here, otherwise functions won't be loaded
 autoload -Uz compinit && compinit
 
+# Add git autocomplete script
+zstyle ':completion:*:*:git:*' script $ZSH/functions/git-completion.bash
+
 eval "$(starship init zsh)"
 
 # load every completion after autocomplete loads
@@ -131,7 +134,12 @@ zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
 # pasting with tabs doesn't perform completion
 zstyle ':completion:*' insert-tab pending
 
+# Fish style history search
 source /opt/homebrew/share/zsh-history-substring-search/zsh-history-substring-search.zsh
+
+# Abbreviation support
+source /opt/homebrew/share/zsh-abbr/zsh-abbr.zsh
+
 
 #add each topic folder to fpath so that they can add functions and completion scripts
 for topic_folder ($ZSH/*) if [ -d $topic_folder ]; then  fpath=($topic_folder $fpath); fi;
