@@ -28,7 +28,7 @@ alias greset='git reset --hard'
 alias gst='git status -sb'
 alias stash='git stash'
 alias pop='git stash pop'
-alias yolo='git add --all & git commit --amend & git push -f'
+alias yolo='git add --all && git commit --amend && git push -f'
 
 # Uses git's autocompletion for inner commands. Assumes an install of git's
 # bash `git-completion` script at $completion below (this is where Homebrew
