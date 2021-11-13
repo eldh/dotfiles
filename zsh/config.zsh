@@ -43,8 +43,8 @@ bindkey '^?' backward-delete-char
 # ALIASES
 alias cls='clear' # Good 'ol Clear Screen command
 alias reload="exec $SHELL -l"
-alias show="defaults write com.apple.finder AppleShowAllFiles -bool true & killall Finder"
-alias hide="defaults write com.apple.finder AppleShowAllFiles -bool false & killall Finder"
+alias show="defaults write com.apple.finder AppleShowAllFiles -bool true && killall Finder"
+alias hide="defaults write com.apple.finder AppleShowAllFiles -bool false && killall Finder"
 
 
 

@@ -56,8 +56,12 @@ brew install gpg
 brew install scc
 brew install cloc
 brew install gh
+
+# zsh stuff
 brew install starship
 brew install zsh-history-substring-search
+brew install zsh-autosuggestions
+brew install olets/tap/zsh-abbr
 
 brew install homebrew/cask/alfred
 brew install homebrew/cask/kitty

@@ -114,8 +114,8 @@ bindkey '^[[B' history-substring-search-down
 # ALIASES
 alias cls='clear' # Good 'ol Clear Screen command
 alias reload="exec $SHELL -l"
-alias show="defaults write com.apple.finder AppleShowAllFiles -bool true & killall Finder"
-alias hide="defaults write com.apple.finder AppleShowAllFiles -bool false & killall Finder"
+alias show="defaults write com.apple.finder AppleShowAllFiles -bool true && killall Finder"
+alias hide="defaults write com.apple.finder AppleShowAllFiles -bool false && killall Finder"
 
 alias ..="cd .."
 alias ...="cd ../.."
@@ -123,8 +123,6 @@ alias ....="cd ../../.."
 alias l="ls -lF -G"
 alias la="ls -laF -G"
 alias ls="command ls -G"
-
-
 
 # COMPLETION
 
@@ -140,6 +138,8 @@ source /opt/homebrew/share/zsh-history-substring-search/zsh-history-substring-se
 # Abbreviation support
 source /opt/homebrew/share/zsh-abbr/zsh-abbr.zsh
 
+# Auto suggestions
+source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 
 #add each topic folder to fpath so that they can add functions and completion scripts
 for topic_folder ($ZSH/*) if [ -d $topic_folder ]; then  fpath=($topic_folder $fpath); fi;
