@@ -1,6 +1,6 @@
 #!/bin/sh
 
-sh ../npm/install.sh
-sh ../Code/install.sh
-sh ../homebrew/install.sh
-sh ../terminal/install.sh
+sh $ZSH/npm/install.sh
+sh $ZSH/Code/install.sh
+sh $ZSH/terminal/install.sh
+# sh $ZSH/homebrew/install.sh

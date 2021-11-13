@@ -280,5 +280,8 @@
   "explorer.confirmDragAndDrop": false,
   "[jsonc]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "files.associations": {
+    "*.symlink": "shellscript"
   }
 }
