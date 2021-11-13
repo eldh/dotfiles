@@ -21,7 +21,7 @@
     "cfml",
     "HTML (Eex)"
   ],
-  "editor.fontFamily": "'MonoLisa', 'Fira Code', Menlo, Monaco, 'Courier New', monospace",
+  "editor.fontFamily": "'FiraCode Nerd Font', 'Fira Code', Menlo, Monaco, 'Courier New', monospace",
   "editor.fontSize": 14,
   "editor.cursorStyle": "line",
   "editor.wordWrap": "on",
