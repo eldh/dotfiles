@@ -30,7 +30,7 @@ fi
 brew update
 
 # Upgrade any already-installed formulae.
-brew upgrade --all
+brew upgrade
 
 # Install homebrew packages
 
@@ -40,53 +40,46 @@ brew install coreutils
 sudo ln -s /usr/local/bin/gsha256sum /usr/local/bin/sha256sum
 
 brew install fish
-brew tap homebrew/versions
 
 command -v fish | sudo tee -a /etc/shells
 chsh -s /usr/local/bin/fish
 
-brew install tmux
-
-# Install more recent versions of some OS X tools.
-# brew install vim --override-system-vi
-# brew install homebrew/dupes/grep
-# brew install homebrew/dupes/openssh
-# brew install homebrew/dupes/screen
-# brew install homebrew/php/php55 --with-gmp
-
+brew install nano
 brew install ne
-
-# clojurescript
-# brew install rlwrap
 
 # Install other useful binaries.
 brew install ack
 brew install git
-brew install hub
 brew install git-lfs
 brew install ccat
 brew install fzf
-brew install node
+brew install node@16
 brew install yarn
 brew install gpg
 brew install scc
 brew install cloc
+brew install gh
+brew install pure
 
 brew tap homebrew/cask-cask
-brew install alfred
-brew install kitty
-brew install brave-browser
-brew install bettertouchtool
-brew install spotify
-brew install slack
-brew install transmission
-brew install visual-studio-code
-brew install kap
-brew install 1password
-brew install gitup
-brew install vlc
+brew install homebrew/cask/alfred
+brew install homebrew/cask/kitty
+brew install homebrew/cask/brave-browser
+brew install homebrew/cask/bettertouchtool
+brew install homebrew/cask/spotify
+brew install homebrew/cask/slack
+brew install homebrew/cask/transmission
+brew install homebrew/cask/visual-studio-code
+brew install homebrew/cask/kap
+brew install homebrew/cask/1password
+brew install homebrew/cask/gitup
+brew install homebrew/cask/vlc
+brew install homebrew/cask/firefox
+brew install homebrew/cask/superhuman
+brew install homebrew/cask/gitup
+brew install homebrew/cask/postico
 
-brew install safari-technology-preview
+brew install homebrew/cask-versions/safari-technology-preview
 
 brew tap homebrew/cask-fonts
 brew install font-inconsolata
@@ -95,21 +88,15 @@ brew install font-fira-sans
 brew install font-fira-code
 brew install font-hasklig
 brew install font-monoid
-brew install font-source-sans-pro
-brew install font-source-code-pro
 brew install font-lato
 brew install font-pacifico
 brew install font-abril-fatface
-brew install font-crimson-text
-brew install font-libre-baskerville
 brew install font-roboto-slab
-brew install font-roboto
-brew install font-roboto-mono
 brew install font-noto-sans
 brew install font-inter
 brew install font-noto-serif
 # brew install font-noto-mono
-brew install qlcolorcode qlstephen qlmarkdown quicklook-json qlprettypatch quicklook-csv betterzipql webpquicklook suspicious-package qlvideo
+brew install qlcolorcode qlstephen qlmarkdown quicklook-json qlprettypatch quicklook-csv webpquicklook suspicious-package qlvideo
 brew cleanup
 
 # Remove outdated versions from the cellar.

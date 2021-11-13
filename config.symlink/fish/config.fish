@@ -1,21 +1,21 @@
 set -x FISH $HOME/.config/fish
 
 if test (hostname) = "Neo-neo.local"
-  set -x THIS_MACHINE NeoNeo
-  else
+    set -x THIS_MACHINE NeoNeo
+else
     set -x THIS_MACHINE WorkBook
 end
 
 # load the config files
 for file in $FISH/config/*.fish
-  source $file
+    source $file
 end
 
 # Theming
 set fish_greeting '⚡️'
 
 function fish_title
-  echo (basename $PWD)
+    echo (basename $PWD)
 end
 
 # Set locale to en_us
@@ -65,7 +65,7 @@ alias ffs='sudo (fc -ln -1)'
 alias timer='echo "Timer started. Stop with Ctrl-D." and date and time cat and date'
 
 # Get OS X Software Updates, and update installed Ruby gems, Homebrew, npm, and their installed packages
-alias update='sudo softwareupdate -i -a; brew update; brew upgrade --all; brew cleanup; npm install -g npm@latest; npm update -g; sudo gem update --system; sudo gem update'
+alias update='sudo softwareupdate -i -a; brew update; brew upgrade; brew cleanup; npm install -g npm@latest; npm update -g; sudo gem update --system; sudo gem update'
 
 # IP addresses
 alias ip="dig +short myip.opendns.com @resolver1.opendns.com"
@@ -93,4 +93,13 @@ alias afk="/System/Library/CoreServices/Menu\ Extras/User.menu/Contents/Resource
 # Start ios simulator
 alias ios="open /Applications/Xcode.app/Contents/Developer/Applications/Simulator.app"
 
-test -e {$HOME}/.iterm2_shell_integration.fish ; and source {$HOME}/.iterm2_shell_integration.fish
+# Linear
+alias lc="lin checkout"
+alias ln="lin new"
+
+fish_add_path /opt/homebrew/opt/node@16/bin
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/Users/eldh/google-cloud-sdk/path.fish.inc' ]
+    . '/Users/eldh/google-cloud-sdk/path.fish.inc'
+end

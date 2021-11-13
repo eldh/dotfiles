@@ -19,6 +19,6 @@ config.symlink/yarn
 config.symlink/hub
 config.symlink/gcloud
 config.symlink/gatsby
-
+config.symlink/gh/hosts.yml
 node_modules
 .DS_Store
