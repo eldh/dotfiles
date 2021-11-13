@@ -12,8 +12,6 @@ git/gitconfig.symlink
 
 atom.symlink/projects.cson
 
-config.symlink/fish/fish_history
-config.symlink/fish/fishd.*
 config.symlink/configstore
 config.symlink/yarn
 config.symlink/hub
