@@ -30,8 +30,7 @@ do
 done
 
 # initialize autocomplete here, otherwise functions won't be loaded
-autoload -U compinit
-compinit
+autoload -Uz compinit && compinit
 
 eval "$(starship init zsh)"
 
@@ -106,7 +105,8 @@ bindkey '^[[5C' end-of-line
 bindkey '^[[3~' delete-char
 bindkey '^?' backward-delete-char
 
-
+bindkey '^[[A' history-substring-search-up
+bindkey '^[[B' history-substring-search-down
 
 # ALIASES
 alias cls='clear' # Good 'ol Clear Screen command
@@ -131,6 +131,9 @@ zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
 # pasting with tabs doesn't perform completion
 zstyle ':completion:*' insert-tab pending
 
+source /opt/homebrew/share/zsh-history-substring-search/zsh-history-substring-search.zsh
 
 #add each topic folder to fpath so that they can add functions and completion scripts
 for topic_folder ($ZSH/*) if [ -d $topic_folder ]; then  fpath=($topic_folder $fpath); fi;
+
+
