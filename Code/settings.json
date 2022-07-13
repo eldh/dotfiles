@@ -32,8 +32,6 @@
     "javascriptreact"
   ],
   "editor.fontLigatures": true,
-  "workbench.statusBar.visible": false,
-  "workbench.activityBar.visible": false,
   "files.exclude": {
     "**/.git": true,
     "src/**/*.bs.js": true,
@@ -297,5 +295,10 @@
   "files.associations": {
     "*.symlink": "shellscript"
   },
-  "terminal.integrated.drawBoldTextInBrightColors": false
+  "terminal.integrated.drawBoldTextInBrightColors": false,
+  "editor.inlineSuggest.enabled": true,
+  "workbench.activityBar.visible": false,
+  "workbench.statusBar.visible": false,
+  "extensions.ignoreRecommendations": true,
+  "npm.keybindingsChangedWarningShown": true
 }

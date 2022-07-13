@@ -51,6 +51,7 @@ brew install git-lfs
 brew install ccat
 brew install fzf
 brew install node@16
+brew install python
 brew install yarn
 brew install gpg
 brew install scc
@@ -64,7 +65,7 @@ brew install zsh-autosuggestions
 brew install olets/tap/zsh-abbr
 
 brew install homebrew/cask/alfred
-brew install homebrew/cask/kitty
+brew install homebrew/cask/warp
 brew install homebrew/cask/brave-browser
 brew install homebrew/cask/bettertouchtool
 brew install homebrew/cask/spotify
@@ -76,7 +77,6 @@ brew install homebrew/cask/1password
 brew install homebrew/cask/gitup
 brew install homebrew/cask/vlc
 brew install homebrew/cask/firefox
-brew install homebrew/cask/superhuman
 brew install homebrew/cask/gitup
 brew install homebrew/cask/postico
 
