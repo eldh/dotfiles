@@ -67,6 +67,7 @@ path+=/opt/homebrew/opt/node@16/bin # homebrew
 path+=/usr/local/sbin # homebrew
 path+=/opt/homebrew/bin # homebrew
 path+=$DOTFILES/bin # local bins
+path+=/opt/homebrew/opt/python@3.9/libexec/bin # python bins
 
 
 export LSCOLORS="exfxcxdxbxegedabagacad"
