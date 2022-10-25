@@ -146,3 +146,9 @@ source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 for topic_folder ($ZSH/*) if [ -d $topic_folder ]; then  fpath=($topic_folder $fpath); fi;
 
 
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/Users/eldh/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/eldh/google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/Users/eldh/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/eldh/google-cloud-sdk/completion.zsh.inc'; fi
