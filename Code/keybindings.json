@@ -52,11 +52,6 @@
     "when": "gitlens:enabled && config.gitlens.keymap == 'alternate'"
   },
   {
-    "key": "shift+alt+7",
-    "command": "-gitlens.showCommitSearch",
-    "when": "gitlens:enabled && config.gitlens.keymap == 'alternate'"
-  },
-  {
     "key": "ctrl+shift+alt+q",
     "command": "workbench.action.quickOpenView"
   },
