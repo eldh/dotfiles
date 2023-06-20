@@ -1,26 +1,6 @@
 {
   "files.autoSave": "onFocusChange",
   "editor.formatOnSave": true,
-  "auto-close-tag.activationOnLanguage": [
-    "reason",
-    "xml",
-    "php",
-    "blade",
-    "ejs",
-    "jinja",
-    "javascript",
-    "javascriptreact",
-    "typescript",
-    "typescriptreact",
-    "plaintext",
-    "markdown",
-    "vue",
-    "liquid",
-    "erb",
-    "lang-cfml",
-    "cfml",
-    "HTML (Eex)"
-  ],
   "editor.fontFamily": "'FiraCode Nerd Font', 'Fira Code', Menlo, Monaco, 'Courier New', monospace",
   "editor.fontSize": 14,
   "editor.cursorStyle": "line",
@@ -30,6 +10,31 @@
     "typescript",
     "typescriptreact",
     "javascriptreact"
+  ],
+  "auto-correct.dictionary": [
+    {
+      "languages": ["*"],
+      "words": {
+        "attachemnt": "attachment",
+        "hte": "the",
+        "mispell": "misspell",
+        "mispelled": "misspelled",
+        "{despa,sepe}rat{e,es,ed,ing,ely,ion,ions,or}": "{despe,sepa}rat{}"
+      },
+      "useLargeList": false
+    },
+    {
+      "languages": [
+        "javascript",
+        "javascriptreact",
+        "typescript",
+        "typescriptreact"
+      ],
+      "words": {
+        "cosnt": "const",
+        "functoin": "function"
+      }
+    }
   ],
   "editor.fontLigatures": true,
   "files.exclude": {
@@ -212,7 +217,7 @@
   "editor.minimap.showSlider": "always",
   "editor.multiCursorModifier": "ctrlCmd",
   "editor.formatOnPaste": false,
-  "terminal.external.osxExec": "iTerm.app",
+  "terminal.external.osxExec": "Warp.app",
   "editor.renderLineHighlight": "all",
   "editor.codeLens": true,
   "workbench.startupEditor": "newUntitledFile",
@@ -227,7 +232,6 @@
     "suppressLineUncommittedWarning": false,
     "suppressNoRepositoryWarning": false
   },
-  "gitlens.keymap": "alternate",
   "editor.tabSize": 2,
   "editor.lightbulb.enabled": false,
   "zenMode.centerLayout": true,
@@ -279,7 +283,6 @@
   "gitlens.currentLine.enabled": false,
   "gitlens.hovers.currentLine.over": "line",
   "gitlens.codeLens.enabled": false,
-  "gitlens.statusBar.enabled": false,
   "gitlens.hovers.enabled": false,
   "gitlens.views.fileHistory.enabled": false,
   "gitlens.views.search.enabled": false,
@@ -300,5 +303,9 @@
   "workbench.activityBar.visible": false,
   "workbench.statusBar.visible": false,
   "extensions.ignoreRecommendations": true,
-  "npm.keybindingsChangedWarningShown": true
+  "npm.keybindingsChangedWarningShown": true,
+  "gitlens.statusBar.enabled": false,
+  "window.commandCenter": false,
+  "terminal.integrated.windowsEnableConpty": false,
+  "terminal.integrated.defaultProfile.osx": "zsh"
 }
