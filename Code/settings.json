@@ -233,7 +233,7 @@
     "suppressNoRepositoryWarning": false
   },
   "editor.tabSize": 2,
-  "editor.lightbulb.enabled": false,
+  "editor.lightbulb.enabled": "off",
   "zenMode.centerLayout": true,
   "sync.gist": "1e679e9dce3adba34d884e39a7cfee5a",
   "sync.autoDownload": false,
@@ -252,32 +252,32 @@
   "[json]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.codeActionsOnSave": {
-      "source.fixAll.eslint": true
+      "source.fixAll.eslint": "explicit"
     }
   },
   "[typescriptreact]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.codeActionsOnSave": {
-      "source.fixAll.eslint": true
+      "source.fixAll.eslint": "explicit"
     }
   },
   "[typescript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.codeActionsOnSave": {
-      "source.fixAll.eslint": true
+      "source.fixAll.eslint": "explicit"
     }
   },
   "typescript.updateImportsOnFileMove.enabled": "always",
   "[javascript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.codeActionsOnSave": {
-      "source.fixAll.eslint": true
+      "source.fixAll.eslint": "explicit"
     }
   },
   "[javascriptreact]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.codeActionsOnSave": {
-      "source.fixAll.eslint": true
+      "source.fixAll.eslint": "explicit"
     }
   },
   "gitlens.currentLine.enabled": false,
@@ -289,7 +289,7 @@
   "gitlens.views.compare.enabled": false,
   "javascript.format.enable": false,
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": true
+    "source.fixAll.eslint": "explicit"
   },
   "explorer.confirmDragAndDrop": false,
   "[jsonc]": {
@@ -300,12 +300,12 @@
   },
   "terminal.integrated.drawBoldTextInBrightColors": false,
   "editor.inlineSuggest.enabled": true,
-  "workbench.activityBar.visible": false,
   "workbench.statusBar.visible": false,
   "extensions.ignoreRecommendations": true,
   "npm.keybindingsChangedWarningShown": true,
   "gitlens.statusBar.enabled": false,
   "window.commandCenter": false,
   "terminal.integrated.windowsEnableConpty": false,
-  "terminal.integrated.defaultProfile.osx": "zsh"
+  "terminal.integrated.defaultProfile.osx": "zsh",
+  "workbench.activityBar.location": "hidden"
 }

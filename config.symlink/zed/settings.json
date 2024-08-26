@@ -7,6 +7,52 @@
 // custom settings, run the `open default settings` command
 // from the command palette or from `Zed` application menu.
 {
-    "buffer_font_size": 15,
-    "buffer_font_family": "Fira Code"
+  "assistant": {
+    "default_model": {
+      "provider": "zed.dev",
+      "model": "claude-3-5-sonnet-20240620"
+    },
+    "version": "2"
+  },
+  "theme": "Evil Rabbit (Dark)",
+  "buffer_font_size": 15,
+  "autosave": "on_focus_change",
+  "format_on_save": "language_server",
+  "enable_language_server": true,
+  "languages": {
+    "TypeScript": {
+      "formatter": "language_server"
+    }
+  },
+  "experimental.theme_overrides": {
+    "modified": "#928272",
+    "created": "#124235",
+    "warning.background": "#423222",
+    "warning.border": "#524232"
+    //   "editor.background": "#222",
+    //   "background": "#222",
+    //   "terminal.background": "#222",
+    //   "title_bar.background": "#222",
+    //   "border": "#333",
+    //   "editor.gutter.background": "#222",
+    //   "panel.background": "#222",
+    //   "info.background": "#222",
+    //   "tab_bar.background": "#333",
+    //   "tab.active_background": "#444",
+    //   "tab.inactive_background": "#333",
+    //   "status_bar.background": "#333",
+    //   "toolbar.background": "#222",
+    //   "editor.active_line.background": "#1d1d1d",
+    //   "element.selected": "#F00",
+    //   "players": [
+    //     {
+    //       "selection": "#333"
+    //     },
+    //   ],
+    //   "syntax": {
+    //     "comment": {
+    //       "font_style": "italic"
+    //     }
+    //   }
+  }
 }
