@@ -9,13 +9,15 @@
   {
     "context": "Workspace",
     "bindings": {
-      "cmd-t": "workspace::ToggleBottomDock"
+      "cmd-t": "workspace::ToggleBottomDock",
+      "cmd-:": "workspace::ToggleRightDock"
     }
   },
   {
     "context": "Editor",
     "bindings": {
-      "shift-cmd-d": "editor::DuplicateLineDown"
+      "shift-cmd-d": "editor::DuplicateLineDown",
+      "cmd-:": "workspace::ToggleRightDock"
       // "j k": ["workspace::SendKeystrokes", "escape"]
     }
   }
