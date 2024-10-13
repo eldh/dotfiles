@@ -10,7 +10,7 @@
   "assistant": {
     "default_model": {
       "provider": "zed.dev",
-      "model": "claude-3-5-sonnet-20240620"
+      "model": "claude-3-5-sonnet-20240620-fast-edit"
     },
     "version": "2"
   },
@@ -25,10 +25,30 @@
   "ui_font_family": "Inter Variable",
   "buffer_font_family": "Fira Code",
   "autosave": "on_focus_change",
+  "format_on_save": "on",
+  "formatter": {
+    "code_actions": {
+      "source.fixAll.eslint": true
+    }
+  },
+  "lsp": {
+    "vtsls": {
+      "initialization_options": {
+        "typescript": {
+          "tsserver": {
+            "maxTsServerMemory": 8092
+          }
+        }
+      }
+    }
+  },
   "enable_language_server": true,
   "languages": {
     "TypeScript": {
-      "formatter": "language_server"
+      "formatter": "language_server",
+      "code_actions_on_format": {
+        "source.fixAll.eslint": true
+      }
     }
   },
   "terminal": {
@@ -43,10 +63,15 @@
     "terminal.ansi.bright_black": "#888",
     "hint": "#444", // git blame etc
     "predictive": "#444",
+    "panel.background": "#1a1a1a",
+    "terminal.background": "#1a1a1a",
+    "tab_bar.background": "#1a1a1a",
+    "tab.active_background": "#2a2a2a",
+    // "pane_group.border": "#ff0000",
     //   "editor.background": "#222",
     //   "background": "#222",
     //   "terminal.background": "#222",
-    //   "title_bar.background": "#222",
+    // "title_bar.background": "#222",
     //   "border": "#333",
     //   "editor.gutter.background": "#222",
     //   "panel.background": "#222",
