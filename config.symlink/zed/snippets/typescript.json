@@ -1,6 +1,6 @@
 {
   "Log to the console": {
-    "prefix": "log",
+    "prefix": "qqq",
     "body": [
       "console.log($1);",
       "$0"
