@@ -15,6 +15,9 @@ atom.symlink/projects.cson
 config.symlink/configstore
 config.symlink/yarn
 config.symlink/hub
+config.symlink/raycast
+config.symlink/raycast/extensions
+config.symlink/zed/conversations
 config.symlink/gcloud
 config.symlink/gatsby
 config.symlink/gh/hosts.yml
