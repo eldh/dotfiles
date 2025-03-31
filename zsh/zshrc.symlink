@@ -1,6 +1,6 @@
 # shortcut to this dotfiles path is $ZSH
 export ZSH=$HOME/dotfiles
-export NODE_PATH=/opt/homebrew/opt/node@20
+export NODE_PATH=/opt/homebrew/opt/node@22
 
 # your project folder that we can `c [tab]` to
 export PROJECTS=$HOME/Code
@@ -63,7 +63,7 @@ bindkey "^[[B" down-line-or-beginning-search # Down
 # set -x DOTFILES ~/dotfiles
 
 # Languages
-path+=/opt/homebrew/opt/node@20/bin # homebrew
+path+=/opt/homebrew/opt/node@22/bin # homebrew
 path+=/usr/local/sbin # homebrew
 path+=/opt/homebrew/bin # homebrew
 path+=$DOTFILES/bin # local bins
@@ -156,15 +156,6 @@ if [ -f '/Users/eldh/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/eldh
 # Generated for envman. Do not edit.
 [ -s "$HOME/.config/envman/load.sh" ] && source "$HOME/.config/envman/load.sh"
 
-
-# pnpm
-export PNPM_HOME="/Users/eldh/Library/pnpm"
-case ":$PATH:" in
-  *":$PNPM_HOME:"*) ;;
-  *) export PATH="$PNPM_HOME:$PATH" ;;
-esac
-# pnpm end
-
 # prevent yarn from running in non-yarn projects
 yarn() {
   if [ -e package-lock.lock ]; then
@@ -175,3 +166,12 @@ yarn() {
     command yarn $@
   fi
 }
+
+# pnpm
+export PNPM_HOME="/Users/eldh/Library/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+# pnpm end
+

@@ -76,5 +76,18 @@
   {
     "key": "ctrl+cmd+2",
     "command": "workbench.action.focusSecondEditorGroup"
+  },
+  {
+    "key": "shift+cmd+k",
+    "command": "-editor.action.deleteLines",
+    "when": "textInputFocus && !editorReadonly"
+  },
+  {
+    "key": "shift+cmd+k",
+    "command": "-composer.openAsBar"
+  },
+  {
+    "key": "ctrl+shift+cmd+k",
+    "command": "workbench.panel.aichat"
   }
 ]

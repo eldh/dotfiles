@@ -50,7 +50,7 @@ brew install git
 brew install git-lfs
 brew install ccat
 brew install fzf
-brew install node@20
+brew install node@22
 brew install python
 brew install yarn
 brew install gpg
