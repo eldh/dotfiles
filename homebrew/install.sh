@@ -15,14 +15,8 @@ if test ! $(which brew)
 then
   echo "  Installing Homebrew for you."
 
-  # Install the correct homebrew for each OS type
-  if test "$(uname)" = "Darwin"
-  then
-    ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-  elif test "$(expr substr $(uname -s) 1 5)" = "Linux"
-  then
-    ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/linuxbrew/go/install)"
-  fi
+  # Install the correct homebrew
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
 fi
 
@@ -64,7 +58,6 @@ brew install zsh-history-substring-search
 brew install zsh-autosuggestions
 brew install olets/tap/zsh-abbr
 
-brew install homebrew/cask/alfred
 brew install homebrew/cask/warp
 brew install homebrew/cask/brave-browser
 brew install homebrew/cask/bettertouchtool
@@ -72,13 +65,17 @@ brew install homebrew/cask/spotify
 brew install homebrew/cask/slack
 brew install homebrew/cask/transmission
 brew install homebrew/cask/visual-studio-code
-brew install homebrew/cask/kap
 brew install homebrew/cask/1password
 brew install homebrew/cask/gitup
 brew install homebrew/cask/vlc
 brew install homebrew/cask/firefox
-brew install homebrew/cask/gitup
-brew install homebrew/cask/postico
+brew install homebrew/cask/cursor
+brew install homebrew/cask/raycast
+brew install homebrew/cask/cursor
+brew install homebrew/cask/tableplus
+brew install homebrew/cask/arc
+
+
 
 brew install homebrew/cask-versions/safari-technology-preview
 

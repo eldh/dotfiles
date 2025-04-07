@@ -152,5 +152,5 @@ then
   fi
 fi
 
-echo ''
+echo '' 
 echo '  All installed!'
