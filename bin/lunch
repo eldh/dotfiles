@@ -1,0 +1,196 @@
+#!/usr/bin/env bash
+# lunch — display today's lunch menus from Restaurang Logen and Ulls Restaurang
+set -euo pipefail
+
+fetch_and_parse() {
+  python3 << 'PYEOF'
+import sys, re, locale, datetime, html as htmlmod
+
+# --- Date setup ---
+now = datetime.datetime.now()
+weekday = now.weekday()  # 0=Mon .. 6=Sun
+is_weekend = weekday >= 5
+
+if is_weekend:
+    # Show next Monday
+    days_ahead = 7 - weekday
+    target = now + datetime.timedelta(days=days_ahead)
+else:
+    target = now
+
+day_idx = target.weekday()
+swedish_days = ["Måndag", "Tisdag", "Onsdag", "Torsdag", "Fredag"]
+english_days = ["monday", "tuesday", "wednesday", "thursday", "friday"]
+day_name_sv = swedish_days[day_idx]
+day_name_en = english_days[day_idx]
+iso_week = target.isocalendar()[1]
+date_str = target.strftime("%d/%m")
+
+if is_weekend:
+    header = f"📅  Dagens lunch — {day_name_sv} {date_str} (v. {iso_week}) [visar måndag — det är helg!]"
+else:
+    header = f"📅  Dagens lunch — {day_name_sv} {date_str} (v. {iso_week})"
+
+print(header)
+print()
+
+# --- Fetch pages in parallel using curl ---
+import subprocess, threading
+
+logen_html = [None]
+ulls_html = [None]
+
+def fetch_logen():
+    r = subprocess.run(
+        ["curl", "-sL", "--max-time", "10", "https://www.nordrest.se/restaurang/restaurang-logen/"],
+        capture_output=True, text=True
+    )
+    logen_html[0] = r.stdout
+
+def fetch_ulls():
+    r = subprocess.run(
+        ["curl", "-sL", "--max-time", "10", "https://www.ullsrestaurang.se/17/3/veckans-lunch/"],
+        capture_output=True, text=True
+    )
+    ulls_html[0] = r.stdout
+
+t1 = threading.Thread(target=fetch_logen)
+t2 = threading.Thread(target=fetch_ulls)
+t1.start(); t2.start()
+t1.join(); t2.join()
+
+# --- Parse Logen ---
+def parse_logen(raw):
+    if not raw:
+        return None, None, None, []
+
+    # Extract prices
+    price = None
+    student_price = None
+    m = re.search(r'<strong>Lunchpris:</strong>\s*<span>\s*(\d+)\s*kr', raw)
+    if m:
+        price = m.group(1)
+    m = re.search(r'<strong>Student:</strong>\s*<span>\s*(\d+)\s*kr', raw)
+    if m:
+        student_price = m.group(1)
+
+    # Week number
+    week = None
+    m = re.search(r'id="dynamic-week-number"[^>]*>v\.\s*(\d+)', raw)
+    if m:
+        week = m.group(1)
+
+    # Find today's dishes directly — search for the day header followed by
+    # its ratter-list. The accordion-header contains the day name, then
+    # the accordion-content has a ul.ratter-list with li.ratter items.
+    pattern = (
+        r'<div class="accordion-header">\s*' + re.escape(day_name_sv) +
+        r'.*?<ul class="ratter-list">(.*?)</ul>'
+    )
+    day_match = re.search(pattern, raw, re.DOTALL)
+
+    dishes = []
+    if day_match:
+        ratter_html = day_match.group(1)
+        for li in re.finditer(r'<li class="ratter"[^>]*>(.*?)</li>', ratter_html, re.DOTALL):
+            text = li.group(1)
+            # Remove span.co2-value and noscript blocks (including content)
+            text = re.sub(r'<span class="co2-value"[^>]*>.*?</span>', '', text, flags=re.DOTALL)
+            text = re.sub(r'<noscript>.*?</noscript>', '', text, flags=re.DOTALL)
+            text = re.sub(r'<[^>]+>', '', text)
+            text = htmlmod.unescape(text).strip()
+            text = re.sub(r'\s+', ' ', text)
+            if text:
+                dishes.append(text)
+
+    return price, student_price, week, dishes
+
+
+# --- Parse Ulls ---
+def parse_ulls(raw):
+    if not raw:
+        return None, []
+
+    # Find the section matching the target week. The page has #previous,
+    # #current and #next sections. Pick the one whose heading matches.
+    week = None
+    section = raw  # fallback
+
+    for section_id in ["current", "next", "previous"]:
+        sec_match = re.search(
+            r'<div id="' + section_id + r'">(.*?)(?=<div id="(?:previous|current|next)">|<div class="menu-controller">)',
+            raw, re.DOTALL
+        )
+        if not sec_match:
+            continue
+        sec_html = sec_match.group(1)
+        wm = re.search(r'Dagens lunch v\.\s*(\d+)', sec_html)
+        if wm and int(wm.group(1)) == iso_week:
+            section = sec_html
+            week = wm.group(1)
+            break
+
+    # If no week matched, fall back to #current
+    if not week:
+        sec_match = re.search(
+            r'<div id="current">(.*?)(?=<div id="(?:previous|current|next)">|<div class="menu-controller">)',
+            raw, re.DOTALL
+        )
+        if sec_match:
+            section = sec_match.group(1)
+        wm = re.search(r'Dagens lunch v\.\s*(\d+)', section)
+        if wm:
+            week = wm.group(1)
+
+    # Find the menu-item for today's day
+    pattern = (
+        r'<div class="menu-item ' + day_name_en + r'">\s*'
+        r'<p class="small-title">[^<]*</p>\s*(.*?)\s*<div class="menu-bottom">'
+    )
+    day_match = re.search(pattern, section, re.DOTALL)
+
+    dishes = []
+    if day_match:
+        day_html = day_match.group(1)
+        for p in re.finditer(r'<p>\s*(.*?)\s*</p>', day_html, re.DOTALL):
+            text = p.group(1).strip()
+            text = re.sub(r'<[^>]+>', '', text)
+            text = htmlmod.unescape(text).strip()
+            text = re.sub(r'\s+', ' ', text)
+            if text and text != "Veckans kaka!":
+                dishes.append(text)
+
+    return week, dishes
+
+
+# --- Output ---
+price, student_price, logen_week, logen_dishes = parse_logen(logen_html[0])
+
+price_str = ""
+if price:
+    price_str = f"{price} kr"
+    if student_price:
+        price_str += f" / student {student_price} kr"
+else:
+    price_str = "?"
+
+print(f"🍽️  Restaurang Logen ({price_str})")
+if logen_dishes:
+    for d in logen_dishes:
+        print(f"  • {d}")
+else:
+    print("  (ingen meny hittades)")
+print()
+
+ulls_week, ulls_dishes = parse_ulls(ulls_html[0])
+print(f"🍽️  Ulls Restaurang (125 kr)")
+if ulls_dishes:
+    for d in ulls_dishes:
+        print(f"  • {d}")
+else:
+    print("  (ingen meny hittades)")
+
+PYEOF
+}
+
+fetch_and_parse
