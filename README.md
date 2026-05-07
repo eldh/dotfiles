@@ -57,6 +57,7 @@ Single-workspace:
 - `jjon <rev>` — fetch, then start a new change on top of `<rev>`.
 - `jjpush` — first push of a bookmark (`--allow-new`).
 - `jjrepush` — `jj tug` then `jj git push` to update an existing PR.
+- `jjpr [gh args...]` — push current change's bookmark and `gh pr create`.
 - `jjremote` — fetch and list all remote bookmarks.
 - `jjcheat` — print a git→jj cheat sheet.
 
@@ -70,6 +71,9 @@ named `<repo>-<workspace>`):
 - `jjws-rm <name>` — forget a workspace and `rm -rf` its dir (confirms first).
 - `jjdev <bookmark>` — point the dev workspace at `<bookmark>`; dev server
   hot-reloads. Does not change the calling shell's cwd.
+- `jjlinear <user/branch>` — fetch; if the remote branch exists, track it;
+  otherwise create it locally on `trunk()`. Either way, create a workspace
+  named after the part after `/` and `cd` in.
 
 ## Todo
 

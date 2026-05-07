@@ -24,6 +24,21 @@ jjpush() { jj git push --allow-new; }
 # Update an existing PR: move bookmark forward to @-, then push.
 jjrepush() { jj tug && jj git push; }
 
+# Push current change's bookmark and open a PR from it.
+# Extra args are forwarded to `gh pr create` (e.g. --draft, --title, etc.)
+jjpr() {
+  # Find the bookmark pointing at @ (or the nearest ancestor)
+  local bookmark
+  bookmark=$(jj log -r 'heads(::@ & bookmarks())' --no-graph -T 'bookmarks.join(" ")' 2>/dev/null | awk '{print $1}')
+  if [[ -z "$bookmark" ]]; then
+    echo "no bookmark at or before @ — create one first" >&2
+    return 1
+  fi
+  # Strip trailing * that jj appends to bookmarks ahead of remote
+  bookmark="${bookmark%\*}"
+  jj git push --allow-new && gh pr create --head "$bookmark" "$@"
+}
+
 # Fetch and list everything remote — handy for finding agent/coworker branches.
 jjremote() { jj git fetch && jj bookmark list --all-remotes; }
 
@@ -133,6 +148,62 @@ jjdev() {
   ( cd "$devdir" && jj edit "$1" )
 }
 
+# Pull a Linear-style branch into a fresh workspace and cd in.
+# Pass the full branch name copied from Linear (e.g. eldh/lin-68881-foo);
+# the workspace name is everything after the first "/" (e.g. lin-68881-foo).
+# If the branch exists on origin, track it. Otherwise create it locally on
+# top of trunk() — same shape as jjstart, just nested in a workspace.
+# Usage: jjlinear <user/branch-name>
+jjlinear() {
+  if [[ -z "$1" ]]; then
+    echo "usage: jjlinear <user/branch-name>" >&2
+    echo "  e.g.  jjlinear eldh/lin-68881-small-screen-layout" >&2
+    return 1
+  fi
+  if [[ "$1" != */* ]]; then
+    echo "expected branch like 'user/lin-1234-foo', got '$1'" >&2
+    return 1
+  fi
+  local full="$1" short="${1#*/}" base target rev remote_exists=0
+  base="$(_jjws_repo_base)" || { echo "not in a jj repo" >&2; return 1; }
+  target="${base}-${short}"
+
+  echo "fetching from origin..."
+  jj git fetch || return 1
+
+  if jj log --ignore-working-copy --no-graph -r "${full}@origin" -T '""' >/dev/null 2>&1; then
+    remote_exists=1
+    rev="$full"
+    # Track the remote bookmark (warns if already tracked; not fatal).
+    jj bookmark track "$full" --remote=origin 2>/dev/null
+  else
+    rev='trunk()'
+    echo "no remote bookmark '${full}' on origin — creating it locally on trunk()"
+  fi
+
+  if [[ -d "$target" ]]; then
+    echo "workspace already exists at $target — cd'ing in"
+    cd "$target"
+    return 0
+  fi
+  jj workspace add --name "$short" -r "$rev" "$target" || return 1
+  cd "$target" || return 1
+
+  # Fresh local branch case: put the bookmark on the new workspace's @.
+  if (( remote_exists == 0 )); then
+    jj bookmark create "$full" -r @
+  fi
+}
+
+# Completion helper: subordinate workspace names (excludes "default" since
+# the default workspace lives at the bare repo dir, not <repo>-default).
+# Registered via compdef in zsh/completion.zsh.
+_jjws_complete_workspace() {
+  local -a workspaces
+  workspaces=(${(f)"$(jj --color=never workspace list 2>/dev/null | sed 's/:.*//' | grep -v '^default$')"})
+  compadd -a workspaces
+}
+
 # Cheat sheet: common git workflows translated to jj.
 jjcheat() {
   cat <<'EOF'
@@ -164,6 +235,8 @@ Push current branch
   git push -u (first push)  →  jjpush       (= jj git push --allow-new)
   git push (update PR)      →  jjrepush     (= jj tug && jj git push)
                                tug moves the bookmark forward to @-
+  push + open PR            →  jjpr [--draft, --title, ... forwarded to gh]
+                               (finds the bookmark at/before @, pushes, gh pr create)
   Why: bookmarks don't auto-follow @ like git's HEAD does. After `jj new` the
   bookmark stays put on the old commit, so you must drag it forward (tug)
   before pushing or the remote won't see your new work.
@@ -199,6 +272,13 @@ Workspaces — parallel agents + dedicated dev workspace
     jjws-new and-1234-fix-login    create ../<repo>-and-1234-fix-login at trunk()
     jjws-cd  and-1234-fix-login    cd in; point your agent at $PWD
     jj bookmark create and-1234-fix-login -r @
+
+  pick up or start a Linear branch (paste full name from Linear)
+    jjlinear eldh/lin-68881-small-screen-layout
+                                   fetch; if remote branch exists, track it;
+                                   else create it locally on trunk().
+                                   either way: create workspace
+                                   ../<repo>-lin-68881-... and cd in.
 
   point dev at a bookmark (the headline move)
     jjdev and-1234-fix-login       updates @ in dev workspace; server hot-reloads
