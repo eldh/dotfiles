@@ -46,6 +46,31 @@ There's a few special files in the hierarchy.
   but still keep those autoloaded files in your home directory. These get
   symlinked in when you run `script/bootstrap`.
 
+## jj (jujutsu) helpers
+
+Defined in `zsh/jj.zsh`. Bookmark names are pasted directly from Linear.
+
+Single-workspace:
+
+- `jjstart <name>` — fetch, branch off `trunk()`, create bookmark.
+- `jjsw <rev>` — switch working copy to another change/bookmark.
+- `jjon <rev>` — fetch, then start a new change on top of `<rev>`.
+- `jjpush` — first push of a bookmark (`--allow-new`).
+- `jjrepush` — `jj tug` then `jj git push` to update an existing PR.
+- `jjremote` — fetch and list all remote bookmarks.
+- `jjcheat` — print a git→jj cheat sheet.
+
+Multi-workspace (parallel agents + dedicated dev workspace, sibling dirs
+named `<repo>-<workspace>`):
+
+- `jjws-new <name> [rev]` — create sibling workspace at `<repo>-<name>`.
+- `jjws-dev` — create the dedicated `dev` workspace.
+- `jjws-cd <name>` — `cd` to a sibling workspace from anywhere in the repo.
+- `jjws-ls` — list workspaces (`jj workspace list`).
+- `jjws-rm <name>` — forget a workspace and `rm -rf` its dir (confirms first).
+- `jjdev <bookmark>` — point the dev workspace at `<bookmark>`; dev server
+  hot-reloads. Does not change the calling shell's cwd.
+
 ## Todo
 
 - Script for generating ssh key

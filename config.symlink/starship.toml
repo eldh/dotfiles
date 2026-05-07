@@ -2,9 +2,10 @@ format = """
 $username\
 $hostname\
 $directory\
-$git_branch\
+${custom.jj}\
+${custom.git_branch}\
+${custom.git_status}\
 $git_state\
-$git_status\
 $line_break\
 $python\
 $character"""
@@ -17,20 +18,13 @@ error_symbol = "[❯](red)"
 success_symbol = "[❯](green)"
 vicmd_symbol = "[❮](pruple)"
 
+# Built-in git modules disabled; custom modules below replace them and yield
+# to the jj module when a colocated/jj repo is detected (.jj at repo root).
 [git_branch]
-format = "[$branch]($style)"
-style = "bright-black"
+disabled = true
 
 [git_status]
-conflicted = "​"
-deleted = "​"
-format = "[[(*$conflicted$untracked$modified$staged$renamed$deleted)](218) ($ahead_behind)]($style)"
-modified = "​"
-renamed = "​"
-staged = "​"
-stashed = "≡"
-style = "cyan"
-untracked = "​"
+disabled = true
 
 [git_state]
 format = '\([$state( $progress_current/$progress_total)]($style)\) '
@@ -43,3 +37,46 @@ style = "yellow"
 [python]
 format = "[$virtualenv]($style) "
 style = "bright-black"
+
+# jj working-copy info: bookmark on @ (or change_id if none), conflict (!),
+# empty marker (ø). Skipped when not in a jj repo or workspace.
+[custom.jj]
+description = "jj working-copy info"
+when = '''r=$(git rev-parse --show-toplevel 2>/dev/null); test -d "${r}/.jj" || jj workspace root >/dev/null 2>&1'''
+command = '''jj log --ignore-working-copy -r @ --no-graph --color=never -T 'separate(" ", coalesce(local_bookmarks, change_id.shortest()), if(conflict, "!"), if(empty, "ø"))' 2>/dev/null'''
+format = "[$output]($style) "
+style = "bright-black"
+shell = ["sh", "--norc"]
+
+# git replacements that suppress themselves when .jj exists at the repo root,
+# so colocated repos render only the jj module.
+[custom.git_branch]
+description = "git branch (suppressed in jj repos)"
+when = '''r=$(git rev-parse --show-toplevel 2>/dev/null); test -n "$r" && test ! -d "$r/.jj"'''
+command = '''git symbolic-ref --short HEAD 2>/dev/null || git rev-parse --short HEAD 2>/dev/null'''
+format = "[$output]($style)"
+style = "bright-black"
+shell = ["sh", "--norc"]
+
+[custom.git_status]
+description = "git dirty + ahead/behind (suppressed in jj repos)"
+when = '''r=$(git rev-parse --show-toplevel 2>/dev/null); test -n "$r" && test ! -d "$r/.jj"'''
+command = '''
+dirty=""
+git diff --quiet 2>/dev/null && git diff --cached --quiet 2>/dev/null || dirty="*"
+ab=""
+upstream=$(git rev-parse --abbrev-ref --symbolic-full-name '@{u}' 2>/dev/null)
+if [ -n "$upstream" ]; then
+  ahead=$(git rev-list --count "${upstream}..HEAD" 2>/dev/null)
+  behind=$(git rev-list --count "HEAD..${upstream}" 2>/dev/null)
+  [ "${ahead:-0}" -gt 0 ] && ab="${ab}↑${ahead}"
+  [ "${behind:-0}" -gt 0 ] && ab="${ab}↓${behind}"
+fi
+out=""
+[ -n "$dirty" ] && out="$dirty"
+[ -n "$ab" ] && out="${out}${ab}"
+[ -n "$out" ] && echo " $out"
+'''
+format = "[$output]($style)"
+style = "cyan"
+shell = ["sh", "--norc"]
