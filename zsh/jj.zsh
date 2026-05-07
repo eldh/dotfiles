@@ -148,7 +148,7 @@ Pull latest from origin/master
 
 Check out a remote branch
   git checkout <name>       →  jj git fetch
-                               jj bookmark track <name>@origin
+                               jj bookmark track <name> --remote=origin
                                jj edit <name>
   start fresh on top of it  →  jjon <name>@origin
 
