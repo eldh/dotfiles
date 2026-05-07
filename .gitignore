@@ -24,3 +24,4 @@ config.symlink/gh/hosts.yml
 node_modules
 .DS_Store
 config.symlink/raycast/config.json
+config.symlink/jj/repos/
