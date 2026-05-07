@@ -71,6 +71,8 @@ named `<repo>-<workspace>`):
 - `jjws-rm <name>` — forget a workspace and `rm -rf` its dir (confirms first).
 - `jjdev <bookmark>` — point the dev workspace at `<bookmark>`; dev server
   hot-reloads. Does not change the calling shell's cwd.
+- `jjdev-this` — same, but uses the bookmark in the workspace you're
+  currently in. Creates the dev workspace if it doesn't exist.
 - `jjlinear <user/branch>` — fetch; if the remote branch exists, track it;
   otherwise create it locally on `trunk()`. Either way, create a workspace
   named after the part after `/` and `cd` in.

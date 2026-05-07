@@ -130,6 +130,32 @@ jjws-rm() {
   jj workspace forget "$1" && rm -rf "$target"
 }
 
+# Point the dev workspace at THIS workspace's bookmark. Creates the dev
+# workspace if it doesn't exist yet. Footgun: if your @ is exactly at the
+# bookmark, jj refuses the cross-workspace edit — `jj new` first to move @.
+jjdev-this() {
+  local base devdir bookmark
+  base="$(_jjws_repo_base)" || { echo "not in a jj repo" >&2; return 1; }
+  devdir="${base}-dev"
+  if [[ "$(jj workspace root 2>/dev/null)" == "$devdir" ]]; then
+    echo "already in the dev workspace — nothing to promote" >&2
+    return 1
+  fi
+  bookmark=$(jj log -r 'heads(::@ & bookmarks())' --no-graph -T 'bookmarks.join(" ")' 2>/dev/null | awk '{print $1}')
+  bookmark="${bookmark%\*}"
+  if [[ -z "$bookmark" ]]; then
+    echo "no bookmark at or before @ — create one first" >&2
+    return 1
+  fi
+  if [[ ! -d "$devdir" ]]; then
+    echo "creating dev workspace at $bookmark"
+    jj workspace add --name dev -r "$bookmark" "$devdir"
+  else
+    echo "pointing dev at $bookmark"
+    ( cd "$devdir" && jj edit "$bookmark" )
+  fi
+}
+
 # Point the dev workspace at a bookmark; dev server hot-reloads against new code.
 # Subshell — does not change the calling shell's cwd.
 # Usage: jjdev <bookmark>
@@ -283,6 +309,9 @@ Workspaces — parallel agents + dedicated dev workspace
   point dev at a bookmark (the headline move)
     jjdev and-1234-fix-login       updates @ in dev workspace; server hot-reloads
                                    (subshell — your cwd doesn't change)
+    jjdev-this                     same, but auto-detects the bookmark of the
+                                   workspace you're currently in. creates the
+                                   dev workspace if it doesn't exist yet.
 
   switch dev to a different in-flight issue
     jjdev and-1235-other-thing
