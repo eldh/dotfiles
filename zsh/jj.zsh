@@ -177,8 +177,9 @@ jjdev() {
 # Pull a Linear-style branch into a fresh workspace and cd in.
 # Pass the full branch name copied from Linear (e.g. eldh/lin-68881-foo);
 # the workspace name is everything after the first "/" (e.g. lin-68881-foo).
-# If the branch exists on origin, track it. Otherwise create it locally on
-# top of trunk() — same shape as jjstart, just nested in a workspace.
+# Does NOT fetch — run `jj git fetch` first if you need the latest from
+# origin. If the branch is already known locally (from a prior fetch),
+# track it. Otherwise create it locally on top of trunk().
 # Usage: jjlinear <user/branch-name>
 jjlinear() {
   if [[ -z "$1" ]]; then
@@ -194,9 +195,6 @@ jjlinear() {
   base="$(_jjws_repo_base)" || { echo "not in a jj repo" >&2; return 1; }
   target="${base}-${short}"
 
-  echo "fetching from origin..."
-  jj git fetch || return 1
-
   if jj log --ignore-working-copy --no-graph -r "${full}@origin" -T '""' >/dev/null 2>&1; then
     remote_exists=1
     rev="$full"
@@ -204,7 +202,8 @@ jjlinear() {
     jj bookmark track "$full" --remote=origin 2>/dev/null
   else
     rev='trunk()'
-    echo "no remote bookmark '${full}' on origin — creating it locally on trunk()"
+    echo "no remote bookmark '${full}' known locally — creating on trunk()"
+    echo "  (run \`jj git fetch\` first if you expected to pick it up from origin)"
   fi
 
   if [[ -d "$target" ]]; then
@@ -301,9 +300,10 @@ Workspaces — parallel agents + dedicated dev workspace
 
   pick up or start a Linear branch (paste full name from Linear)
     jjlinear eldh/lin-68881-small-screen-layout
-                                   fetch; if remote branch exists, track it;
-                                   else create it locally on trunk().
-                                   either way: create workspace
+                                   does NOT fetch (run `jj git fetch` first
+                                   if needed). if the branch is known
+                                   locally, track it; else create it on
+                                   trunk(). either way: create workspace
                                    ../<repo>-lin-68881-... and cd in.
 
   point dev at a bookmark (the headline move)
