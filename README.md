@@ -73,9 +73,10 @@ named `<repo>-<workspace>`):
   hot-reloads. Does not change the calling shell's cwd.
 - `jjdev-this` — same, but uses the bookmark in the workspace you're
   currently in. Creates the dev workspace if it doesn't exist.
-- `jjlinear <user/branch>` — fetch; if the remote branch exists, track it;
-  otherwise create it locally on `trunk()`. Either way, create a workspace
-  named after the part after `/` and `cd` in.
+- `jjlinear <user/branch>` — if the branch is known locally (you've fetched
+  recently), track it; otherwise create it locally on `trunk()`. Does **not**
+  fetch — run `jj git fetch` first when needed. Creates a workspace named
+  after the part after `/` and `cd`s in.
 
 ## Todo
 
