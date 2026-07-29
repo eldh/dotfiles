@@ -1,0 +1,329 @@
+#!/bin/bash
+
+# Function to show usage
+show_usage() {
+    echo "Usage: pr [OPTIONS]"
+    echo ""
+    echo "Create a pull request with AI-generated description and intelligent reviewer selection"
+    echo ""
+    echo "Options:"
+    echo "  -d, --draft        Create as draft PR"
+    echo "  -t, --title TITLE  Custom PR title (otherwise uses commit message)"
+    echo "  -b, --base BRANCH  Base branch (default: main/master)"
+    echo "  -r, --reviewers N  Number of reviewers to suggest (default: 2)"
+    echo "  --dry-run          Show what would be created without creating PR"
+    echo "  -h, --help         Show this help message"
+    echo ""
+    echo "Examples:"
+    echo "  pr                          # Create PR with auto-generated content"
+    echo "  pr --draft                  # Create draft PR"
+    echo "  pr --title \"Fix bug in auth\" # Custom title"
+    echo "  pr --base develop           # Target develop branch"
+}
+
+# Default values
+DRAFT=false
+CUSTOM_TITLE=""
+BASE_BRANCH=""
+NUM_REVIEWERS=2
+DRY_RUN=false
+
+# Parse command line arguments
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        -d|--draft)
+            DRAFT=true
+            shift
+            ;;
+        -t|--title)
+            CUSTOM_TITLE="$2"
+            shift 2
+            ;;
+        -b|--base)
+            BASE_BRANCH="$2"
+            shift 2
+            ;;
+        -r|--reviewers)
+            NUM_REVIEWERS="$2"
+            shift 2
+            ;;
+        --dry-run)
+            DRY_RUN=true
+            shift
+            ;;
+        -h|--help)
+            show_usage
+            exit 0
+            ;;
+        *)
+            echo "Unknown option: $1"
+            show_usage
+            exit 1
+            ;;
+    esac
+done
+
+# Check if we're in a git repository
+if ! git rev-parse --git-dir > /dev/null 2>&1; then
+    echo "❌ Error: Not in a git repository"
+    exit 1
+fi
+
+# Check if gh CLI is installed
+if ! command -v gh &> /dev/null; then
+    echo "❌ Error: GitHub CLI (gh) is not installed"
+    echo "Install it with: brew install gh"
+    exit 1
+fi
+
+# Check if user is authenticated with gh
+if ! gh auth status &> /dev/null; then
+    echo "❌ Error: Not authenticated with GitHub CLI"
+    echo "Run: gh auth login"
+    exit 1
+fi
+
+# Get current branch
+CURRENT_BRANCH=$(git branch --show-current)
+if [ -z "$CURRENT_BRANCH" ]; then
+    echo "❌ Error: Not on a branch"
+    exit 1
+fi
+
+echo "📊 Current branch: $CURRENT_BRANCH"
+
+# Determine base branch if not specified
+if [ -z "$BASE_BRANCH" ]; then
+    # Try to find main/master branch
+    if git show-ref --verify --quiet refs/heads/main; then
+        BASE_BRANCH="main"
+    elif git show-ref --verify --quiet refs/heads/master; then
+        BASE_BRANCH="master"
+    elif git show-ref --verify --quiet refs/remotes/origin/main; then
+        BASE_BRANCH="main"
+    elif git show-ref --verify --quiet refs/remotes/origin/master; then
+        BASE_BRANCH="master"
+    else
+        echo "❌ Error: Could not determine base branch. Please specify with --base"
+        exit 1
+    fi
+fi
+
+echo "📊 Base branch: $BASE_BRANCH"
+
+# Check if current branch is ahead of base
+if ! git merge-base --is-ancestor "$BASE_BRANCH" "$CURRENT_BRANCH" 2>/dev/null; then
+    echo "❌ Error: Current branch is not ahead of $BASE_BRANCH"
+    echo "Make sure you have commits to create a PR with"
+    exit 1
+fi
+
+# Get commits that will be in the PR
+COMMITS=$(git log --oneline "$BASE_BRANCH..$CURRENT_BRANCH")
+if [ -z "$COMMITS" ]; then
+    echo "❌ Error: No commits found between $BASE_BRANCH and $CURRENT_BRANCH"
+    exit 1
+fi
+
+echo ""
+echo "📝 Commits to be included in PR:"
+echo "─────────────────────────────────────────"
+echo "$COMMITS"
+echo "─────────────────────────────────────────"
+echo ""
+
+# Get the diff for analysis
+DIFF=$(git diff "$BASE_BRANCH..$CURRENT_BRANCH")
+if [ -z "$DIFF" ]; then
+    echo "❌ Error: No changes found between branches"
+    exit 1
+fi
+
+# Get files changed for reviewer analysis
+CHANGED_FILES=$(git diff --name-only "$BASE_BRANCH..$CURRENT_BRANCH")
+echo "📁 Changed files:"
+echo "$CHANGED_FILES" | sed 's/^/  - /'
+echo ""
+
+# Determine PR title
+if [ -n "$CUSTOM_TITLE" ]; then
+    PR_TITLE="$CUSTOM_TITLE"
+else
+    # Use the most recent commit message as title
+    PR_TITLE=$(git log -1 --pretty=format:"%s" "$CURRENT_BRANCH")
+fi
+
+echo "📋 PR Title: $PR_TITLE"
+echo ""
+
+# Look for PR template
+PR_TEMPLATE=""
+TEMPLATE_PATHS=(
+    ".github/pull_request_template.md"
+    ".github/PULL_REQUEST_TEMPLATE.md"
+    ".github/pull_request_template"
+    ".github/PULL_REQUEST_TEMPLATE"
+    "docs/pull_request_template.md"
+    "docs/PULL_REQUEST_TEMPLATE.md"
+    "PULL_REQUEST_TEMPLATE.md"
+    "pull_request_template.md"
+)
+
+for template_path in "${TEMPLATE_PATHS[@]}"; do
+    if [ -f "$template_path" ]; then
+        PR_TEMPLATE=$(cat "$template_path")
+        echo "📄 Found PR template: $template_path"
+        break
+    fi
+done
+
+# Generate PR description using Claude
+echo "🤖 Generating PR description..."
+echo ""
+
+DESCRIPTION_PROMPT="Based on these git changes, write a concise pull request description.
+
+The description should:
+- Be clear and professional
+- Explain WHAT changed and WHY
+- Include any relevant context
+- Be concise but informative
+- Use markdown formatting appropriately"
+
+if [ -n "$PR_TEMPLATE" ]; then
+    DESCRIPTION_PROMPT="$DESCRIPTION_PROMPT
+
+Please follow this PR template format:
+$PR_TEMPLATE"
+fi
+
+DESCRIPTION_PROMPT="$DESCRIPTION_PROMPT
+
+Output ONLY the PR description in markdown format, no explanations.
+
+Git diff:
+$DIFF
+
+Commit messages:
+$COMMITS"
+
+PR_DESCRIPTION=$(claude -p "$DESCRIPTION_PROMPT")
+
+if [ -z "$PR_DESCRIPTION" ]; then
+    echo "❌ Failed to generate PR description"
+    exit 1
+fi
+
+echo "💬 Generated PR description:"
+echo "─────────────────────────────────────────"
+echo "$PR_DESCRIPTION"
+echo "─────────────────────────────────────────"
+echo ""
+
+# Get potential reviewers based on file history
+echo "🔍 Finding potential reviewers based on code familiarity..."
+
+# Get contributors to the changed files (excluding current user)
+CURRENT_USER=$(gh api user --jq '.login')
+POTENTIAL_REVIEWERS=()
+
+while IFS= read -r file; do
+    if [ -n "$file" ]; then
+        # Get recent contributors to this file (last 10 commits, excluding current user)
+        file_contributors=$(git log -10 --format="%ae" -- "$file" | sort | uniq | head -5)
+        for email in $file_contributors; do
+            # Try to get GitHub username from email
+            username=$(gh api search/users -F q="$email in:email" --jq '.items[0].login' 2>/dev/null || echo "")
+            # Only accept valid GitHub login strings
+            if [[ -n "$username" && "$username" != "null" && "$username" != "$CURRENT_USER" && "$username" =~ ^[A-Za-z0-9-]+$ ]]; then
+                POTENTIAL_REVIEWERS+=("$username")
+            fi
+        done
+    fi
+done <<< "$CHANGED_FILES"
+
+# Remove duplicates and limit to requested number
+UNIQUE_REVIEWERS=($(printf "%s\n" "${POTENTIAL_REVIEWERS[@]}" | sort -u | head -$NUM_REVIEWERS))
+
+if [ ${#UNIQUE_REVIEWERS[@]} -gt 0 ]; then
+    echo "👥 Suggested reviewers based on code familiarity:"
+    printf "  - %s\n" "${UNIQUE_REVIEWERS[@]}"
+    REVIEWER_LIST=$(IFS=,; echo "${UNIQUE_REVIEWERS[*]}")
+else
+    echo "🤷 No potential reviewers found based on file history"
+    REVIEWER_LIST=""
+fi
+echo ""
+
+# If dry run, stop here
+if [ "$DRY_RUN" = true ]; then
+    echo "🔍 Dry run complete - would create PR with:"
+    echo "  Title: $PR_TITLE"
+    echo "  Base: $BASE_BRANCH"
+    echo "  Head: $CURRENT_BRANCH"
+    echo "  Draft: $DRAFT"
+    if [ -n "$REVIEWER_LIST" ]; then
+        echo "  Reviewers: $REVIEWER_LIST"
+    fi
+    exit 0
+fi
+
+# Ask for confirmation
+echo "Create pull request?"
+echo "  Title: $PR_TITLE"
+echo "  $BASE_BRANCH ← $CURRENT_BRANCH"
+if [ "$DRAFT" = true ]; then
+    echo "  Status: Draft"
+fi
+if [ -n "$REVIEWER_LIST" ]; then
+    echo "  Reviewers: $REVIEWER_LIST"
+fi
+echo ""
+read -p "Proceed? (y/n/e to edit): " -n 1 -r REPLY
+echo ""
+
+if [[ $REPLY =~ ^[Ee]$ ]]; then
+    # Edit the description
+    echo ""
+    echo "✏️  Opening editor for PR description..."
+    TEMP_FILE=$(mktemp)
+    echo "$PR_DESCRIPTION" > "$TEMP_FILE"
+    ${EDITOR:-nano} "$TEMP_FILE"
+    PR_DESCRIPTION=$(cat "$TEMP_FILE")
+    rm "$TEMP_FILE"
+    echo ""
+    # Ask again after editing
+    read -p "Create PR with edited description? (y/n): " -n 1 -r REPLY
+    echo ""
+fi
+
+if [[ $REPLY =~ ^[Yy]$ ]]; then
+    echo ""
+    echo "🚀 Creating pull request..."
+    
+    # Build gh pr create command
+    GH_CMD="gh pr create --title \"$PR_TITLE\" --body \"$PR_DESCRIPTION\" --base \"$BASE_BRANCH\""
+    
+    if [ "$DRAFT" = true ]; then
+        GH_CMD="$GH_CMD --draft"
+    fi
+    
+    if [ -n "$REVIEWER_LIST" ]; then
+        GH_CMD="$GH_CMD --reviewer \"$REVIEWER_LIST\""
+    fi
+    
+    # Execute the command
+    eval $GH_CMD
+    
+    if [ $? -eq 0 ]; then
+        echo "✅ Pull request created successfully!"
+        echo ""
+        echo "🔗 View PR: $(gh pr view --json url --jq '.url')"
+    else
+        echo "❌ Failed to create pull request"
+        exit 1
+    fi
+else
+    echo ""
+    echo "❌ Pull request cancelled"
+fi
