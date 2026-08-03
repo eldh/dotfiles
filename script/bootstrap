@@ -137,8 +137,23 @@ install_dotfiles () {
   done
 }
 
+install_agent_instructions () {
+  info 'linking agent instructions (CLAUDE.md / AGENTS.md)'
+
+  local overwrite_all=false backup_all=false skip_all=false
+  local src="$DOTFILES_ROOT/claude/AGENTS.md"
+
+  # AGENTS.md is the single source of truth. Claude Code reads ~/.claude/CLAUDE.md;
+  # Codex reads ~/.codex/AGENTS.md. Both are nested inside live state dirs, so we
+  # link the individual files rather than using the *.symlink convention.
+  mkdir -p "$HOME/.claude" "$HOME/.codex"
+  link_file "$src" "$HOME/.claude/CLAUDE.md"
+  link_file "$src" "$HOME/.codex/AGENTS.md"
+}
+
 setup_gitconfig
 install_dotfiles
+install_agent_instructions
 
 # If we're on a Mac, let's install and setup homebrew.
 if [ "$(uname -s)" == "Darwin" ]
