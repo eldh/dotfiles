@@ -1,55 +1,234 @@
-#!/bin/sh
+#!/usr/bin/env bash
 #
-# dot
+# dot — one command to converge this machine to the dotfiles' "right" state.
 #
-# `dot` handles installation, updates, things like that. Run it periodically
-# to make sure you're on the latest and greatest.
+# Safe to run any time; every step is idempotent and reports what it did.
+#
+#   dot            symlinks + agent files + brew bundle + npm globals
+#   dot --macos    the above, plus macOS defaults + Terminal.app theme
+#   dot --all      alias for --macos (everything)
+#   dot -e|--edit  open the dotfiles directory in $EDITOR
+#   dot -h|--help  show this help
 
 set -e
 
-parentDirectory="$(cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd -P)"
-dotfilesDirectory="$(cd "$( dirname "$parentDirectory" )" && pwd -P)"
+# Resolve the dotfiles root from this script's location (bin/dot -> ..).
+DOTFILES_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd -P)"
 
-displayUsageAndExit() {
-	echo "dot -- dotfiles management"
-	echo ""
-	echo "Usage: dot [options]"
-	echo ""
-	echo "Options:"
-	echo "  -e, --edit    Open dotfiles directory for editing"
-	echo "  -h, --help    Show this help message and exit"
-	exit
+###############################################################################
+# Output helpers
+###############################################################################
+
+info ()    { printf "\r  [ \033[00;34m..\033[0m ] %s\n" "$1"; }
+user ()    { printf "\r  [ \033[0;33m??\033[0m ] %s\n" "$1"; }
+success () { printf "\r\033[2K  [ \033[00;32mOK\033[0m ] %s\n" "$1"; }
+fail ()    { printf "\r\033[2K  [\033[0;31mFAIL\033[0m] %s\n" "$1"; echo ''; exit 1; }
+
+###############################################################################
+# Symlinks
+###############################################################################
+
+# Symlink a single file, resolving conflicts interactively (skip/backup/overwrite).
+# Already-correct links are skipped silently-ish, so this is safe to re-run.
+link_file () {
+  local src=$1 dst=$2
+  local overwrite= backup= skip= action=
+
+  if [ -f "$dst" -o -d "$dst" -o -L "$dst" ]
+  then
+    if [ "$overwrite_all" == "false" ] && [ "$backup_all" == "false" ] && [ "$skip_all" == "false" ]
+    then
+      local currentSrc="$(readlink "$dst")"
+
+      if [ "$currentSrc" == "$src" ]
+      then
+        skip=true;
+      else
+        user "File already exists: $dst ($(basename "$src")), what do you want to do?\n\
+        [s]kip, [S]kip all, [o]verwrite, [O]verwrite all, [b]ackup, [B]ackup all?"
+        read -n 1 action
+        case "$action" in
+          o ) overwrite=true;;
+          O ) overwrite_all=true;;
+          b ) backup=true;;
+          B ) backup_all=true;;
+          s ) skip=true;;
+          S ) skip_all=true;;
+          * ) ;;
+        esac
+      fi
+    fi
+
+    overwrite=${overwrite:-$overwrite_all}
+    backup=${backup:-$backup_all}
+    skip=${skip:-$skip_all}
+
+    if [ "$overwrite" == "true" ]; then rm -rf "$dst"; success "removed $dst"; fi
+    if [ "$backup" == "true" ];    then mv "$dst" "${dst}.backup"; success "moved $dst to ${dst}.backup"; fi
+    if [ "$skip" == "true" ];      then success "skipped $src"; fi
+  fi
+
+  if [ "$skip" != "true" ]  # "false" or empty
+  then
+    ln -s "$1" "$2"
+    success "linked $1 to $2"
+  fi
 }
 
-while test $# -gt 0; do
-	case "$1" in
-		"-h"|"--help")
-			displayUsageAndExit
-			;;
-		"-e"|"--edit")
-			exec "$EDITOR" "$dotfilesDirectory"
-			exit
-			;;
-		*)
-			echo "Invalid option: $1"
-			displayUsageAndExit
-			;;
-	esac
-	shift
-done
+# Generate git/gitconfig.symlink from the template on first run only.
+setup_gitconfig () {
+  if ! [ -f "$DOTFILES_ROOT/git/gitconfig.symlink" ]
+  then
+    info 'setup gitconfig'
 
-export ZSH=$HOME/dotfiles
+    local git_credential='cache'
+    if [ "$(uname -s)" == "Darwin" ]; then git_credential='osxkeychain'; fi
 
-# Set macOS defaults
-$ZSH/macos/set-defaults.sh
+    user ' - What is your github author name?'
+    read -e git_authorname
+    user ' - What is your github author email?'
+    read -e git_authoremail
 
-# Install homebrew
-$ZSH/homebrew/install.sh 2>&1
+    sed -e "s/AUTHORNAME/$git_authorname/g" \
+        -e "s/AUTHOREMAIL/$git_authoremail/g" \
+        -e "s/GIT_CREDENTIAL_HELPER/$git_credential/g" \
+        "$DOTFILES_ROOT/git/gitconfig.symlink.example" > "$DOTFILES_ROOT/git/gitconfig.symlink"
 
-# Upgrade homebrew
-echo "› brew update"
-brew update
+    success 'gitconfig'
+  fi
+}
 
-# Install software
-echo "› $ZSH/script/install"
-$ZSH/script/install
+# Symlink every *.symlink file (depth <=2) into $HOME as a dotfile.
+install_dotfiles () {
+  info 'installing dotfiles'
+
+  local overwrite_all=false backup_all=false skip_all=false
+  local src dst
+
+  # -prune stops find from descending into a matched dir (e.g. config.symlink),
+  # so a directory-shaped symlink source is never double-matched.
+  for src in $(find -H "$DOTFILES_ROOT" -maxdepth 2 -name '*.symlink' -not -path '*/.git/*' -prune)
+  do
+    dst="$HOME/.$(basename "${src%.*}")"
+    link_file "$src" "$dst"
+  done
+}
+
+# AGENTS.md is the single source of truth for agent instructions. Claude Code
+# reads ~/.claude/CLAUDE.md; Codex reads ~/.codex/AGENTS.md. Both live inside
+# active state dirs, so we link the individual files rather than the whole dir.
+install_agent_instructions () {
+  info 'linking agent instructions (CLAUDE.md / AGENTS.md)'
+
+  local overwrite_all=false backup_all=false skip_all=false
+  local src="$DOTFILES_ROOT/claude/AGENTS.md"
+
+  mkdir -p "$HOME/.claude" "$HOME/.codex"
+  link_file "$src" "$HOME/.claude/CLAUDE.md"
+  link_file "$src" "$HOME/.codex/AGENTS.md"
+}
+
+###############################################################################
+# Packages
+###############################################################################
+
+# Ensure Homebrew is installed and on PATH, then apply the Brewfile.
+install_homebrew () {
+  info 'homebrew'
+
+  if ! command -v brew >/dev/null 2>&1
+  then
+    info 'installing Homebrew'
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  fi
+
+  # Apple Silicon installs to /opt/homebrew and may not be on PATH yet.
+  if [ -x /opt/homebrew/bin/brew ]; then eval "$(/opt/homebrew/bin/brew shellenv)"; fi
+
+  # Make zsh the login shell if it isn't already.
+  local zsh_path; zsh_path="$(command -v zsh)"
+  if [ -n "$zsh_path" ] && [ "$SHELL" != "$zsh_path" ]
+  then
+    info "setting login shell to $zsh_path"
+    chsh -s "$zsh_path" || info "could not change shell (do it manually: chsh -s $zsh_path)"
+  fi
+
+  info 'brew bundle'
+  brew bundle --file="$DOTFILES_ROOT/homebrew/Brewfile" || fail "brew bundle failed"
+  success 'homebrew up to date'
+}
+
+# Install global npm packages listed in npm/packages.txt (only when missing).
+install_npm () {
+  if ! command -v npm >/dev/null 2>&1
+  then
+    info 'npm not found, skipping global packages'
+    return
+  fi
+
+  info 'npm global packages'
+  local installed pkg
+  installed="$(npm ls -g --depth=0 --parseable 2>/dev/null)"
+
+  while IFS= read -r pkg || [ -n "$pkg" ]; do
+    case "$pkg" in ''|\#*) continue;; esac
+    if printf '%s\n' "$installed" | grep -q "/node_modules/${pkg}$"
+    then
+      success "npm: $pkg (already installed)"
+    else
+      info "npm install -g $pkg"
+      npm install -g "$pkg" >/dev/null && success "npm: $pkg"
+    fi
+  done < "$DOTFILES_ROOT/npm/packages.txt"
+}
+
+###############################################################################
+# macOS (opt-in — needs sudo and force-quits apps)
+###############################################################################
+
+apply_macos () {
+  if [ "$(uname -s)" != "Darwin" ]; then info 'not macOS, skipping defaults'; return; fi
+
+  info 'applying macOS defaults (may prompt for sudo and restart apps)'
+  "$DOTFILES_ROOT/macos/set-defaults.sh"
+
+  info 'configuring Terminal.app theme'
+  "$DOTFILES_ROOT/terminal/install.sh"
+  success 'macOS defaults applied'
+}
+
+###############################################################################
+# Main
+###############################################################################
+
+usage () {
+  sed -n '3,11p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'
+  exit "${1:-0}"
+}
+
+main () {
+  local do_macos=false
+
+  while test $# -gt 0; do
+    case "$1" in
+      -h|--help)   usage 0 ;;
+      -e|--edit)   exec "${EDITOR:-vi}" "$DOTFILES_ROOT" ;;
+      --macos|--all) do_macos=true ;;
+      *) echo "Invalid option: $1"; usage 1 ;;
+    esac
+    shift
+  done
+
+  setup_gitconfig
+  install_dotfiles
+  install_agent_instructions
+  install_homebrew
+  install_npm
+
+  if [ "$do_macos" == "true" ]; then apply_macos; fi
+
+  echo ''
+  success 'All set.'
+}
+
+main "$@"

@@ -2,7 +2,7 @@
 
 ## Install
 
-Run this:
+First run:
 
 ```sh
 git clone https://github.com/eldh/dotfiles.git ~/dotfiles
@@ -10,24 +10,33 @@ cd ~/dotfiles
 script/bootstrap
 ```
 
-This will symlink the appropriate files in `dotfiles` to your home directory.
-Everything is configured and tweaked within `~/dotfiles`.
+`script/bootstrap` is just a first-run wrapper around `dot --all`. It symlinks
+the versioned files into your home directory, installs Homebrew + packages, and
+applies macOS defaults. Everything is configured and tweaked within `~/dotfiles`.
+
+### Keeping the setup fresh
+
+`dot` (in `bin/`, so it's on your `$PATH`) is the single, idempotent command.
+It's safe to run any time and always converges the machine to the "right" state:
+
+```sh
+dot            # symlinks + agent instructions + brew bundle + npm globals
+dot --macos    # the above, plus macOS defaults + Terminal.app theme
+dot --all      # everything (alias for --macos)
+dot -e         # open the dotfiles directory in $EDITOR
+```
+
+Package lists are declarative: edit `homebrew/Brewfile` and `npm/packages.txt`
+rather than any install script. macOS defaults live in `macos/set-defaults.sh`
+and only run behind `--macos`, since they need `sudo` and force-quit apps.
 
 ### Preferences
 
-- VS Code - Make sure that install script has run. It should symlink preferences from dotfiles.
 - BetterTouchTools: Import preset
 
 ### Accounts
 
 - Github: https://help.github.com/en/articles/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent && https://help.github.com/en/articles/adding-a-new-ssh-key-to-your-github-account
-
-### Maintainance
-
-`dot` is a simple script that installs some dependencies, sets sane OS X
-defaults, and so on. Tweak this script, and occasionally run `dot` from
-time to time to keep your environment fresh and up-to-date. You can find
-this script in `bin/`.
 
 ## Components
 
@@ -44,7 +53,7 @@ There's a few special files in the hierarchy.
 - **topic/\*.symlink**: Any files ending in `*.symlink` get symlinked into
   your `$HOME`. This is so you can keep all of those versioned in your dotfiles
   but still keep those autoloaded files in your home directory. These get
-  symlinked in when you run `script/bootstrap`.
+  symlinked in when you run `dot`.
 
 ## jj (jujutsu) helpers
 
