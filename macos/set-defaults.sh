@@ -193,7 +193,7 @@ defaults write com.apple.Safari com.apple.Safari.ContentPageGroupIdentifier.WebK
 defaults write NSGlobalDomain WebKitDeveloperExtras -bool true
 
 ###############################################################################
-# Address Book, Dashboard, iCal, TextEdit, and Disk Utility                   #
+# TextEdit                                                                    #
 ###############################################################################
 
 # Use plain text mode for new TextEdit documents
@@ -203,35 +203,12 @@ defaults write com.apple.TextEdit PlainTextEncoding -int 4
 defaults write com.apple.TextEdit PlainTextEncodingForWrite -int 4
 
 ###############################################################################
-# Transmission.app                                                            #
-###############################################################################
-
-# Use `~/Downloads/Torrents` to store incomplete downloads
-defaults write org.m0k.transmission UseIncompleteDownloadFolder -bool true
-defaults write org.m0k.transmission IncompleteDownloadFolder -string "${HOME}/Downloads/Torrents"
-#
-# # Don’t prompt for confirmation before downloading
-defaults write org.m0k.transmission DownloadAsk -bool false
-#
-# # Trash original torrent files
-defaults write org.m0k.transmission DeleteOriginalTorrent -bool true
-#
-# # Hide the donate message
-defaults write org.m0k.transmission WarningDonate -bool false
-# # Hide the legal disclaimer
-defaults write org.m0k.transmission WarningLegal -bool false
-
-# Sketch
-defaults write com.bohemiancoding.sketch3 exportCompactSVG -bool yes
-
-###############################################################################
 # Kill affected applications                                                  #
 ###############################################################################
 
 for app in "Activity Monitor" "Address Book" "Calendar" "Contacts" "cfprefsd" \
 	"Dock" "Finder" "Mail" "Messages" \
-	"Opera" "Safari" "SystemUIServer" \
-	"Transmission" "iCal"; do
+	"Safari" "SystemUIServer"; do
 	killall "${app}" > /dev/null 2>&1
 done
 echo "Done. Note that some of these changes require a logout/restart to take effect."

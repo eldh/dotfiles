@@ -61,7 +61,7 @@ bindkey "^[[B" down-line-or-beginning-search # Down
 # set -x DOTFILES ~/dotfiles
 export DOTFILES=$ZSH
 # Languages
-path+=/opt/homebrew/opt/node@22/bin # homebrew
+path+=/opt/homebrew/opt/node@24/bin # homebrew
 path+=/usr/local/sbin # homebrew
 path+=/opt/homebrew/bin # homebrew
 path+=$ZSH/bin # local bins

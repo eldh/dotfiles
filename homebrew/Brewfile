@@ -1,0 +1,81 @@
+# Homebrew manifest — declarative package list.
+#
+# Applied by `dot` via `brew bundle`. Add/remove lines here rather than
+# editing install scripts. To see what would be removed if this file were
+# treated as the source of truth: `brew bundle cleanup --file=homebrew/Brewfile`.
+
+# Taps
+tap "olets/tap"
+
+# GNU core utilities (those bundled with macOS are outdated).
+# Remember to add `$(brew --prefix coreutils)/libexec/gnubin` to $PATH.
+brew "coreutils"
+
+# Editors / pagers
+brew "nano"
+brew "ne"
+
+# Dev tooling
+brew "ack"
+brew "git"
+brew "git-lfs"
+brew "ccat"
+brew "fzf"
+brew "node@24"
+brew "python"
+brew "yarn"
+brew "gpg"
+brew "scc"
+brew "cloc"
+brew "gh"
+
+# Shell
+brew "starship"
+brew "zsh-history-substring-search"
+brew "zsh-autosuggestions"
+brew "olets/tap/zsh-abbr"
+
+# Applications
+cask "warp"
+cask "zed"
+cask "visual-studio-code"
+cask "cursor"
+cask "brave-browser"
+cask "firefox"
+cask "arc"
+cask "safari-technology-preview"
+cask "bettertouchtool"
+cask "raycast"
+cask "1password"
+cask "tableplus"
+cask "gitup-app"
+cask "spotify"
+cask "slack"
+cask "transmission"
+cask "vlc"
+
+# Fonts (the homebrew/cask-fonts tap was merged into the core cask tap)
+cask "font-inconsolata"
+cask "font-input"
+cask "font-fira-sans"
+cask "font-fira-code"
+cask "font-hasklig"
+cask "font-monoid"
+cask "font-lato"
+cask "font-pacifico"
+cask "font-abril-fatface"
+cask "font-roboto-slab"
+cask "font-noto-sans"
+cask "font-inter"
+cask "font-noto-serif"
+
+# QuickLook plugins
+cask "qlcolorcode"
+cask "qlstephen"
+cask "qlmarkdown"
+cask "quicklook-json"
+cask "qlprettypatch"
+cask "quicklook-csv"
+cask "webpquicklook"
+cask "suspicious-package"
+cask "quicklook-video"
