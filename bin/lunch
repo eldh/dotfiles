@@ -108,57 +108,52 @@ def parse_logen(raw):
 
 # --- Parse Ulls ---
 def parse_ulls(raw):
+    # The site uses a "castit" menu widget: week panels
+    # (div.castit-weekpanel[data-week]) contain section.castit-day per
+    # weekday, with dish text in data-sv attributes.
     if not raw:
         return None, []
 
-    # Find the section matching the target week. The page has #previous,
-    # #current and #next sections. Pick the one whose heading matches.
-    week = None
-    section = raw  # fallback
+    def clean(s):
+        s = htmlmod.unescape(s)
+        return re.sub(r'\s+', ' ', s).strip()
 
-    for section_id in ["current", "next", "previous"]:
-        sec_match = re.search(
-            r'<div id="' + section_id + r'">(.*?)(?=<div id="(?:previous|current|next)">|<div class="menu-controller">)',
-            raw, re.DOTALL
-        )
-        if not sec_match:
-            continue
-        sec_html = sec_match.group(1)
-        wm = re.search(r'Dagens lunch v\.\s*(\d+)', sec_html)
+    # Pick the panel for the target week, else the active one, else the page.
+    week = None
+    section = raw
+    panels = re.split(r'<div class="castit-weekpanel', raw)[1:]
+    active = None
+    for p in panels:
+        attrs = p.split('>', 1)[0]
+        wm = re.search(r'data-week="(\d+)"', attrs)
         if wm and int(wm.group(1)) == iso_week:
-            section = sec_html
+            section = p
             week = wm.group(1)
             break
-
-    # If no week matched, fall back to #current
-    if not week:
-        sec_match = re.search(
-            r'<div id="current">(.*?)(?=<div id="(?:previous|current|next)">|<div class="menu-controller">)',
-            raw, re.DOTALL
-        )
-        if sec_match:
-            section = sec_match.group(1)
-        wm = re.search(r'Dagens lunch v\.\s*(\d+)', section)
-        if wm:
-            week = wm.group(1)
-
-    # Find the menu-item for today's day
-    pattern = (
-        r'<div class="menu-item ' + day_name_en + r'">\s*'
-        r'<p class="small-title">[^<]*</p>\s*(.*?)\s*<div class="menu-bottom">'
-    )
-    day_match = re.search(pattern, section, re.DOTALL)
+        if 'is-active' in attrs and active is None:
+            active = (p, wm.group(1) if wm else None)
+    else:
+        if active:
+            section, week = active
 
     dishes = []
-    if day_match:
-        day_html = day_match.group(1)
-        for p in re.finditer(r'<p>\s*(.*?)\s*</p>', day_html, re.DOTALL):
-            text = p.group(1).strip()
-            text = re.sub(r'<[^>]+>', '', text)
-            text = htmlmod.unescape(text).strip()
-            text = re.sub(r'\s+', ' ', text)
-            if text and text != "Veckans kaka!":
-                dishes.append(text)
+    for day_html in re.split(r'<section class="castit-day', section)[1:]:
+        day_html = day_html.split('</section>')[0]
+        tm = re.search(r'castit-day__title.*?data-sv="([^"]*)"', day_html, re.DOTALL)
+        if not tm or clean(tm.group(1)) != day_name_sv:
+            continue
+        for wrap in re.split(r'<div class="castit-dish-wrap">', day_html)[1:]:
+            title = re.search(r'castit-dish__title"[^>]*data-sv="([^"]*)"', wrap)
+            desc = re.search(r'castit-dish__desc"[^>]*data-sv="([^"]*)"', wrap)
+            if not title:
+                continue
+            text = clean(title.group(1))
+            if not text or text.startswith("Veckans kaka"):
+                continue
+            if desc and clean(desc.group(1)):
+                text += f" — {clean(desc.group(1))}"
+            dishes.append(text)
+        break
 
     return week, dishes
 
