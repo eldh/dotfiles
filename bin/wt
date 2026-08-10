@@ -1,0 +1,71 @@
+#!/bin/bash
+#
+# wt — create a git worktree and initialize it, like a Conductor workspace.
+#
+# Usage: wt <name> [base]
+#
+#   name  Name of the worktree and the new branch.
+#   base  Branch to start from. Default: the origin default branch.
+#
+# The worktree is created at ~/Code/worktrees/<repo>/<name>.
+# If the repo has a setup script in .conductor/settings.toml, it runs
+# in the new worktree with CONDUCTOR_ROOT_PATH set to the main repo.
+#
+# The path of the new worktree is written to stdout. All other output
+# goes to stderr, so a shell function can capture the path and cd to it.
+
+set -e
+
+name="$1"
+if [ -z "$name" ]; then
+  echo "usage: wt <name> [base]" >&2
+  exit 1
+fi
+
+root="$(git rev-parse --show-toplevel 2>/dev/null)" || {
+  echo "wt: not inside a git repository" >&2
+  exit 1
+}
+
+# Resolve the main repo root, in case we run from another worktree.
+main="$(git -C "$root" worktree list | head -n1 | awk '{print $1}')"
+repo="$(basename "$main")"
+dest="$HOME/Code/worktrees/$repo/$name"
+
+if [ -e "$dest" ]; then
+  echo "wt: $dest already exists" >&2
+  exit 1
+fi
+
+base="$2"
+if [ -z "$base" ]; then
+  base="$(git -C "$main" symbolic-ref --quiet --short refs/remotes/origin/HEAD 2>/dev/null || true)"
+  base="${base:-HEAD}"
+fi
+
+# Refresh the base branch if it is a remote-tracking ref.
+case "$base" in
+  origin/*)
+    echo "wt: fetching ${base#origin/}..." >&2
+    git -C "$main" fetch --quiet origin "${base#origin/}" || true
+    ;;
+esac
+
+echo "wt: creating $dest (branch $name from $base)" >&2
+mkdir -p "$(dirname "$dest")"
+git -C "$main" worktree add -b "$name" "$dest" "$base" 1>&2
+
+# Find a Conductor setup script and run it.
+setup=""
+for f in "$main/.conductor/settings.local.toml" "$main/.conductor/settings.toml"; do
+  [ -f "$f" ] || continue
+  setup="$(sed -n 's/^setup[[:space:]]*=[[:space:]]*"\(.*\)"$/\1/p' "$f" | head -n1)"
+  [ -n "$setup" ] && break
+done
+
+if [ -n "$setup" ]; then
+  echo "wt: running setup: $setup" >&2
+  (cd "$dest" && CONDUCTOR_ROOT_PATH="$main" bash -c "$setup" 1>&2)
+fi
+
+echo "$dest"
