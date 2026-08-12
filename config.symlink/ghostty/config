@@ -1,0 +1,40 @@
+# Ghostty config. Read by Ghostty.app and by cmux, which renders its
+# terminals with Ghostty. cmux only uses this while `cmux themes` is set
+# to "inherit"; `cmux themes set` overrides it with a machine-local file.
+#
+# Colors are the same palette as config.symlink/kitty/kitty.conf.
+# Apply changes with `cmux reload-config` — no restart needed.
+
+font-family = "FiraCode Nerd Font"
+font-size = 14
+
+background = #16171b
+foreground = #cccccc
+
+selection-background = #cccccc
+selection-foreground = #16171b
+
+# black / bright black
+palette = 0=#000000
+palette = 8=#767676
+# red
+palette = 1=#bf6069
+palette = 9=#bf6069
+# green
+palette = 2=#98be8b
+palette = 10=#98be8b
+# yellow
+palette = 3=#ebcb8a
+palette = 11=#ebcb8a
+# blue
+palette = 4=#8fa1b3
+palette = 12=#8fa1b3
+# magenta
+palette = 5=#b48ea6
+palette = 13=#b48ea6
+# cyan
+palette = 6=#96b5b4
+palette = 14=#96b5b4
+# white / bright white
+palette = 7=#c0c5ce
+palette = 15=#fefefe
