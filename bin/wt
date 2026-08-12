@@ -2,23 +2,66 @@
 #
 # wt — create a git worktree and initialize it, like a Conductor workspace.
 #
-# Usage: wt <name> [base]
+# Usage: wt [--no-setup] <name> [base]
+#        wt setup [dir]
 #
-#   name  Name of the worktree and the new branch.
-#   base  Branch to start from. Default: the origin default branch.
+#   name  Name of the worktree and the branch. If the branch already
+#         exists (locally or on origin) the worktree checks it out and
+#         continues on it; otherwise a new branch is created.
+#   base  Branch to start a new branch from. Default: the origin
+#         default branch. Ignored when the branch already exists.
 #
 # The worktree is created at ~/Code/worktrees/<repo>/<name>.
 # If the repo has a setup script in .conductor/settings.toml, it runs
 # in the new worktree with CONDUCTOR_ROOT_PATH set to the main repo.
+# With --no-setup the setup script is skipped; `wt setup [dir]` runs
+# it later for an existing worktree (dir defaults to the current one).
 #
 # The path of the new worktree is written to stdout. All other output
 # goes to stderr, so a shell function can capture the path and cd to it.
 
 set -e
 
+# Run the Conductor setup script for the worktree at $1, if the repo
+# has one.
+run_setup() {
+  dir="$1"
+  main="$(git -C "$dir" worktree list | head -n1 | awk '{print $1}')"
+  setup=""
+  for f in "$main/.conductor/settings.local.toml" "$main/.conductor/settings.toml"; do
+    [ -f "$f" ] || continue
+    setup="$(sed -n 's/^setup[[:space:]]*=[[:space:]]*"\(.*\)"$/\1/p' "$f" | head -n1)"
+    [ -n "$setup" ] && break
+  done
+
+  if [ -z "$setup" ]; then
+    echo "wt: no setup script found" >&2
+    return 0
+  fi
+
+  echo "wt: running setup: $setup" >&2
+  (cd "$dir" && CONDUCTOR_ROOT_PATH="$main" bash -c "$setup" 1>&2)
+}
+
+if [ "$1" = "setup" ]; then
+  dir="${2:-$PWD}"
+  git -C "$dir" rev-parse --show-toplevel >/dev/null 2>&1 || {
+    echo "wt: $dir is not inside a git repository" >&2
+    exit 1
+  }
+  run_setup "$dir"
+  exit 0
+fi
+
+no_setup=""
+if [ "$1" = "--no-setup" ]; then
+  no_setup=1
+  shift
+fi
+
 name="$1"
 if [ -z "$name" ]; then
-  echo "usage: wt <name> [base]" >&2
+  echo "usage: wt [--no-setup] <name> [base]" >&2
   exit 1
 fi
 
@@ -37,35 +80,41 @@ if [ -e "$dest" ]; then
   exit 1
 fi
 
-base="$2"
-if [ -z "$base" ]; then
-  base="$(git -C "$main" symbolic-ref --quiet --short refs/remotes/origin/HEAD 2>/dev/null || true)"
-  base="${base:-HEAD}"
+mkdir -p "$(dirname "$dest")"
+
+# If the branch already exists, pick it up instead of creating a new one.
+if git -C "$main" show-ref --verify --quiet "refs/heads/$name"; then
+  [ -n "$2" ] && echo "wt: branch $name already exists, ignoring base $2" >&2
+  echo "wt: creating $dest (existing branch $name)" >&2
+  git -C "$main" worktree add "$dest" "$name" 1>&2
+elif git -C "$main" show-ref --verify --quiet "refs/remotes/origin/$name" ||
+     git -C "$main" ls-remote --exit-code --heads origin "$name" >/dev/null 2>&1; then
+  [ -n "$2" ] && echo "wt: branch $name already exists on origin, ignoring base $2" >&2
+  echo "wt: fetching branch $name from origin..." >&2
+  git -C "$main" fetch --quiet origin "$name"
+  echo "wt: creating $dest (branch $name tracking origin/$name)" >&2
+  git -C "$main" worktree add --track -b "$name" "$dest" "origin/$name" 1>&2
+else
+  base="$2"
+  if [ -z "$base" ]; then
+    base="$(git -C "$main" symbolic-ref --quiet --short refs/remotes/origin/HEAD 2>/dev/null || true)"
+    base="${base:-HEAD}"
+  fi
+
+  # Refresh the base branch if it is a remote-tracking ref.
+  case "$base" in
+    origin/*)
+      echo "wt: fetching ${base#origin/}..." >&2
+      git -C "$main" fetch --quiet origin "${base#origin/}" || true
+      ;;
+  esac
+
+  echo "wt: creating $dest (branch $name from $base)" >&2
+  git -C "$main" worktree add -b "$name" "$dest" "$base" 1>&2
 fi
 
-# Refresh the base branch if it is a remote-tracking ref.
-case "$base" in
-  origin/*)
-    echo "wt: fetching ${base#origin/}..." >&2
-    git -C "$main" fetch --quiet origin "${base#origin/}" || true
-    ;;
-esac
-
-echo "wt: creating $dest (branch $name from $base)" >&2
-mkdir -p "$(dirname "$dest")"
-git -C "$main" worktree add -b "$name" "$dest" "$base" 1>&2
-
-# Find a Conductor setup script and run it.
-setup=""
-for f in "$main/.conductor/settings.local.toml" "$main/.conductor/settings.toml"; do
-  [ -f "$f" ] || continue
-  setup="$(sed -n 's/^setup[[:space:]]*=[[:space:]]*"\(.*\)"$/\1/p' "$f" | head -n1)"
-  [ -n "$setup" ] && break
-done
-
-if [ -n "$setup" ]; then
-  echo "wt: running setup: $setup" >&2
-  (cd "$dest" && CONDUCTOR_ROOT_PATH="$main" bash -c "$setup" 1>&2)
+if [ -z "$no_setup" ]; then
+  run_setup "$dest"
 fi
 
 echo "$dest"
