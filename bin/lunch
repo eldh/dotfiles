@@ -59,60 +59,14 @@ t2 = threading.Thread(target=fetch_ulls)
 t1.start(); t2.start()
 t1.join(); t2.join()
 
-# --- Parse Logen ---
-def parse_logen(raw):
+# --- Parse Logen and Ulls ---
+# Both sites now run the same "castit" menu widget: week panels
+# (div.castit-weekpanel[data-week]) contain section.castit-day per
+# weekday, with dish text in data-sv attributes, and prices in
+# span.castit-lunch-meta__item.
+def parse_castit(raw):
     if not raw:
-        return None, None, None, []
-
-    # Extract prices
-    price = None
-    student_price = None
-    m = re.search(r'<strong>Lunchpris:</strong>\s*<span>\s*(\d+)\s*kr', raw)
-    if m:
-        price = m.group(1)
-    m = re.search(r'<strong>Student:</strong>\s*<span>\s*(\d+)\s*kr', raw)
-    if m:
-        student_price = m.group(1)
-
-    # Week number
-    week = None
-    m = re.search(r'id="dynamic-week-number"[^>]*>v\.\s*(\d+)', raw)
-    if m:
-        week = m.group(1)
-
-    # Find today's dishes directly — search for the day header followed by
-    # its ratter-list. The accordion-header contains the day name, then
-    # the accordion-content has a ul.ratter-list with li.ratter items.
-    pattern = (
-        r'<div class="accordion-header">\s*' + re.escape(day_name_sv) +
-        r'.*?<ul class="ratter-list">(.*?)</ul>'
-    )
-    day_match = re.search(pattern, raw, re.DOTALL)
-
-    dishes = []
-    if day_match:
-        ratter_html = day_match.group(1)
-        for li in re.finditer(r'<li class="ratter"[^>]*>(.*?)</li>', ratter_html, re.DOTALL):
-            text = li.group(1)
-            # Remove span.co2-value and noscript blocks (including content)
-            text = re.sub(r'<span class="co2-value"[^>]*>.*?</span>', '', text, flags=re.DOTALL)
-            text = re.sub(r'<noscript>.*?</noscript>', '', text, flags=re.DOTALL)
-            text = re.sub(r'<[^>]+>', '', text)
-            text = htmlmod.unescape(text).strip()
-            text = re.sub(r'\s+', ' ', text)
-            if text:
-                dishes.append(text)
-
-    return price, student_price, week, dishes
-
-
-# --- Parse Ulls ---
-def parse_ulls(raw):
-    # The site uses a "castit" menu widget: week panels
-    # (div.castit-weekpanel[data-week]) contain section.castit-day per
-    # weekday, with dish text in data-sv attributes.
-    if not raw:
-        return None, []
+        return None, [], {}
 
     def clean(s):
         s = htmlmod.unescape(s)
@@ -143,6 +97,10 @@ def parse_ulls(raw):
         if not tm or clean(tm.group(1)) != day_name_sv:
             continue
         for wrap in re.split(r'<div class="castit-dish-wrap">', day_html)[1:]:
+            # Date headings (e.g. "13 augusti") are wraps too, but their
+            # dish div carries this modifier class — skip them.
+            if 'castit-dish--day-note' in wrap:
+                continue
             title = re.search(r'castit-dish__title"[^>]*data-sv="([^"]*)"', wrap)
             desc = re.search(r'castit-dish__desc"[^>]*data-sv="([^"]*)"', wrap)
             if not title:
@@ -155,21 +113,34 @@ def parse_ulls(raw):
             dishes.append(text)
         break
 
-    return week, dishes
+    # Prices: repeated <span class="castit-lunch-meta__item">Label : NNN SEK</span>
+    prices = {}
+    for item in re.finditer(r'<span class="castit-lunch-meta__item">(.*?)</span>', raw, re.DOTALL):
+        text = clean(re.sub(r'<[^>]+>', '', item.group(1)))
+        if ':' not in text:
+            continue
+        label, value = text.split(':', 1)
+        vm = re.search(r'\d+', value)
+        if vm:
+            prices[label.strip()] = vm.group(0)
+
+    return week, dishes, prices
+
+
+def price_str_for(prices):
+    price = prices.get("Lunchpris")
+    if not price:
+        return "?"
+    s = f"{price} kr"
+    student = prices.get("Student") or prices.get("Studentpris")
+    if student:
+        s += f" / student {student} kr"
+    return s
 
 
 # --- Output ---
-price, student_price, logen_week, logen_dishes = parse_logen(logen_html[0])
-
-price_str = ""
-if price:
-    price_str = f"{price} kr"
-    if student_price:
-        price_str += f" / student {student_price} kr"
-else:
-    price_str = "?"
-
-print(f"🍽️  Restaurang Logen ({price_str})")
+logen_week, logen_dishes, logen_prices = parse_castit(logen_html[0])
+print(f"🍽️  Restaurang Logen ({price_str_for(logen_prices)})")
 if logen_dishes:
     for d in logen_dishes:
         print(f"  • {d}")
@@ -177,8 +148,8 @@ else:
     print("  (ingen meny hittades)")
 print()
 
-ulls_week, ulls_dishes = parse_ulls(ulls_html[0])
-print(f"🍽️  Ulls Restaurang (125 kr)")
+ulls_week, ulls_dishes, ulls_prices = parse_castit(ulls_html[0])
+print(f"🍽️  Ulls Restaurang ({price_str_for(ulls_prices)})")
 if ulls_dishes:
     for d in ulls_dishes:
         print(f"  • {d}")
