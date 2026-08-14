@@ -5,7 +5,7 @@
 # Safe to run any time; every step is idempotent and reports what it did.
 #
 #   dot            symlinks + agent files + brew bundle + npm globals
-#   dot --macos    the above, plus macOS defaults + Terminal.app theme
+#   dot --macos    the above, plus macOS defaults
 #   dot --all      alias for --macos (everything)
 #   dot -e|--edit  open the dotfiles directory in $EDITOR
 #   dot -h|--help  show this help
@@ -189,11 +189,8 @@ install_npm () {
 apply_macos () {
   if [ "$(uname -s)" != "Darwin" ]; then info 'not macOS, skipping defaults'; return; fi
 
-  info 'applying macOS defaults (may prompt for sudo and restart apps)'
+  info 'applying macOS defaults (restarts Dock/Finder/SystemUIServer)'
   "$DOTFILES_ROOT/macos/set-defaults.sh"
-
-  info 'configuring Terminal.app theme'
-  "$DOTFILES_ROOT/terminal/install.sh"
   success 'macOS defaults applied'
 }
 
