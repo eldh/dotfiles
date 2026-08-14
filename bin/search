@@ -4,9 +4,5 @@
 #
 set -e
 
-# use -iru to search directories ack usually ignores (like .git)
-if [ -x /usr/bin/ack-grep ]; then
-    ack-grep -i $1
-else
-    ack -i $1
-fi
+# --hidden searches dotfiles too; .git is still ignored by default.
+exec rg --hidden -i "$1"

@@ -1,14 +1,5 @@
 # Global npm packages, one per line. Installed by `dot` (only when missing).
 # Blank lines and # comments are ignored.
-diff-so-fancy
-emoj
-fast-cli
-git-recent
-http-server
-np
+kill-port
 npm-check-updates
 spoof
-vtop
-kill-port
-yarn-deduplicate
-md-to-pdf

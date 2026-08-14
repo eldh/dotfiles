@@ -11,15 +11,14 @@ tap "olets/tap"
 # Remember to add `$(brew --prefix coreutils)/libexec/gnubin` to $PATH.
 brew "coreutils"
 
-# Editors / pagers
-brew "nano"
-brew "ne"
+# Editor (terminal, with conventional keybindings)
+brew "micro"
 
 # Dev tooling
-brew "ack"
+brew "ripgrep"
 brew "git"
 brew "git-lfs"
-brew "ccat"
+brew "bat"
 brew "fzf"
 brew "node@24"
 brew "python"
@@ -35,11 +34,16 @@ brew "zsh-history-substring-search"
 brew "zsh-autosuggestions"
 brew "olets/tap/zsh-abbr"
 
+# Terminals
+cask "ghostty"
+cask "cmux"
+
 # Applications
 cask "warp"
 cask "zed"
 cask "visual-studio-code"
 cask "cursor"
+cask "google-chrome"
 cask "brave-browser"
 cask "firefox"
 cask "arc"
@@ -70,12 +74,5 @@ cask "font-inter"
 cask "font-noto-serif"
 
 # QuickLook plugins
-cask "qlcolorcode"
-cask "qlstephen"
-cask "qlmarkdown"
-cask "quicklook-json"
-cask "qlprettypatch"
-cask "quicklook-csv"
-cask "webpquicklook"
 cask "suspicious-package"
 cask "quicklook-video"
