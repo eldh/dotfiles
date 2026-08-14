@@ -18,6 +18,7 @@ config.symlink/hub
 config.symlink/raycast
 config.symlink/raycast/extensions
 config.symlink/zed/conversations
+config.symlink/zed/embeddings/
 config.symlink/gcloud
 config.symlink/gatsby
 config.symlink/gh/hosts.yml
