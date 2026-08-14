@@ -137,6 +137,10 @@ source /opt/homebrew/share/zsh-history-substring-search/zsh-history-substring-se
 source /opt/homebrew/share/zsh-abbr/zsh-abbr.zsh
 
 # Auto suggestions
+# The plugin defaults to fg=8, which resolves through the terminal's palette
+# and can end up indistinguishable from typed text. Pin an explicit grey so
+# the suggestion always reads as dimmer than what you typed.
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=#767676'
 source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 
 #add each topic folder to fpath so that they can add functions and completion scripts
