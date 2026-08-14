@@ -137,11 +137,24 @@ source /opt/homebrew/share/zsh-history-substring-search/zsh-history-substring-se
 source /opt/homebrew/share/zsh-abbr/zsh-abbr.zsh
 
 # Auto suggestions
-# The plugin defaults to fg=8, which resolves through the terminal's palette
-# and can end up indistinguishable from typed text. Pin an explicit grey so
-# the suggestion always reads as dimmer than what you typed.
+# The plugin defaults to fg=8, which resolves through the terminal palette.
+# Pin an explicit grey instead so the colour is the same everywhere.
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=#767676'
 source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+
+# When zsh-syntax-highlighting is absent, zsh-history-substring-search installs
+# a stand-in _zsh_highlight() that empties region_highlight on every printable
+# key, and hooks it into zle-line-pre-redraw. That wipes the autosuggestion's
+# colour too, so the suggestion lost its grey from the second character on.
+# Keep the autosuggestion's entry and drop the rest, which is all the stand-in
+# was meant to do. Skip this entirely if real syntax highlighting is loaded.
+if (( ! ${+ZSH_HIGHLIGHT_VERSION} )); then
+  _zsh_highlight() {
+    if [[ $KEYS == [[:print:]] ]]; then
+      region_highlight=("${(@M)region_highlight:#*${ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE}*}")
+    fi
+  }
+fi
 
 #add each topic folder to fpath so that they can add functions and completion scripts
 for topic_folder ($ZSH/*) if [ -d $topic_folder ]; then  fpath=($topic_folder $fpath); fi;
