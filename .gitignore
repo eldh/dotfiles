@@ -1,16 +1,6 @@
-atom.symlink/.apm
-atom.symlink/.node-gyp
-atom.symlink/.storage
-atom.symlink/compile-cache/
-atom.symlink/blob-store
-atom.symlink/packages
-atom.symlink/recovery
-atom.symlink/storage
-atom.symlink/themes
 
 git/gitconfig.symlink
 
-atom.symlink/projects.cson
 
 config.symlink/configstore
 config.symlink/yarn
@@ -25,7 +15,6 @@ config.symlink/gh/hosts.yml
 node_modules
 .DS_Store
 config.symlink/raycast/config.json
-config.symlink/jj/repos/
 
 # Machine-local / generated state
 .claude/
@@ -33,4 +22,3 @@ config.symlink/simple-update-notifier/
 config.symlink/zed/prompts/
 config.symlink/zed/settings_backup.json
 config.symlink/1Password/
-pbcopy
