@@ -1,9 +1,15 @@
+###############################################################################
+# Environment & path
+###############################################################################
+
 # shortcut to this dotfiles path is $ZSH
 export ZSH=$HOME/dotfiles
-export NODE_PATH=/opt/homebrew/opt/node@24
+export DOTFILES=$ZSH
 
 # your project folder that we can `c [tab]` to
 export PROJECTS=$HOME/Code
+
+export EDITOR=micro
 
 # Stash your environment variables in ~/.localrc. This means they'll stay out
 # of your main dotfiles repository (which may be public, like this one), but
@@ -13,69 +19,47 @@ then
   source ~/.localrc
 fi
 
-# all of our zsh files
-typeset -U config_files
-config_files=($ZSH/**/*.zsh)
+export PNPM_HOME="$HOME/Library/pnpm"
 
-# load the path files
-for file in ${(M)config_files:#*/path.zsh}
-do
-  source $file
-done
+# One list, deduplicated by `typeset -U`; first occurrence of a dir wins.
+typeset -U path
+path=(
+  $PNPM_HOME
+  /opt/homebrew/opt/node@24/bin
+  /opt/homebrew/bin
+  /opt/homebrew/sbin
+  /usr/local/sbin
+  $ZSH/bin
+  $HOME/.opencode/bin
+  $path
+)
 
-# load everything but the path and completion files
-for file in ${${config_files:#*/path.zsh}:#*/completion.zsh}
-do
-  source $file
-done
-
-# initialize autocomplete here, otherwise functions won't be loaded
-autoload -Uz compinit && compinit
-
-# Add git autocomplete script
-zstyle ':completion:*:*:git:*' script $ZSH/functions/git-completion.bash
-
-# load every completion after autocomplete loads
-for file in ${(M)config_files:#*/completion.zsh}
-do
-  source $file
-done
-
-unset config_files
-
-# Better history
-# Credits to https://coderwall.com/p/jpj_6q/zsh-better-history-searching-with-arrow-keys
-autoload -U up-line-or-beginning-search
-autoload -U down-line-or-beginning-search
-zle -N up-line-or-beginning-search
-zle -N down-line-or-beginning-search
-bindkey "^[[A" up-line-or-beginning-search # Up
-bindkey "^[[B" down-line-or-beginning-search # Down
-
-
-# PATH
-
-# @@ -1,11 +0,0 @@
-# set -x NODE_PATH /usr/local/lib/node
-# set -x EDITOR nano
-# set -x DOTFILES ~/dotfiles
-export DOTFILES=$ZSH
-# Languages
-path+=/opt/homebrew/opt/node@24/bin # homebrew
-path+=/usr/local/sbin # homebrew
-path+=/opt/homebrew/bin # homebrew
-path+=$ZSH/bin # local bins
-path+=/opt/homebrew/bin/python@3.12/bin # python bins
+export MACOSX_DEPLOYMENT_TARGET=15.0
 
 export LSCOLORS="exfxcxdxbxegedabagacad"
 export CLICOLOR=true
 
-fpath=($ZSH/functions $fpath)
-fpath=(/opt/homebrew/lib/node_modules $fpath)
-
 HISTFILE=~/.zsh_history
-HISTSIZE=10000
-SAVEHIST=10000
+HISTSIZE=100000
+SAVEHIST=100000
+
+# Generated for envman. Do not edit.
+[ -s "$HOME/.config/envman/load.sh" ] && source "$HOME/.config/envman/load.sh"
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f "$HOME/google-cloud-sdk/path.zsh.inc" ]; then . "$HOME/google-cloud-sdk/path.zsh.inc"; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f "$HOME/google-cloud-sdk/completion.zsh.inc" ]; then . "$HOME/google-cloud-sdk/completion.zsh.inc"; fi
+
+# opam environment
+if command -v opam > /dev/null; then
+  eval $(opam env)
+fi
+
+###############################################################################
+# Shell options
+###############################################################################
 
 setopt NO_BG_NICE # don't nice background tasks
 setopt NO_HUP
@@ -83,21 +67,43 @@ setopt NO_LIST_BEEP
 setopt LOCAL_OPTIONS # allow functions to have local options
 setopt LOCAL_TRAPS # allow functions to have local traps
 setopt HIST_VERIFY
-setopt SHARE_HISTORY # share history between sessions ???
+setopt SHARE_HISTORY # share history between sessions
 setopt EXTENDED_HISTORY # add timestamps to history
 setopt PROMPT_SUBST
 setopt CORRECT
 setopt COMPLETE_IN_WORD
 setopt IGNORE_EOF
-
 setopt APPEND_HISTORY # adds history
-setopt INC_APPEND_HISTORY SHARE_HISTORY  # adds history incrementally and share it across sessions
-setopt HIST_IGNORE_ALL_DUPS  # don't record dupes in history
+setopt INC_APPEND_HISTORY # adds history incrementally
+setopt HIST_IGNORE_ALL_DUPS # don't record dupes in history
 setopt HIST_REDUCE_BLANKS
 
 # don't expand aliases _before_ completion has finished
 #   like: git comm-[tab]
-setopt complete_aliases
+setopt COMPLETE_ALIASES
+
+###############################################################################
+# Completion
+###############################################################################
+
+fpath=($ZSH/functions $fpath)
+
+# autoload the function files (everything that isn't a _completion file)
+for f in $ZSH/functions/[^_]*(N.:t); do autoload -U $f; done
+
+autoload -Uz compinit && compinit
+
+# matches case insensitive for lowercase
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
+
+# pasting with tabs doesn't perform completion
+zstyle ':completion:*' insert-tab pending
+
+###############################################################################
+# Keybindings
+###############################################################################
+# NOTE: the up/down arrow binds live in the plugin section below, because they
+# have to come after zsh-history-substring-search is sourced.
 
 bindkey '^[^[[D' backward-word
 bindkey '^[^[[C' forward-word
@@ -106,10 +112,10 @@ bindkey '^[[5C' end-of-line
 bindkey '^[[3~' delete-char
 bindkey '^?' backward-delete-char
 
-bindkey '^[[A' history-substring-search-up
-bindkey '^[[B' history-substring-search-down
+###############################################################################
+# Aliases
+###############################################################################
 
-# ALIASES
 alias cls='clear' # Good 'ol Clear Screen command
 alias reload="exec $SHELL -l"
 alias show="defaults write com.apple.finder AppleShowAllFiles -bool true && killall Finder"
@@ -122,19 +128,114 @@ alias l="ls -lF -G"
 alias la="ls -laF -G"
 alias ls="command ls -G"
 
-# COMPLETION
+alias ios='open -a simulator'
 
-# matches case insensitive for lowercase
-zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
+# git
+alias g='git'
+alias gl='git pull --prune'
+alias glog="git log --graph --pretty=format:'%Cred%h%Creset %an: %s - %Creset %C(yellow)%d%Creset %Cgreen(%cr)%Creset' --abbrev-commit --date=relative"
+alias gp='git push origin HEAD'
 
-# pasting with tabs doesn't perform completion
-zstyle ':completion:*' insert-tab pending
+# Remove `+` and `-` from start of diff lines; just rely upon color.
+alias gd='git diff --color | sed "s/^\([^-+ ]*\)[-+ ]/\\1/" | less -r'
 
-# Fish style history search
-source /opt/homebrew/share/zsh-history-substring-search/zsh-history-substring-search.zsh
+alias gaa='git add --all'
+alias gc='git commit'
+alias gca='git commit -a'
+alias gcm='git commit -m'
+alias gcb='git copy-branch-name'
+alias gb='git branch'
+alias gco='git checkout'
+alias gac='git add -A && git commit -m'
+alias gcaa='git commit -v -a --amend'
+alias gpl='git pull --rebase'
+alias gprune='git branch --merged | grep -v "\*" | grep -v "master" | grep -v "develop" | grep -v "staging" | xargs -n 1 git branch -d'
+alias gpn='git push --set-upstream origin $(git rev-parse --abbrev-ref HEAD)'
+alias grem='git rebase --autostash --autosquash master'
+alias grea='git rebase --abort'
+alias grec='git rebase --continue'
+alias greset='git reset --hard'
+alias gst='git status -sb'
+alias stash='git stash'
+alias pop='git stash pop'
+alias yolo='git add --all && git commit --amend && git push -f'
+
+###############################################################################
+# Functions
+###############################################################################
+
+# prevent yarn from running in non-yarn projects
+yarn() {
+  if [ -e package-lock.json ]; then
+    echo "⚠️  This is a npm project. Why don't you use "npm" ⁉️"
+  elif [ -e pnpm-lock.yaml ]; then
+    echo "⚠️  This is a pnpm project. Why don't you use "pnpm" ⁉️"
+  else
+    command yarn $@
+  fi
+}
+
+# Create a worktree with bin/wt, then cd into it.
+#
+# Inside cmux, the setup script runs in the background instead:
+# a new pane opens below the current one with claude on the left,
+# the setup running top-right, and a spare shell bottom-right.
+wt() {
+  if [[ "$1" == setup ]]; then
+    command wt "$@"
+    return
+  fi
+
+  local dir
+  if [[ -n "$CMUX_WORKSPACE_ID" ]] && command -v cmux >/dev/null; then
+    dir="$(command wt --no-setup "$@")" || return
+    cd "$dir" || return
+    _wt_cmux_layout "$dir"
+  else
+    dir="$(command wt "$@")" || return
+    cd "$dir"
+  fi
+}
+
+# Pull a string value out of pretty-printed `cmux --json` output.
+_wt_json() {
+  sed -n "s/.*\"$1\" *: *\"\([^\"]*\)\".*/\1/p" | head -n1
+}
+
+_wt_cmux_layout() {
+  local dir="$1" ws="$CMUX_WORKSPACE_ID"
+  local out left_pane left_surf tr_pane tr_surf br_surf
+
+  out="$(cmux --json new-pane --direction down --workspace "$ws")" || return
+  left_pane="$(print -r -- "$out" | _wt_json pane_ref)"
+  left_surf="$(print -r -- "$out" | _wt_json surface_ref)"
+
+  out="$(cmux --json new-split right --workspace "$ws" --pane "$left_pane")" || return
+  tr_pane="$(print -r -- "$out" | _wt_json pane_ref)"
+  tr_surf="$(print -r -- "$out" | _wt_json surface_ref)"
+
+  out="$(cmux --json new-split down --workspace "$ws" --pane "$tr_pane")" || return
+  br_surf="$(print -r -- "$out" | _wt_json surface_ref)"
+
+  # Give the new shells a beat to start before typing into them.
+  sleep 0.3
+  cmux send --workspace "$ws" --surface "$tr_surf" "cd ${(q)dir} && command wt setup"$'\n'
+  cmux send --workspace "$ws" --surface "$br_surf" "cd ${(q)dir}"$'\n'
+  cmux send --workspace "$ws" --surface "$left_surf" "cd ${(q)dir} && claude"$'\n'
+  cmux focus-pane --workspace "$ws" --pane "$left_pane"
+}
+
+###############################################################################
+# Plugins (order matters)
+###############################################################################
 
 # Abbreviation support
 source /opt/homebrew/share/zsh-abbr/zsh-abbr.zsh
+
+# Fish style history search
+source /opt/homebrew/share/zsh-history-substring-search/zsh-history-substring-search.zsh
+bindkey '^[[A' history-substring-search-up
+bindkey '^[[B' history-substring-search-down
 
 # Auto suggestions
 # The plugin defaults to fg=8, which resolves through the terminal palette.
@@ -156,47 +257,8 @@ if (( ! ${+ZSH_HIGHLIGHT_VERSION} )); then
   }
 fi
 
-#add each topic folder to fpath so that they can add functions and completion scripts
-for topic_folder ($ZSH/*) if [ -d $topic_folder ]; then  fpath=($topic_folder $fpath); fi;
-
-
-
-# Generated for envman. Do not edit.
-[ -s "$HOME/.config/envman/load.sh" ] && source "$HOME/.config/envman/load.sh"
-
-# prevent yarn from running in non-yarn projects
-yarn() {
-  if [ -e package-lock.lock ]; then
-    echo "⚠️  This is a npm project. Why don't you use "npm" ⁉️"
-  elif [ -e pnpm-lock.yaml ]; then
-    echo "⚠️  This is a pnpm project. Why don't you use "pnpm" ⁉️"
-  else
-    command yarn $@
-  fi
-}
-
-# pnpm
-export PNPM_HOME="/Users/eldh/Library/pnpm"
-case ":$PATH:" in
-  *":$PNPM_HOME/bin:"*) ;;
-  *) export PATH="$PNPM_HOME/bin:$PATH" ;;
-esac
-# pnpm end
-
-export PATH="/opt/homebrew/bin:$PATH"
+###############################################################################
+# Prompt
+###############################################################################
 
 eval "$(starship init zsh)"
-
-export PATH="/opt/homebrew/bin/python@3.12/bin:$PATH"
-export MACOSX_DEPLOYMENT_TARGET=15.0
-
-export PATH="/opt/homebrew/opt/node@24/bin:$PATH"
-# The next line updates PATH for the Google Cloud SDK.
-if [ -f '/Users/eldh/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/eldh/google-cloud-sdk/path.zsh.inc'; fi
-
-# The next line enables shell command completion for gcloud.
-if [ -f '/Users/eldh/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/eldh/google-cloud-sdk/completion.zsh.inc'; fi
-
-eval $(opam env) # opam environment
-# opencode
-export PATH=/Users/eldh/.opencode/bin:$PATH
