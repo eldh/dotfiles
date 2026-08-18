@@ -243,13 +243,13 @@ wt() {
     sed -n -E 's/^Suggested branch name:[[:space:]]*([^[:space:]]+).*/\1/p' | head -n1)"
   issue="$(print -r -- "$prompt" |
     sed -n -E 's/.*<issue identifier="([^"]+)".*/\1/p' | head -n1)"
+  title="$(print -r -- "$prompt" | sed -n -E 's|.*<title>(.*)</title>.*|\1|p' | head -n1)"
 
   if [[ -n "$branch" ]]; then
     # eldh/lin-82174-some-title -> some-title
     name="$(print -r -- "${branch##*/}" | sed -E 's/^lin-[0-9]+-//')"
   else
     # No branch line: kebab-case the issue title instead.
-    title="$(print -r -- "$prompt" | sed -n -E 's|.*<title>(.*)</title>.*|\1|p' | head -n1)"
     if [[ -z "$title" ]]; then
       print "wt: could not find a branch name or issue title in the prompt" >&2
       return 1
@@ -269,7 +269,7 @@ wt() {
   dir="$(command wt --no-setup --branch "$branch" "$name")" || return
 
   if [[ -n "$CMUX_WORKSPACE_ID" ]] && command -v cmux >/dev/null; then
-    _wt_workspace "$dir" "${issue:-$name}" "$name" ~/.cache/wt/$name.md
+    _wt_workspace "$dir" "${title:-${issue:-$name}}" "${issue:-$name}" ~/.cache/wt/$name.md
   else
     cd "$dir" && command wt setup && claude --permission-mode plan "$(cat ~/.cache/wt/$name.md)"
   fi
