@@ -2,14 +2,18 @@
 #
 # wt — create a git worktree and initialize it, like a Conductor workspace.
 #
-# Usage: wt [--no-setup] <name> [base]
+# Usage: wt [--no-setup] [--branch <branch>] <name> [base]
 #        wt setup [dir]
 #
-#   name  Name of the worktree and the branch. If the branch already
-#         exists (locally or on origin) the worktree checks it out and
-#         continues on it; otherwise a new branch is created.
+#   name  Name of the worktree, and of the branch unless --branch
+#         gives another one. If the branch already exists (locally or
+#         on origin) the worktree checks it out and continues on it;
+#         otherwise a new branch is created.
 #   base  Branch to start a new branch from. Default: the origin
 #         default branch. Ignored when the branch already exists.
+#
+#   --branch <branch>  Use this branch name instead of <name>. The
+#                      worktree directory still uses <name>.
 #
 # The worktree is created at ~/Code/worktrees/<repo>/<name>.
 # If the repo has a setup script in .conductor/settings.toml, it runs
@@ -54,16 +58,33 @@ if [ "$1" = "setup" ]; then
 fi
 
 no_setup=""
-if [ "$1" = "--no-setup" ]; then
-  no_setup=1
-  shift
-fi
+branch=""
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --no-setup)
+      no_setup=1
+      shift
+      ;;
+    --branch)
+      branch="$2"
+      if [ -z "$branch" ]; then
+        echo "wt: --branch needs a branch name" >&2
+        exit 1
+      fi
+      shift 2
+      ;;
+    *)
+      break
+      ;;
+  esac
+done
 
 name="$1"
 if [ -z "$name" ]; then
-  echo "usage: wt [--no-setup] <name> [base]" >&2
+  echo "usage: wt [--no-setup] [--branch <branch>] <name> [base]" >&2
   exit 1
 fi
+branch="${branch:-$name}"
 
 root="$(git rev-parse --show-toplevel 2>/dev/null)" || {
   echo "wt: not inside a git repository" >&2
@@ -83,17 +104,17 @@ fi
 mkdir -p "$(dirname "$dest")"
 
 # If the branch already exists, pick it up instead of creating a new one.
-if git -C "$main" show-ref --verify --quiet "refs/heads/$name"; then
-  [ -n "$2" ] && echo "wt: branch $name already exists, ignoring base $2" >&2
-  echo "wt: creating $dest (existing branch $name)" >&2
-  git -C "$main" worktree add "$dest" "$name" 1>&2
-elif git -C "$main" show-ref --verify --quiet "refs/remotes/origin/$name" ||
-     git -C "$main" ls-remote --exit-code --heads origin "$name" >/dev/null 2>&1; then
-  [ -n "$2" ] && echo "wt: branch $name already exists on origin, ignoring base $2" >&2
-  echo "wt: fetching branch $name from origin..." >&2
-  git -C "$main" fetch --quiet origin "$name"
-  echo "wt: creating $dest (branch $name tracking origin/$name)" >&2
-  git -C "$main" worktree add --track -b "$name" "$dest" "origin/$name" 1>&2
+if git -C "$main" show-ref --verify --quiet "refs/heads/$branch"; then
+  [ -n "$2" ] && echo "wt: branch $branch already exists, ignoring base $2" >&2
+  echo "wt: creating $dest (existing branch $branch)" >&2
+  git -C "$main" worktree add "$dest" "$branch" 1>&2
+elif git -C "$main" show-ref --verify --quiet "refs/remotes/origin/$branch" ||
+     git -C "$main" ls-remote --exit-code --heads origin "$branch" >/dev/null 2>&1; then
+  [ -n "$2" ] && echo "wt: branch $branch already exists on origin, ignoring base $2" >&2
+  echo "wt: fetching branch $branch from origin..." >&2
+  git -C "$main" fetch --quiet origin "$branch"
+  echo "wt: creating $dest (branch $branch tracking origin/$branch)" >&2
+  git -C "$main" worktree add --track -b "$branch" "$dest" "origin/$branch" 1>&2
 else
   base="$2"
   if [ -z "$base" ]; then
@@ -109,8 +130,8 @@ else
       ;;
   esac
 
-  echo "wt: creating $dest (branch $name from $base)" >&2
-  git -C "$main" worktree add -b "$name" "$dest" "$base" 1>&2
+  echo "wt: creating $dest (branch $branch from $base)" >&2
+  git -C "$main" worktree add -b "$branch" "$dest" "$base" 1>&2
 fi
 
 if [ -z "$no_setup" ]; then

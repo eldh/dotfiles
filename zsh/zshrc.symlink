@@ -175,54 +175,106 @@ yarn() {
   fi
 }
 
-# Create a worktree with bin/wt, then cd into it.
+# Create a worktree with bin/wt and open it.
 #
-# Inside cmux, the setup script runs in the background instead:
-# a new pane opens below the current one with claude on the left,
-# the setup running top-right, and a spare shell bottom-right.
+# `wt` with no arguments is paste mode: paste a Linear issue prompt,
+# end with ^D. The branch comes from the "Suggested branch name:" line
+# and the worktree name from that branch without the `eldh/lin-NNNNN-`
+# prefix. The pasted prompt is kept at ~/.cache/wt/<name>.md.
+#
+# `wt <name> [base]` is arg mode: the worktree name is the branch name,
+# and claude starts without a prompt.
+#
+# Inside cmux both modes open a new workspace named after the issue:
+# claude on the left, `wt setup` top-right, a spare shell bottom-right.
+# Outside cmux they cd into the worktree and run setup there.
 wt() {
   if [[ "$1" == setup ]]; then
     command wt "$@"
     return
   fi
 
-  local dir
-  if [[ -n "$CMUX_WORKSPACE_ID" ]] && command -v cmux >/dev/null; then
+  local dir prompt title branch issue name
+
+  # Arg mode: the name is also the branch.
+  if (( $# )); then
     dir="$(command wt --no-setup "$@")" || return
-    cd "$dir" || return
-    _wt_cmux_layout "$dir"
+    if [[ -n "$CMUX_WORKSPACE_ID" ]] && command -v cmux >/dev/null; then
+      _wt_workspace "$dir" "$1" ""
+    else
+      command wt setup "$dir"
+      cd "$dir"
+    fi
+    return
+  fi
+
+  # Paste mode.
+  print "wt: paste the issue prompt, end with ^D:" >&2
+  prompt="$(cat)"
+  if [[ -z "$prompt" ]]; then
+    print "wt: no prompt given" >&2
+    return 1
+  fi
+
+  branch="$(print -r -- "$prompt" |
+    sed -n -E 's/^Suggested branch name:[[:space:]]*([^[:space:]]+).*/\1/p' | head -n1)"
+  issue="$(print -r -- "$prompt" |
+    sed -n -E 's/.*<issue identifier="([^"]+)".*/\1/p' | head -n1)"
+
+  if [[ -n "$branch" ]]; then
+    # eldh/lin-82174-some-title -> some-title
+    name="$(print -r -- "${branch##*/}" | sed -E 's/^lin-[0-9]+-//')"
   else
-    dir="$(command wt "$@")" || return
-    cd "$dir"
+    # No branch line: kebab-case the issue title instead.
+    title="$(print -r -- "$prompt" | sed -n -E 's|.*<title>(.*)</title>.*|\1|p' | head -n1)"
+    if [[ -z "$title" ]]; then
+      print "wt: could not find a branch name or issue title in the prompt" >&2
+      return 1
+    fi
+    name="$(print -r -- "${title:l}" | sed -E 's/[^a-z0-9]+/-/g; s/^-+//; s/-+$//')"
+    branch="$name"
+  fi
+
+  if [[ -z "$issue" ]]; then
+    issue="$(print -r -- "$branch" | sed -n -E 's/.*(lin-[0-9]+).*/\1/p')"
+    issue="${issue:u}"
+  fi
+
+  mkdir -p ~/.cache/wt
+  print -r -- "$prompt" > ~/.cache/wt/$name.md
+
+  dir="$(command wt --no-setup --branch "$branch" "$name")" || return
+
+  if [[ -n "$CMUX_WORKSPACE_ID" ]] && command -v cmux >/dev/null; then
+    _wt_workspace "$dir" "${issue:-$name}" "$name" ~/.cache/wt/$name.md
+  else
+    cd "$dir" && command wt setup && claude "$(cat ~/.cache/wt/$name.md)"
   fi
 }
 
-# Pull a string value out of pretty-printed `cmux --json` output.
-_wt_json() {
-  sed -n "s/.*\"$1\" *: *\"\([^\"]*\)\".*/\1/p" | head -n1
-}
+# Open a cmux workspace for the worktree at $1, named $2 and described
+# by $3: claude on the left, `wt setup` top-right, spare shell below it.
+# With a prompt file in $4, claude starts with that prompt; the command
+# reaches cmux with `$(cat …)` unexpanded, so the pane's own shell reads
+# the file and quoting in the prompt cannot break out.
+_wt_workspace() {
+  local dir="$1" ws_name="$2" ws_desc="$3" prompt_file="$4"
+  local left layout
 
-_wt_cmux_layout() {
-  local dir="$1" ws="$CMUX_WORKSPACE_ID"
-  local out left_pane left_surf tr_pane tr_surf br_surf
+  if [[ -n "$prompt_file" ]]; then
+    left="$(printf 'claude \\"$(cat %s)\\"' "$prompt_file")"
+  else
+    left='claude'
+  fi
 
-  out="$(cmux --json new-pane --direction down --workspace "$ws")" || return
-  left_pane="$(print -r -- "$out" | _wt_json pane_ref)"
-  left_surf="$(print -r -- "$out" | _wt_json surface_ref)"
+  layout="$(printf '{"direction":"horizontal","split":0.5,"children":[{"pane":{"surfaces":[{"type":"terminal","command":"%s"}]}},{"direction":"vertical","split":0.5,"children":[{"pane":{"surfaces":[{"type":"terminal","command":"command wt setup"}]}},{"pane":{"surfaces":[{"type":"terminal"}]}}]}]}' "$left")"
 
-  out="$(cmux --json new-split right --workspace "$ws" --pane "$left_pane")" || return
-  tr_pane="$(print -r -- "$out" | _wt_json pane_ref)"
-  tr_surf="$(print -r -- "$out" | _wt_json surface_ref)"
-
-  out="$(cmux --json new-split down --workspace "$ws" --pane "$tr_pane")" || return
-  br_surf="$(print -r -- "$out" | _wt_json surface_ref)"
-
-  # Give the new shells a beat to start before typing into them.
-  sleep 0.3
-  cmux send --workspace "$ws" --surface "$tr_surf" "cd ${(q)dir} && command wt setup"$'\n'
-  cmux send --workspace "$ws" --surface "$br_surf" "cd ${(q)dir}"$'\n'
-  cmux send --workspace "$ws" --surface "$left_surf" "cd ${(q)dir} && claude"$'\n'
-  cmux focus-pane --workspace "$ws" --pane "$left_pane"
+  cmux workspace create \
+    --name "$ws_name" \
+    --description "$ws_desc" \
+    --cwd "$dir" \
+    --focus true \
+    --layout "$layout"
 }
 
 ###############################################################################
