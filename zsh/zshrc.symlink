@@ -177,8 +177,8 @@ yarn() {
 
 # Create a worktree with bin/wt and open it.
 #
-# `wt` with no arguments is paste mode: paste a Linear issue prompt,
-# end with ^D. The branch comes from the "Suggested branch name:" line
+# `wt` with no arguments is paste mode: paste a Linear issue prompt and
+# press Enter. The branch comes from the "Suggested branch name:" line
 # and the worktree name from that branch without the `eldh/lin-NNNNN-`
 # prefix. The pasted prompt is kept at ~/.cache/wt/<name>.md.
 #
@@ -208,9 +208,15 @@ wt() {
     return
   fi
 
-  # Paste mode.
-  print "wt: paste the issue prompt, end with ^D:" >&2
-  prompt="$(cat)"
+  # Paste mode. vared runs the line editor, where a bracketed paste keeps
+  # its newlines in the buffer, so a single Enter submits the whole prompt.
+  if [[ -t 0 ]]; then
+    print "wt: paste the issue prompt, then press Enter:" >&2
+    prompt=
+    vared prompt || return 1
+  else
+    prompt="$(cat)"
+  fi
   if [[ -z "$prompt" ]]; then
     print "wt: no prompt given" >&2
     return 1
