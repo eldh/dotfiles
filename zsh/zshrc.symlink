@@ -254,7 +254,7 @@ wt() {
   if [[ -n "$CMUX_WORKSPACE_ID" ]] && command -v cmux >/dev/null; then
     _wt_workspace "$dir" "${issue:-$name}" "$name" ~/.cache/wt/$name.md
   else
-    cd "$dir" && command wt setup && claude "$(cat ~/.cache/wt/$name.md)"
+    cd "$dir" && command wt setup && claude --permission-mode plan "$(cat ~/.cache/wt/$name.md)"
   fi
 }
 
@@ -268,9 +268,9 @@ _wt_workspace() {
   local left layout
 
   if [[ -n "$prompt_file" ]]; then
-    left="$(printf 'claude \\"$(cat %s)\\"' "$prompt_file")"
+    left="$(printf 'claude --permission-mode plan \\"$(cat %s)\\"' "$prompt_file")"
   else
-    left='claude'
+    left='claude --permission-mode plan'
   fi
 
   layout="$(printf '{"direction":"horizontal","split":0.5,"children":[{"pane":{"surfaces":[{"type":"terminal","command":"%s"}]}},{"direction":"vertical","split":0.5,"children":[{"pane":{"surfaces":[{"type":"terminal","command":"command wt setup"}]}},{"pane":{"surfaces":[{"type":"terminal"}]}}]}]}' "$left")"
