@@ -188,9 +188,26 @@ yarn() {
 # Inside cmux both modes open a new workspace named after the issue:
 # claude on the left, `wt setup` top-right, a spare shell bottom-right.
 # Outside cmux they cd into the worktree and run setup there.
+#
+# `wt prune` removes the worktrees of merged PRs and, inside cmux, also
+# closes the workspaces that stand in them.
 wt() {
   if [[ "$1" == setup ]]; then
     command wt "$@"
+    return
+  fi
+
+  if [[ "$1" == prune ]]; then
+    local -a pruned
+    local out
+    out="$(command wt "$@")" || return
+    pruned=(${(f)out})
+
+    # Dry runs print the same paths but change nothing, so keep the
+    # workspaces open.
+    if [[ "$2" != (-n|--dry-run) ]] && (( $#pruned )); then
+      _wt_close_workspaces "${pruned[@]}"
+    fi
     return
   fi
 
@@ -281,6 +298,52 @@ _wt_workspace() {
     --cwd "$dir" \
     --focus true \
     --layout "$layout"
+}
+
+# Close the cmux workspaces whose directory is one of $@, the worktrees
+# that `wt prune` removed.
+_wt_close_workspaces() {
+  [[ -n "$CMUX_WORKSPACE_ID" ]] || return 0
+  command -v cmux >/dev/null || return 0
+  if ! command -v python3 >/dev/null; then
+    print "wt: no python3, leaving the cmux workspaces open" >&2
+    return 0
+  fi
+
+  local json
+  json="$(CMUX_QUIET=1 cmux --json workspace list 2>/dev/null)" || return 0
+  [[ -n "$json" ]] || return 0
+
+  local matched
+  matched="$(print -r -- "$json" | python3 -c '
+import json, sys
+
+dirs = set(sys.argv[1:])
+ids = []
+
+def walk(node):
+    if isinstance(node, dict):
+        if node.get("current_directory") in dirs and node.get("id"):
+            ids.append(node["id"])
+        for value in node.values():
+            walk(value)
+    elif isinstance(node, list):
+        for value in node:
+            walk(value)
+
+try:
+    walk(json.load(sys.stdin))
+except Exception:
+    pass
+for workspace_id in ids:
+    print(workspace_id)
+' "$@")" || return 0
+
+  local id
+  for id in ${(f)matched}; do
+    cmux workspace close --workspace "$id" 1>&2 ||
+      print "wt: could not close cmux workspace $id" >&2
+  done
 }
 
 ###############################################################################

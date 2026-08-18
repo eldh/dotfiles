@@ -4,6 +4,7 @@
 #
 # Usage: wt [--no-setup] [--branch <branch>] <name> [base]
 #        wt setup [dir]
+#        wt prune [-n|--dry-run]
 #
 #   name  Name of the worktree, and of the branch unless --branch
 #         gives another one. If the branch already exists (locally or
@@ -21,10 +22,29 @@
 # With --no-setup the setup script is skipped; `wt setup [dir]` runs
 # it later for an existing worktree (dir defaults to the current one).
 #
-# The path of the new worktree is written to stdout. All other output
-# goes to stderr, so a shell function can capture the path and cd to it.
+# `wt prune` removes the worktrees of merged PRs. PRs are squash merged,
+# so `git branch --merged` cannot find them; instead, after a
+# `git fetch --prune`, a branch whose upstream is gone had its remote
+# branch deleted by GitHub when the PR merged. Worktrees with
+# uncommitted changes and branches that were never pushed stay.
+# With -n (or --dry-run) nothing changes.
+#
+# The path of the new worktree is written to stdout, as are the paths of
+# the pruned worktrees. All other output goes to stderr, so a shell
+# function can capture the paths and cd to (or close) them.
 
 set -e
+
+# Resolve the repository, in case we run from another worktree. Sets
+# root (the current worktree), main (the main repo root) and repo.
+resolve_repo() {
+  root="$(git rev-parse --show-toplevel 2>/dev/null)" || {
+    echo "wt: not inside a git repository" >&2
+    exit 1
+  }
+  main="$(git -C "$root" worktree list | head -n1 | awk '{print $1}')"
+  repo="$(basename "$main")"
+}
 
 # Run the Conductor setup script for the worktree at $1, if the repo
 # has one.
@@ -57,6 +77,150 @@ if [ "$1" = "setup" ]; then
   exit 0
 fi
 
+# Remove the worktree at $1 (branch $2, named $3 below the worktree
+# base directory), its branch and its cached prompt, and write its path
+# to stdout. In a dry run it only tells what it would do.
+prune_worktree() {
+  wt_dir="$1"
+  wt_ref="$2"
+  wt_rel="$3"
+
+  if [ -n "$dry_run" ]; then
+    echo "wt: would prune $wt_rel (branch $wt_ref)" >&2
+    n_pruned=$((n_pruned + 1))
+    echo "$wt_dir"
+    return 0
+  fi
+
+  echo "wt: pruning $wt_rel (branch $wt_ref)" >&2
+  if ! git -C "$main" worktree remove "$wt_dir" 1>&2; then
+    echo "wt: could not remove $wt_rel, keeping branch $wt_ref" >&2
+    n_kept=$((n_kept + 1))
+    return 0
+  fi
+  git -C "$main" branch -D "$wt_ref" 1>&2 ||
+    echo "wt: could not delete branch $wt_ref" >&2
+  # Cached prompts only exist for paste-mode names, which have no slash.
+  rm -f "$HOME/.cache/wt/$wt_rel.md"
+  n_pruned=$((n_pruned + 1))
+  echo "$wt_dir"
+}
+
+# Decide what to do with the worktree at $1 on branch $2 ("" when the
+# worktree is detached), and do it.
+classify_worktree() {
+  cw_dir="$1"
+  cw_ref="$2"
+
+  case "$cw_dir" in
+    "$base_dir"/*) ;;
+    *) return 0 ;;
+  esac
+  cw_rel="${cw_dir#"$base_dir"/}"
+
+  if [ -z "$cw_ref" ]; then
+    echo "wt: skip $cw_rel: detached HEAD" >&2
+    n_skipped=$((n_skipped + 1))
+    return 0
+  fi
+
+  # Never remove the worktree we are standing in.
+  if [ "$cw_dir" = "$root" ]; then
+    echo "wt: skip $cw_rel: this is the current worktree" >&2
+    n_skipped=$((n_skipped + 1))
+    return 0
+  fi
+
+  if [ -n "$(git -C "$cw_dir" status --porcelain 2>/dev/null)" ]; then
+    echo "wt: skip $cw_rel: uncommitted changes" >&2
+    n_skipped=$((n_skipped + 1))
+    return 0
+  fi
+
+  # An upstream that is gone means the remote branch was deleted, which
+  # GitHub does when the PR merges.
+  cw_track="$(git -C "$main" for-each-ref \
+    --format='%(upstream)%09%(upstream:track)' "refs/heads/$cw_ref")"
+  cw_upstream="${cw_track%%	*}"
+  cw_state="${cw_track#*	}"
+
+  if [ -z "$cw_upstream" ]; then
+    echo "wt: skip $cw_rel: never pushed" >&2
+    n_skipped=$((n_skipped + 1))
+    return 0
+  fi
+
+  if [ "$cw_state" = "[gone]" ]; then
+    prune_worktree "$cw_dir" "$cw_ref" "$cw_rel"
+    return 0
+  fi
+
+  # The remote branch is still there. The PR may still have merged, so
+  # ask GitHub when gh is available.
+  if command -v gh >/dev/null 2>&1; then
+    cw_pr="$( (cd "$main" && gh pr view "$cw_ref" --json state --jq .state) \
+      2>/dev/null </dev/null || true)"
+    if [ "$cw_pr" = "MERGED" ]; then
+      prune_worktree "$cw_dir" "$cw_ref" "$cw_rel"
+      return 0
+    fi
+  fi
+
+  echo "wt: keep $cw_rel: PR not merged (upstream still exists)" >&2
+  n_kept=$((n_kept + 1))
+}
+
+if [ "$1" = "prune" ]; then
+  dry_run=""
+  case "$2" in
+    -n|--dry-run) dry_run=1 ;;
+    "") ;;
+    *)
+      echo "usage: wt prune [-n|--dry-run]" >&2
+      exit 1
+      ;;
+  esac
+
+  resolve_repo
+  base_dir="$HOME/Code/worktrees/$repo"
+
+  git -C "$main" fetch --prune --quiet origin ||
+    echo "wt: fetch failed, going on with the remote state on disk" >&2
+
+  n_pruned=0
+  n_kept=0
+  n_skipped=0
+
+  # Read the worktrees first: the loop removes some of them.
+  worktrees="$(git -C "$main" worktree list --porcelain)"
+  path=""
+  ref=""
+  while IFS= read -r line; do
+    case "$line" in
+      "worktree "*) path="${line#worktree }" ;;
+      "branch refs/heads/"*) ref="${line#branch refs/heads/}" ;;
+      "")
+        if [ -n "$path" ]; then
+          classify_worktree "$path" "$ref"
+        fi
+        path=""
+        ref=""
+        ;;
+    esac
+  done <<EOF
+$worktrees
+
+EOF
+
+  if [ -n "$dry_run" ]; then
+    echo "wt: would prune $n_pruned, kept $n_kept, skipped $n_skipped" >&2
+  else
+    git -C "$main" worktree prune 1>&2
+    echo "wt: pruned $n_pruned, kept $n_kept, skipped $n_skipped" >&2
+  fi
+  exit 0
+fi
+
 no_setup=""
 branch=""
 while [ $# -gt 0 ]; do
@@ -82,18 +246,13 @@ done
 name="$1"
 if [ -z "$name" ]; then
   echo "usage: wt [--no-setup] [--branch <branch>] <name> [base]" >&2
+  echo "       wt setup [dir]" >&2
+  echo "       wt prune [-n|--dry-run]" >&2
   exit 1
 fi
 branch="${branch:-$name}"
 
-root="$(git rev-parse --show-toplevel 2>/dev/null)" || {
-  echo "wt: not inside a git repository" >&2
-  exit 1
-}
-
-# Resolve the main repo root, in case we run from another worktree.
-main="$(git -C "$root" worktree list | head -n1 | awk '{print $1}')"
-repo="$(basename "$main")"
+resolve_repo
 dest="$HOME/Code/worktrees/$repo/$name"
 
 if [ -e "$dest" ]; then
