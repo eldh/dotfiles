@@ -38,6 +38,9 @@ brew "olets/tap/zsh-abbr"
 cask "ghostty"
 cask "cmux"
 
+# Coding agents
+cask "codex"
+
 # Applications
 cask "warp"
 cask "zed"
