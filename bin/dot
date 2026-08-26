@@ -126,6 +126,16 @@ install_agent_instructions () {
   mkdir -p "$HOME/.claude" "$HOME/.codex"
   link_file "$src" "$HOME/.claude/CLAUDE.md"
   link_file "$src" "$HOME/.codex/AGENTS.md"
+
+  # Skills: link each versioned skill dir into ~/.claude/skills, leaving
+  # any machine-local skills in that directory alone.
+  local skill
+  mkdir -p "$HOME/.claude/skills"
+  for skill in "$DOTFILES_ROOT"/claude/skills/*/
+  do
+    [ -d "$skill" ] || continue
+    link_file "${skill%/}" "$HOME/.claude/skills/$(basename "$skill")"
+  done
 }
 
 ###############################################################################

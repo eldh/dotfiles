@@ -276,7 +276,8 @@ wt() {
 }
 
 # Open a cmux workspace for the worktree at $1, named $2 and described
-# by $3: claude on the left, `wt setup` top-right, spare shell below it.
+# by $3: claude on the left, `wt setup` top-right (with a browser tab
+# behind it, for $WT_BROWSER_URL or localhost:8080), spare shell below.
 # With a prompt file in $4, claude starts with that prompt; the command
 # reaches cmux with `$(cat …)` unexpanded, so the pane's own shell reads
 # the file and quoting in the prompt cannot break out.
@@ -290,7 +291,10 @@ _wt_workspace() {
     left='claude --permission-mode plan'
   fi
 
-  layout="$(printf '{"direction":"horizontal","split":0.5,"children":[{"pane":{"surfaces":[{"type":"terminal","command":"%s"}]}},{"direction":"vertical","split":0.5,"children":[{"pane":{"surfaces":[{"type":"terminal","command":"command wt setup"}]}},{"pane":{"surfaces":[{"type":"terminal"}]}}]}]}' "$left")"
+  # The browser is listed first so the setup terminal, listed last, is the
+  # selected tab while setup runs.
+  layout="$(printf '{"direction":"horizontal","split":0.5,"children":[{"pane":{"surfaces":[{"type":"terminal","command":"%s"}]}},{"direction":"vertical","split":0.5,"children":[{"pane":{"surfaces":[{"type":"browser","url":"%s"},{"type":"terminal","command":"command wt setup"}]}},{"pane":{"surfaces":[{"type":"terminal"}]}}]}]}' \
+    "$left" "${WT_BROWSER_URL:-http://localhost:8080}")"
 
   cmux workspace create \
     --name "$ws_name" \
