@@ -15,6 +15,16 @@ Default working mode, unless I explicitly say otherwise in a session:
 
 When asked to "address" PR comments, whether from Codex or coworkers, first summarize them in a table with columns for the comment, assessment, and plan. Address each comment either by making a change or by replying with a concise reason no change is needed, such as when the concern is not valid or not worth acting on. Keep replies casual and concise, and do not reference git shas. For a simple comment fixed in code, "updated" is an acceptable reply. After pushing any changes and replying, resolve each thread that has been fully addressed.
 
+# Browser testing inside cmux
+
+When running inside cmux (`CMUX_WORKSPACE_ID` is set), use the cmux embedded browser for browser testing instead of Chrome or a Chrome DevTools/claude-in-chrome MCP — even when repo skills (e.g. linear-app's `browser-use-client`) name a Chrome-based driver. Load the `cmux-browser` skill and target a browser surface in the current workspace: `wt` workspaces have one as a tab in the top-right pane; otherwise open one with `cmux browser open --workspace "$CMUX_WORKSPACE_ID"`.
+
+Only the driver changes: everything repo guidance says about *what to test* still applies in full — which URLs (for linear-app: `local.linear.dev` slot URLs from the `dev-environment` skill, NEVER production, and the canonical :8080 belongs to me), login flow, and prerequisites. Navigate the pane's browser there with `cmux browser <surface> goto <url>`. If a login exists in Chrome but not in the cmux browser, `cmux browser <surface> import --from chrome --domain <domain>` transfers it.
+
+Fall back to the repo's Chrome workflow when the task genuinely needs Chrome: Blink-specific behavior, browser extensions, or full network-request inspection.
+
+# GitHub posts
+
 ALWAYS start every comment, reply, review, or PR description you post to GitHub (or any external service) on my behalf with the prefix:
 
     Written by Claude Code:
