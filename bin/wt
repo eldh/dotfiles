@@ -5,6 +5,8 @@
 # Usage: wt [--no-setup] [--branch <branch>] <name> [base]
 #        wt setup [dir]
 #        wt prune [-n|--dry-run]
+#        wt workspace <dir> <name> <desc> [prompt-file]
+#        wt linear
 #
 #   name  Name of the worktree, and of the branch unless --branch
 #         gives another one. If the branch already exists (locally or
@@ -28,6 +30,15 @@
 # branch deleted by GitHub when the PR merged. Worktrees with
 # uncommitted changes and branches that were never pushed stay.
 # With -n (or --dry-run) nothing changes.
+#
+# `wt workspace` is internal plumbing for the zsh `wt` function: it opens
+# the cmux workspace for a worktree that the function just created.
+#
+# `wt linear` is the entry point for Linear's custom coding-tool script
+# (see linear/coding-tools.json). Linear runs it as a bare executable,
+# with the issue in LINEAR_PROMPT, LINEAR_ISSUE_IDENTIFIER,
+# LINEAR_ISSUE_BRANCH_NAME and LINEAR_WORK_DIR, so it does on its own
+# what the zsh function does around a pasted prompt.
 #
 # The path of the new worktree is written to stdout, as are the paths of
 # the pruned worktrees. All other output goes to stderr, so a shell
@@ -221,6 +232,111 @@ EOF
   exit 0
 fi
 
+# Open a cmux workspace for the worktree at $1, named $2 and described
+# by $3: claude on the left, `wt setup` top-right (with a browser tab
+# behind it, for $WT_BROWSER_URL or localhost:8080), spare shell below.
+# With a prompt file in $4, claude starts with that prompt; the command
+# reaches cmux with `$(cat …)` unexpanded, so the pane's own shell reads
+# the file and quoting in the prompt cannot break out.
+open_workspace() {
+  ws_dir="$1"
+  ws_name="$2"
+  ws_desc="$3"
+  ws_prompt="$4"
+
+  if [ -n "$ws_prompt" ]; then
+    ws_left="$(printf 'claude --permission-mode plan \\"$(cat %s)\\"' "$ws_prompt")"
+  else
+    ws_left='claude --permission-mode plan'
+  fi
+
+  # The browser is listed first so the setup terminal, listed last, is the
+  # selected tab while setup runs.
+  ws_layout="$(printf '{"direction":"horizontal","split":0.5,"children":[{"pane":{"surfaces":[{"type":"terminal","command":"%s"}]}},{"direction":"vertical","split":0.5,"children":[{"pane":{"surfaces":[{"type":"browser","url":"%s"},{"type":"terminal","command":"command wt setup"}]}},{"pane":{"surfaces":[{"type":"terminal"}]}}]}]}' \
+    "$ws_left" "${WT_BROWSER_URL:-http://localhost:8080}")"
+
+  cmux workspace create \
+    --name "$ws_name" \
+    --description "$ws_desc" \
+    --cwd "$ws_dir" \
+    --focus true \
+    --layout "$ws_layout"
+}
+
+if [ "$1" = "workspace" ]; then
+  shift
+  if [ -z "$1" ] || [ -z "$2" ]; then
+    echo "usage: wt workspace <dir> <name> <desc> [prompt-file]" >&2
+    exit 1
+  fi
+  open_workspace "$1" "$2" "$3" "$4"
+  exit 0
+fi
+
+# Say $1 in a macOS notification. Linear runs the script without a
+# terminal, so stderr alone reaches nobody.
+linear_notify() {
+  command -v osascript >/dev/null 2>&1 || return 0
+  osascript -e "display notification \"$1\" with title \"wt\"" >/dev/null 2>&1 || true
+}
+
+# Give up on the `wt linear` run, telling $1 on stderr and in a notification.
+linear_fail() {
+  echo "wt: $1" >&2
+  linear_notify "$1"
+  exit 1
+}
+
+if [ "$1" = "linear" ]; then
+  # The create path below re-runs this script from another directory, so
+  # resolve it to an absolute path while we are still where we started.
+  lin_self="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)/$(basename "${BASH_SOURCE[0]}")"
+
+  # Linear spawns the script without a login shell, so machine-local
+  # settings like $WT_BROWSER_URL are not in the environment yet.
+  if [ -z "$WT_BROWSER_URL" ] && [ -f "$HOME/.localrc" ]; then
+    . "$HOME/.localrc"
+  fi
+
+  [ -n "$LINEAR_WORK_DIR" ] || linear_fail "LINEAR_WORK_DIR is not set"
+  cd "$LINEAR_WORK_DIR" 2>/dev/null || linear_fail "cannot enter $LINEAR_WORK_DIR"
+  git rev-parse --show-toplevel >/dev/null 2>&1 ||
+    linear_fail "$LINEAR_WORK_DIR is not inside a git repository"
+
+  lin_branch="$LINEAR_ISSUE_BRANCH_NAME"
+  [ -n "$lin_branch" ] || linear_fail "LINEAR_ISSUE_BRANCH_NAME is not set"
+  lin_issue="$LINEAR_ISSUE_IDENTIFIER"
+  # eldh/lin-82174-some-title -> some-title
+  lin_name="$(printf '%s' "${lin_branch##*/}" | sed -E 's/^lin-[0-9]+-//')"
+  lin_title="$(printf '%s' "$LINEAR_PROMPT" |
+    sed -n -E 's|.*<title>(.*)</title>.*|\1|p' | head -n1)"
+
+  resolve_repo
+  lin_dest="$HOME/Code/worktrees/$repo/$lin_name"
+  lin_cache="$HOME/.cache/wt/$lin_name.md"
+
+  mkdir -p "$HOME/.cache/wt"
+  printf '%s\n' "$LINEAR_PROMPT" > "$lin_cache" ||
+    linear_fail "could not write $lin_cache"
+
+  # Re-triggering an issue from Linear reopens a workspace for the
+  # worktree it already has, instead of failing on the existing directory.
+  if [ -e "$lin_dest" ]; then
+    echo "wt: reusing existing worktree" >&2
+  else
+    lin_dest="$("$lin_self" --no-setup --branch "$lin_branch" "$lin_name")" ||
+      linear_fail "could not create a worktree for $lin_branch"
+  fi
+
+  command -v cmux >/dev/null 2>&1 || linear_fail "cmux is not installed"
+  open_workspace "$lin_dest" "${lin_title:-${lin_issue:-$lin_name}}" \
+    "${lin_issue:-$lin_name}" "$lin_cache" ||
+    linear_fail "could not open a cmux workspace for $lin_name"
+
+  linear_notify "Opened ${lin_issue:-$lin_name}: $lin_name"
+  exit 0
+fi
+
 no_setup=""
 branch=""
 while [ $# -gt 0 ]; do
@@ -248,6 +364,7 @@ if [ -z "$name" ]; then
   echo "usage: wt [--no-setup] [--branch <branch>] <name> [base]" >&2
   echo "       wt setup [dir]" >&2
   echo "       wt prune [-n|--dry-run]" >&2
+  echo "       wt linear" >&2
   exit 1
 fi
 branch="${branch:-$name}"

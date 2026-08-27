@@ -123,9 +123,13 @@ install_agent_instructions () {
   local overwrite_all=false backup_all=false skip_all=false
   local src="$DOTFILES_ROOT/claude/AGENTS.md"
 
-  mkdir -p "$HOME/.claude" "$HOME/.codex"
+  mkdir -p "$HOME/.claude" "$HOME/.codex" "$HOME/.linear"
   link_file "$src" "$HOME/.claude/CLAUDE.md"
   link_file "$src" "$HOME/.codex/AGENTS.md"
+
+  # Linear reads its custom coding-tool scripts, which is how "Work on
+  # issue" reaches bin/wt, from ~/.linear/coding-tools.json.
+  link_file "$DOTFILES_ROOT/linear/coding-tools.json" "$HOME/.linear/coding-tools.json"
 
   # Skills: link each versioned skill dir into ~/.claude/skills, leaving
   # any machine-local skills in that directory alone.

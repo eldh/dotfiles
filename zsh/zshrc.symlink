@@ -275,33 +275,12 @@ wt() {
   fi
 }
 
-# Open a cmux workspace for the worktree at $1, named $2 and described
-# by $3: claude on the left, `wt setup` top-right (with a browser tab
-# behind it, for $WT_BROWSER_URL or localhost:8080), spare shell below.
-# With a prompt file in $4, claude starts with that prompt; the command
-# reaches cmux with `$(cat …)` unexpanded, so the pane's own shell reads
-# the file and quoting in the prompt cannot break out.
+# Open a cmux workspace for the worktree at $1, named $2, described by $3
+# and, with a prompt file in $4, holding a claude that starts on that
+# prompt. The layout lives in `wt workspace`, which Linear's coding-tool
+# script shares.
 _wt_workspace() {
-  local dir="$1" ws_name="$2" ws_desc="$3" prompt_file="$4"
-  local left layout
-
-  if [[ -n "$prompt_file" ]]; then
-    left="$(printf 'claude --permission-mode plan \\"$(cat %s)\\"' "$prompt_file")"
-  else
-    left='claude --permission-mode plan'
-  fi
-
-  # The browser is listed first so the setup terminal, listed last, is the
-  # selected tab while setup runs.
-  layout="$(printf '{"direction":"horizontal","split":0.5,"children":[{"pane":{"surfaces":[{"type":"terminal","command":"%s"}]}},{"direction":"vertical","split":0.5,"children":[{"pane":{"surfaces":[{"type":"browser","url":"%s"},{"type":"terminal","command":"command wt setup"}]}},{"pane":{"surfaces":[{"type":"terminal"}]}}]}]}' \
-    "$left" "${WT_BROWSER_URL:-http://localhost:8080}")"
-
-  cmux workspace create \
-    --name "$ws_name" \
-    --description "$ws_desc" \
-    --cwd "$dir" \
-    --focus true \
-    --layout "$layout"
+  command wt workspace "$@"
 }
 
 # Close the cmux workspaces whose directory is one of $@, the worktrees
