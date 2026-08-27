@@ -292,6 +292,18 @@ if [ "$1" = "linear" ]; then
   # resolve it to an absolute path while we are still where we started.
   lin_self="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)/$(basename "${BASH_SOURCE[0]}")"
 
+  # Linear launches the script through a generated file in $TMPDIR, opened
+  # in the default terminal. When that terminal is cmux, the run itself
+  # sits in a throwaway workspace; remember it so it can be closed on
+  # success. The temp-dir check keeps a manual `wt linear` from a real
+  # workspace safe.
+  lin_host_ws=""
+  case "$PWD" in
+    /var/folders/*|/private/var/folders/*|"${TMPDIR%/}"*)
+      lin_host_ws="$CMUX_WORKSPACE_ID"
+      ;;
+  esac
+
   # Linear spawns the script without a login shell, so machine-local
   # settings like $WT_BROWSER_URL are not in the environment yet.
   if [ -z "$WT_BROWSER_URL" ] && [ -f "$HOME/.localrc" ]; then
@@ -337,6 +349,12 @@ if [ "$1" = "linear" ]; then
     linear_fail "could not open a cmux workspace for $lin_name"
 
   linear_notify "Opened ${lin_issue:-$lin_name}: $lin_name"
+
+  # Closing the hosting workspace kills this script's own pane, so it is
+  # the last thing that happens.
+  if [ -n "$lin_host_ws" ]; then
+    cmux workspace close --workspace "$lin_host_ws" >/dev/null 2>&1 || true
+  fi
   exit 0
 fi
 
