@@ -4,7 +4,7 @@
 #
 # Safe to run any time; every step is idempotent and reports what it did.
 #
-#   dot            symlinks + agent files + brew bundle + npm globals
+#   dot            symlinks + agent files + brew bundle + npm globals + bdiff
 #   dot --macos    the above, plus macOS defaults
 #   dot --all      alias for --macos (everything)
 #   dot -e|--edit  open the dotfiles directory in $EDITOR
@@ -197,6 +197,54 @@ install_npm () {
 }
 
 ###############################################################################
+# bdiff (the user's own OCaml/Reason tool: https://github.com/eldh/bdiff)
+###############################################################################
+
+# Ensure bdiff is present at ~/.local/bin/bdiff. Only ensures presence —
+# rebuilds stay manual via the repo's own `install.sh`.
+install_bdiff () {
+  if command -v bdiff >/dev/null 2>&1
+  then
+    success 'bdiff (already installed)'
+    return
+  fi
+
+  if ! command -v opam >/dev/null 2>&1
+  then
+    info 'opam not found, skipping bdiff (run dot again after brew bundle)'
+    return 0
+  fi
+
+  info 'bdiff'
+
+  if [ ! -d "$HOME/.opam" ]
+  then
+    opam init --bare -ya || { info 'opam init failed, skipping bdiff'; return 0; }
+  fi
+
+  if ! opam switch list --short 2>/dev/null | grep -qx bdiff
+  then
+    info 'creating opam switch "bdiff" (OCaml 5.3) — this compiles OCaml once and takes a while'
+    opam switch create bdiff 5.3.0 --yes || { info 'opam switch create failed, skipping bdiff'; return 0; }
+  fi
+
+  mkdir -p "$HOME/Code"
+  if [ ! -d "$HOME/Code/bdiff" ]
+  then
+    git clone https://github.com/eldh/bdiff.git "$HOME/Code/bdiff" || { info 'git clone bdiff failed, skipping bdiff'; return 0; }
+  fi
+
+  if ! opam pin list --switch bdiff 2>/dev/null | grep -q matcha
+  then
+    opam pin add -y --switch bdiff matcha https://github.com/eldh/matcha.git || { info 'opam pin matcha failed, skipping bdiff'; return 0; }
+  fi
+
+  opam install -y --switch bdiff --deps-only "$HOME/Code/bdiff/bdiff.opam" || { info 'opam install deps failed, skipping bdiff'; return 0; }
+
+  sh "$HOME/Code/bdiff/install.sh" bdiff && success 'bdiff installed' || info 'bdiff install.sh failed'
+}
+
+###############################################################################
 # macOS (opt-in — needs sudo and force-quits apps)
 ###############################################################################
 
@@ -235,6 +283,7 @@ main () {
   install_agent_instructions
   install_homebrew
   install_npm
+  install_bdiff
 
   if [ "$do_macos" == "true" ]; then apply_macos; fi
 

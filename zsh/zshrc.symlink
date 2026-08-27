@@ -30,6 +30,7 @@ path=(
   /opt/homebrew/sbin
   /usr/local/sbin
   $ZSH/bin
+  $HOME/.local/bin
   $HOME/.opencode/bin
   $path
 )
@@ -56,6 +57,11 @@ if [ -f "$HOME/google-cloud-sdk/completion.zsh.inc" ]; then . "$HOME/google-clou
 if command -v opam > /dev/null; then
   eval $(opam env)
 fi
+
+# The blocks above (envman, gcloud, opam) each set $PATH directly rather than
+# appending to the $path array, which bypasses `typeset -U`'s automatic dedup.
+# Reassigning the array forces one last uniqueness pass.
+path=($path)
 
 ###############################################################################
 # Shell options
