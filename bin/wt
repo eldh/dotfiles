@@ -298,10 +298,13 @@ if [ "$1" = "linear" ]; then
     . "$HOME/.localrc"
   fi
 
-  [ -n "$LINEAR_WORK_DIR" ] || linear_fail "LINEAR_WORK_DIR is not set"
-  cd "$LINEAR_WORK_DIR" 2>/dev/null || linear_fail "cannot enter $LINEAR_WORK_DIR"
+  # Prefer the directory Linear passed; fall back to $WT_LINEAR_DIR (from
+  # ~/.localrc) and then the main work repo, so the config does not have to
+  # request LINEAR_WORK_DIR and Linear does not have to show a folder picker.
+  lin_dir="${LINEAR_WORK_DIR:-${WT_LINEAR_DIR:-$HOME/Code/linear-app}}"
+  cd "$lin_dir" 2>/dev/null || linear_fail "cannot enter $lin_dir"
   git rev-parse --show-toplevel >/dev/null 2>&1 ||
-    linear_fail "$LINEAR_WORK_DIR is not inside a git repository"
+    linear_fail "$lin_dir is not inside a git repository"
 
   lin_branch="$LINEAR_ISSUE_BRANCH_NAME"
   [ -n "$lin_branch" ] || linear_fail "LINEAR_ISSUE_BRANCH_NAME is not set"
