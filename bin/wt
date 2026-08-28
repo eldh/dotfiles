@@ -5,7 +5,7 @@
 # Usage: wt [--no-setup] [--branch <branch>] <name> [base]
 #        wt setup [dir]
 #        wt prune [-n|--dry-run]
-#        wt workspace <dir> <name> <desc> [prompt-file]
+#        wt workspace [--harness <name>] <dir> <name> <desc> [prompt-file]
 #        wt linear
 #
 #   name  Name of the worktree, and of the branch unless --branch
@@ -32,7 +32,11 @@
 # With -n (or --dry-run) nothing changes.
 #
 # `wt workspace` is internal plumbing for the zsh `wt` function: it opens
-# the cmux workspace for a worktree that the function just created.
+# the cmux workspace for a worktree that the function just created. The
+# coding harness in its left pane is claude or pi, chosen by --harness
+# (or a trailing positional), then $WT_HARNESS, then claude. The zsh
+# function maps --claude/--pi onto it; set WT_HARNESS in ~/.localrc to
+# change the default for every workspace, Linear-launched ones included.
 #
 # `wt linear` is the entry point for Linear's custom coding-tool script
 # (see linear/coding-tools.json). Linear runs it as a bare executable,
@@ -232,23 +236,57 @@ EOF
   exit 0
 fi
 
+# Resolve the coding harness for a workspace: the name in $1 when given,
+# then $WT_HARNESS, then claude. Sets harness.
+resolve_harness() {
+  harness="${1:-${WT_HARNESS:-claude}}"
+  case "$harness" in
+    claude|pi) ;;
+    *)
+      echo "wt: unknown harness $harness (use claude or pi)" >&2
+      exit 1
+      ;;
+  esac
+}
+
 # Open a cmux workspace for the worktree at $1, named $2 and described
-# by $3: claude on the left, `wt setup` top-right (with a browser tab
-# behind it, for $WT_BROWSER_URL or localhost:8080), spare shell below.
-# With a prompt file in $4, claude starts with that prompt; the command
-# reaches cmux with `$(cat …)` unexpanded, so the pane's own shell reads
-# the file and quoting in the prompt cannot break out.
+# by $3: the coding harness on the left, `wt setup` top-right (with a
+# browser tab behind it, for $WT_BROWSER_URL or localhost:8080), spare
+# shell below. With a prompt file in $4, the harness starts with that
+# prompt; the command reaches cmux with `$(cat …)` unexpanded, so the
+# pane's own shell reads the file and quoting in the prompt cannot break
+# out. $5 is the harness ($WT_HARNESS or claude when empty).
+#
+# Both harnesses start plan-first. Claude has a plan permission mode;
+# Pi's plan-mode extension registers no startup flag, so the same intent
+# is appended to its system prompt from ~/.pi/agent/plan-first.md, and
+# `/plan` in the session escalates it to hard enforcement. Pi takes the
+# initial prompt as a trailing positional after `--`.
 open_workspace() {
   ws_dir="$1"
   ws_name="$2"
   ws_desc="$3"
   ws_prompt="$4"
 
-  if [ -n "$ws_prompt" ]; then
-    ws_left="$(printf 'claude --permission-mode plan \\"$(cat %s)\\"' "$ws_prompt")"
-  else
-    ws_left='claude --permission-mode plan'
-  fi
+  resolve_harness "$5"
+
+  case "$harness" in
+    pi)
+      ws_cmd="pi --append-system-prompt \$HOME/.pi/agent/plan-first.md"
+      if [ -n "$ws_prompt" ]; then
+        ws_left="$(printf '%s -- \\"$(cat %s)\\"' "$ws_cmd" "$ws_prompt")"
+      else
+        ws_left="$ws_cmd"
+      fi
+      ;;
+    *)
+      if [ -n "$ws_prompt" ]; then
+        ws_left="$(printf 'claude --permission-mode plan \\"$(cat %s)\\"' "$ws_prompt")"
+      else
+        ws_left='claude --permission-mode plan'
+      fi
+      ;;
+  esac
 
   # The browser is listed first so the setup terminal, listed last, is the
   # selected tab while setup runs.
@@ -265,11 +303,20 @@ open_workspace() {
 
 if [ "$1" = "workspace" ]; then
   shift
+  ws_harness=""
+  if [ "$1" = "--harness" ]; then
+    ws_harness="$2"
+    if [ -z "$ws_harness" ]; then
+      echo "wt: --harness needs a name" >&2
+      exit 1
+    fi
+    shift 2
+  fi
   if [ -z "$1" ] || [ -z "$2" ]; then
-    echo "usage: wt workspace <dir> <name> <desc> [prompt-file]" >&2
+    echo "usage: wt workspace [--harness <name>] <dir> <name> <desc> [prompt-file] [harness]" >&2
     exit 1
   fi
-  open_workspace "$1" "$2" "$3" "$4"
+  open_workspace "$1" "$2" "$3" "$4" "${ws_harness:-$5}"
   exit 0
 fi
 
@@ -305,8 +352,10 @@ if [ "$1" = "linear" ]; then
   esac
 
   # Linear spawns the script without a login shell, so machine-local
-  # settings like $WT_BROWSER_URL are not in the environment yet.
-  if [ -z "$WT_BROWSER_URL" ] && [ -f "$HOME/.localrc" ]; then
+  # settings like $WT_BROWSER_URL and $WT_HARNESS are not in the
+  # environment yet.
+  if { [ -z "$WT_BROWSER_URL" ] || [ -z "$WT_HARNESS" ]; } &&
+     [ -f "$HOME/.localrc" ]; then
     . "$HOME/.localrc"
   fi
 
@@ -344,8 +393,15 @@ if [ "$1" = "linear" ]; then
   fi
 
   command -v cmux >/dev/null 2>&1 || linear_fail "cmux is not installed"
+  # $WT_HARNESS comes from ~/.localrc, sourced above, so a Linear-launched
+  # issue opens in the same harness as a hand-made worktree. Check it here,
+  # where a bad name can still reach the notification.
+  case "${WT_HARNESS:-claude}" in
+    claude|pi) ;;
+    *) linear_fail "unknown harness $WT_HARNESS (use claude or pi)" ;;
+  esac
   open_workspace "$lin_dest" "${lin_title:-${lin_issue:-$lin_name}}" \
-    "${lin_issue:-$lin_name}" "$lin_cache" ||
+    "${lin_issue:-$lin_name}" "$lin_cache" "$WT_HARNESS" ||
     linear_fail "could not open a cmux workspace for $lin_name"
 
   linear_notify "Opened ${lin_issue:-$lin_name}: $lin_name"

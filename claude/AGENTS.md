@@ -23,6 +23,26 @@ Only the driver changes: everything repo guidance says about *what to test* stil
 
 Fall back to the repo's Chrome workflow when the task genuinely needs Chrome: Blink-specific behavior, browser extensions, or full network-request inspection.
 
+# Pi as an alternative harness
+
+`wt --pi` (or `WT_HARNESS=pi` in `~/.localrc`) opens a worktree workspace
+driven by Pi instead of Claude Code; `wt --claude` and no flag stay on Claude
+Code. The repository's own `CLAUDE.md` and skills govern the session either
+way — only the harness changes.
+
+Pi has no built-in permission system, so under Pi the guard rules in
+`~/.pi/agent/AGENTS.md` are the whole defence: no force push, no `gh pr
+merge`, no destructive GCP or MCP change, and nothing outside the current
+worktree. Plan first for anything substantial, a Linear issue above all: show
+the plan and wait for approval before you change a file. `/plan` turns that
+from an instruction into hard enforcement, and `/plan implement` releases it.
+
+# Testing
+
+Load the `testing-on-the-toilet` skill when you write, review or argue about
+tests. It carries the Google Testing on the Toilet guidance — what a test
+should assert, what makes it brittle, and when a test is not worth writing.
+
 # GitHub posts
 
 ALWAYS start every comment, reply, review, or PR description you post to GitHub (or any external service) on my behalf with the prefix:

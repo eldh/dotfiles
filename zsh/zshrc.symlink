@@ -189,11 +189,17 @@ yarn() {
 # prefix. The pasted prompt is kept at ~/.cache/wt/<name>.md.
 #
 # `wt <name> [base]` is arg mode: the worktree name is the branch name,
-# and claude starts without a prompt.
+# and the coding harness starts without a prompt.
 #
-# Inside cmux both modes open a new workspace named after the issue:
-# claude on the left, `wt setup` top-right, a spare shell bottom-right.
-# Outside cmux they cd into the worktree and run setup there.
+# `--claude` (the default) or `--pi` picks the harness, before the name
+# in arg mode and on its own in paste mode (`wt --pi`, then paste).
+# Without a flag $WT_HARNESS decides, so ~/.localrc can make pi the
+# default everywhere.
+#
+# Inside cmux both modes open a new workspace named after the issue: the
+# harness on the left, `wt setup` top-right, a spare shell bottom-right.
+# Outside cmux they cd into the worktree, run setup and start the
+# harness there.
 #
 # `wt prune` removes the worktrees of merged PRs and, inside cmux, also
 # closes the workspaces that stand in them.
@@ -217,13 +223,22 @@ wt() {
     return
   fi
 
-  local dir prompt title branch issue name
+  local dir prompt title branch issue name harness
+
+  # The harness flags are ours, not bin/wt's, so strip them here and pass
+  # the answer on as --harness. Everything left over is bin/wt's own.
+  harness="$WT_HARNESS"
+  while [[ "$1" == --(pi|claude) ]]; do
+    harness="${1#--}"
+    shift
+  done
+  harness="${harness:-claude}"
 
   # Arg mode: the name is also the branch.
   if (( $# )); then
     dir="$(command wt --no-setup "$@")" || return
     if [[ -n "$CMUX_WORKSPACE_ID" ]] && command -v cmux >/dev/null; then
-      _wt_workspace "$dir" "$1" ""
+      _wt_workspace --harness "$harness" "$dir" "$1" ""
     else
       command wt setup "$dir"
       cd "$dir"
@@ -275,18 +290,30 @@ wt() {
   dir="$(command wt --no-setup --branch "$branch" "$name")" || return
 
   if [[ -n "$CMUX_WORKSPACE_ID" ]] && command -v cmux >/dev/null; then
-    _wt_workspace "$dir" "${title:-${issue:-$name}}" "${issue:-$name}" ~/.cache/wt/$name.md
+    _wt_workspace --harness "$harness" "$dir" "${title:-${issue:-$name}}" \
+      "${issue:-$name}" ~/.cache/wt/$name.md
   else
-    cd "$dir" && command wt setup && claude --permission-mode plan "$(cat ~/.cache/wt/$name.md)"
+    cd "$dir" && command wt setup &&
+      _wt_harness "$harness" ~/.cache/wt/$name.md
   fi
 }
 
 # Open a cmux workspace for the worktree at $1, named $2, described by $3
-# and, with a prompt file in $4, holding a claude that starts on that
-# prompt. The layout lives in `wt workspace`, which Linear's coding-tool
-# script shares.
+# and, with a prompt file in $4, holding a coding harness that starts on
+# that prompt. The layout lives in `wt workspace`, which Linear's
+# coding-tool script shares.
 _wt_workspace() {
   command wt workspace "$@"
+}
+
+# Start the coding harness $1 in the current directory, on the prompt in
+# the file $2. This is the no-cmux path; the cmux one builds the same
+# commands inside `wt workspace`, so keep the two in step.
+_wt_harness() {
+  case "$1" in
+    pi) pi --append-system-prompt ~/.pi/agent/plan-first.md -- "$(cat "$2")" ;;
+    *)  claude --permission-mode plan "$(cat "$2")" ;;
+  esac
 }
 
 # Close the cmux workspaces whose directory is one of $@, the worktrees
