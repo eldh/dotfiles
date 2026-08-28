@@ -20,7 +20,8 @@ applies macOS defaults. Everything is configured and tweaked within `~/dotfiles`
 It's safe to run any time and always converges the machine to the "right" state:
 
 ```sh
-dot            # symlinks + agent instructions + brew bundle + npm globals + bdiff
+dot            # symlinks + agent instructions (Claude/Codex/Pi) + brew bundle
+               # + npm globals + bdiff
 dot --macos    # the above, plus macOS defaults
 dot --all      # everything (alias for --macos)
 dot -e         # open the dotfiles directory in $EDITOR

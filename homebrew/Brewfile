@@ -41,6 +41,9 @@ cask "cmux"
 
 # Coding agents
 cask "codex"
+# Pi, an alternative coding harness. The formula is pi-coding-agent; the
+# binary it installs is `pi`.
+brew "pi-coding-agent"
 
 # Applications
 cask "warp"

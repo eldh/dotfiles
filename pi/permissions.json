@@ -1,0 +1,102 @@
+{
+  "$schema": "https://raw.githubusercontent.com/gotgenes/pi-packages/main/packages/pi-permission-system/schemas/permissions.schema.json",
+
+  "permissionReviewLog": true,
+
+  "permission": {
+    "*": "allow",
+
+    "bash": {
+      "*": "allow",
+
+      "git push *": "allow",
+      "git push *--force*": "deny",
+      "git push *-f": "deny",
+      "git push *-f *": "deny",
+
+      "gh *": "allow",
+      "gh pr create*": "ask",
+      "gh pr edit*": "ask",
+      "gh pr comment*": "ask",
+      "gh issue comment*": "ask",
+      "gh pr merge*": "deny",
+      "gh release create*": "deny",
+      "gh release edit*": "deny",
+
+      "git reset --hard*": "ask",
+      "git clean -*": "ask",
+
+      "rm -r*": "ask",
+      "rm -rf /*": "deny",
+      "rm -rf /": "deny",
+      "rm -rf ~*": "deny",
+      "rm -rf $HOME*": "deny",
+
+      "sudo *": "ask"
+    },
+
+    "path": {
+      "*": "allow",
+      "*.env": "deny",
+      "*.env.*": "deny",
+      "*.env.example": "allow",
+      "*.env.sample": "allow",
+      "~/.ssh/*": "deny",
+      "~/.aws/credentials": "deny",
+      "~/.pi/agent/auth.json": "deny",
+      "~/.config/gh/hosts.yml": "deny"
+    },
+
+    "external_directory": {
+      "*": "ask"
+    },
+    "external_directory_read": {
+      "~/Code/*": "allow",
+      "~/dotfiles/*": "allow",
+      "~/.cache/wt/*": "allow",
+      "~/.claude/*": "allow",
+      "~/.codex/*": "allow",
+      "~/.pi/*": "allow"
+    },
+
+    "mcp": {
+      "*": "allow",
+
+      "gcs:create_bucket": "deny",
+      "gcs:delete_bucket": "deny",
+      "gcs:delete_object": "deny",
+      "gcs:write_text": "deny",
+
+      "pubsub:create_snapshot": "deny",
+      "pubsub:create_subscription": "deny",
+      "pubsub:create_topic": "deny",
+      "pubsub:delete_snapshot": "deny",
+      "pubsub:delete_subscription": "deny",
+      "pubsub:delete_topic": "deny",
+      "pubsub:publish": "deny",
+      "pubsub:update_subscription": "deny",
+      "pubsub:update_topic": "deny",
+
+      "alloydb:create_backup": "deny",
+      "alloydb:create_cluster": "deny",
+      "alloydb:create_instance": "deny",
+      "alloydb:create_user": "deny",
+      "alloydb:execute_sql": "deny",
+      "alloydb:export_data": "deny",
+      "alloydb:import_data": "deny",
+      "alloydb:restore_cluster": "deny",
+      "alloydb:update_instance": "deny",
+
+      "memorystore:backup_instance": "deny",
+      "memorystore:create_instance": "deny",
+      "memorystore:delete_backup": "deny",
+      "memorystore:delete_instance": "deny",
+      "memorystore:export_backup": "deny",
+      "memorystore:reschedule_maintenance": "deny",
+      "memorystore:update_instance": "deny",
+
+      "linear:save_comment": "ask",
+      "linear:merge_diff": "deny"
+    }
+  }
+}

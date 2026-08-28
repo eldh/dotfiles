@@ -4,7 +4,8 @@
 #
 # Safe to run any time; every step is idempotent and reports what it did.
 #
-#   dot            symlinks + agent files + brew bundle + npm globals + bdiff
+#   dot            symlinks + agent files (Claude/Codex/Pi) + brew bundle
+#                  + npm globals + bdiff
 #   dot --macos    the above, plus macOS defaults
 #   dot --all      alias for --macos (everything)
 #   dot -e|--edit  open the dotfiles directory in $EDITOR
@@ -114,9 +115,12 @@ install_dotfiles () {
   done
 }
 
-# AGENTS.md is the single source of truth for agent instructions. Claude Code
-# reads ~/.claude/CLAUDE.md; Codex reads ~/.codex/AGENTS.md. Both live inside
-# active state dirs, so we link the individual files rather than the whole dir.
+# claude/AGENTS.md is the single source of truth for agent instructions.
+# Claude Code reads ~/.claude/CLAUDE.md; Codex reads ~/.codex/AGENTS.md. Pi
+# reads ~/.pi/agent/AGENTS.md and gets its own shorter file, since it needs
+# guard rules the other two get from their permission systems. Every one of
+# these lives inside an active state dir, so we link the individual files
+# rather than the whole directory.
 install_agent_instructions () {
   info 'linking agent instructions (CLAUDE.md / AGENTS.md)'
 
@@ -139,6 +143,25 @@ install_agent_instructions () {
   do
     [ -d "$skill" ] || continue
     link_file "${skill%/}" "$HOME/.claude/skills/$(basename "$skill")"
+  done
+
+  # Pi keeps all of its state in ~/.pi/agent: settings.json (with the pinned
+  # extension list), AGENTS.md, subagent definitions in agents/, and one
+  # config directory per extension. auth.json and the installed npm packages
+  # live in the same tree and stay machine-local, so we link files, not dirs.
+  local agent
+  mkdir -p "$HOME/.pi/agent/agents" \
+           "$HOME/.pi/agent/extensions/pi-permission-system"
+  link_file "$DOTFILES_ROOT/pi/settings.json" "$HOME/.pi/agent/settings.json"
+  link_file "$DOTFILES_ROOT/pi/AGENTS.md" "$HOME/.pi/agent/AGENTS.md"
+  # Appended to the system prompt by `wt --pi`, not loaded on its own.
+  link_file "$DOTFILES_ROOT/pi/plan-first.md" "$HOME/.pi/agent/plan-first.md"
+  link_file "$DOTFILES_ROOT/pi/permissions.json" \
+    "$HOME/.pi/agent/extensions/pi-permission-system/config.json"
+  for agent in "$DOTFILES_ROOT"/pi/agents/*.md
+  do
+    [ -f "$agent" ] || continue
+    link_file "$agent" "$HOME/.pi/agent/agents/$(basename "$agent")"
   done
 }
 
@@ -261,7 +284,7 @@ apply_macos () {
 ###############################################################################
 
 usage () {
-  sed -n '3,11p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'
+  sed -n '3,12p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'
   exit "${1:-0}"
 }
 
