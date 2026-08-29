@@ -23,3 +23,6 @@ config.symlink/zed/prompts/
 config.symlink/zed/settings_backup.json
 config.symlink/1Password/
 config.symlink/micro/buffers/
+
+# Contains an OAuth token — machine-local, never commit.
+config.symlink/github-copilot/

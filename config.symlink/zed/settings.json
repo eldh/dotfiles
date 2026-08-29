@@ -76,7 +76,7 @@
   "autosave": "on_focus_change",
   "format_on_save": "on",
   "formatter": ["prettier"],
-  "enable_language_server": true,
+  "enable_language_server": false,
   "languages": {
     "TypeScript": {
       "language_servers": ["tsgo"],
