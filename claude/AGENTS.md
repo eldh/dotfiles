@@ -43,6 +43,13 @@ Load the `testing-on-the-toilet` skill when you write, review or argue about
 tests. It carries the Google Testing on the Toilet guidance — what a test
 should assert, what makes it brittle, and when a test is not worth writing.
 
+# Individual preferences per repository
+
+Some repositories point at a personal overrides file instead of carrying my
+preferences in their shared guidance. Read `~/.claude/personal-<repo>.md` when
+it exists — `~/.claude/personal-linear-app.md` for linear-app — and treat it as
+authoritative where it conflicts with a repository skill.
+
 # GitHub posts
 
 ALWAYS start every comment, reply, review, or PR description you post to GitHub (or any external service) on my behalf with the prefix:

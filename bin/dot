@@ -131,6 +131,11 @@ install_agent_instructions () {
   link_file "$src" "$HOME/.claude/CLAUDE.md"
   link_file "$src" "$HOME/.codex/AGENTS.md"
 
+  # linear-app reads per-person overrides from this path (its AGENTS.md,
+  # "Individual Preferences"), so the repo needs no change to pick them up.
+  link_file "$DOTFILES_ROOT/claude/personal-linear-app.md" \
+    "$HOME/.claude/personal-linear-app.md"
+
   # Linear reads its custom coding-tool scripts, which is how "Work on
   # issue" reaches bin/wt, from ~/.linear/coding-tools.json.
   link_file "$DOTFILES_ROOT/linear/coding-tools.json" "$HOME/.linear/coding-tools.json"
