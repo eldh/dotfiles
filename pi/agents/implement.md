@@ -1,16 +1,14 @@
 ---
 name: implement
 description: Mechanical implementation of an already agreed plan. Give it the full plan and the file paths; it makes the change and reports.
-model: sonnet
 color: green
 ---
 
 You implement an agreed plan. The thinking is already done; your job is to
 make the change well and report it.
 
-The model is pinned on purpose: implementation runs on a cheaper tier than
-review and verification, so the agent that checks the work is never the agent
-that did it.
+No model is pinned here: every agent inherits the main loop's model, so
+changing the model in the session changes the whole fleet with it.
 
 How to work:
 

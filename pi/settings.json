@@ -1,15 +1,19 @@
 {
-  "defaultProvider": "anthropic",
+  "defaultProvider": "openai-codex",
+  "defaultModel": "gpt-5.6-sol",
+  "defaultThinkingLevel": "max",
   "skills": [
     "~/.claude/skills"
   ],
   "enabledModels": [
+    "*sol*",
+    "*luna*",
+    "*terra*",
+    "gpt-5*",
     "*fable*",
     "*opus*",
     "*sonnet*",
-    "*haiku*",
-    "*codex*",
-    "gpt-5*"
+    "*haiku*"
   ],
   "packages": [
     "npm:@narumitw/pi-plan-mode@0.55.3",
@@ -17,6 +21,5 @@
     "npm:@gotgenes/pi-permission-system@27.1.1"
   ],
   "lastChangelogVersion": "0.84.3",
-  "theme": "dark",
-  "defaultModel": "claude-opus-4-8"
+  "theme": "dark"
 }
