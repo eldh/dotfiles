@@ -163,6 +163,22 @@ install_agent_instructions () {
     [ -f "$agent" ] || continue
     link_file "$agent" "$HOME/.pi/agent/agents/$(basename "$agent")"
   done
+
+  # cmux reads agent activity (running / waiting for input / idle) from a
+  # generated extension, which is how a Pi workspace gets the same sidebar
+  # state a Claude Code one has. cmux writes and owns the file, so we ask it
+  # to rather than versioning a copy that would go stale with every update.
+  if command -v cmux >/dev/null 2>&1 && command -v pi >/dev/null 2>&1
+  then
+    if [ -f "$HOME/.pi/agent/extensions/cmux-session.ts" ]
+    then
+      success 'cmux pi hooks (already installed)'
+    else
+      cmux hooks pi install --yes >/dev/null 2>&1 &&
+        success 'cmux pi hooks' ||
+        info 'could not install the cmux pi hooks'
+    fi
+  fi
 }
 
 ###############################################################################

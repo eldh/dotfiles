@@ -117,6 +117,18 @@
   //     "sound" : "default"
   //   },
 
+  // Sidebar: agent activity (needs `cmux hooks <agent> install` for non-Claude
+  // agents) and pull-request state per worktree, so a merged PR is visible
+  // and `wt prune` can clear the worktree.
+  "sidebar": {
+    "showAgentActivity": true,
+    "showPullRequests": true,
+    "makePullRequestsClickable": true,
+    "openPullRequestLinksInCmuxBrowser": true,
+    "watchGitStatus": true,
+    "showBranchDirectory": true
+  },
+
   //   "sidebar" : {
   //     "showPorts" : true,
   //     "showNotificationMessage" : true,
